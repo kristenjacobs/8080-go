@@ -46,7 +46,7 @@ func newMachineState() *machineState {
 	ms.initialiseRoms()
 	ms.initialiseRam()
 
-	ms.pc = ROM_E_BASE
+	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
 
 	return &ms
@@ -75,28 +75,23 @@ func (ms *machineState) initialiseRam() {
 	ms.ram.bytes = make([]uint8, RAM_SIZE)
 }
 
-func (ms *machineState) readMem(addr uint16, numBytes uint16) ([]uint8, error) {
+func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
 	if inRegion(addr, numBytes, &ms.romE) {
-		fmt.Printf("inRegion E\n")
-		return read(addr, numBytes, &ms.romE), nil
+		return read(addr, numBytes, &ms.romE)
 	}
 	if inRegion(addr, numBytes, &ms.romF) {
-		fmt.Printf("inRegion F\n")
-		return read(addr, numBytes, &ms.romF), nil
+		return read(addr, numBytes, &ms.romF)
 	}
 	if inRegion(addr, numBytes, &ms.romG) {
-		fmt.Printf("inRegion G\n")
-		return read(addr, numBytes, &ms.romG), nil
+		return read(addr, numBytes, &ms.romG)
 	}
 	if inRegion(addr, numBytes, &ms.romH) {
-		fmt.Printf("inRegion H\n")
-		return read(addr, numBytes, &ms.romH), nil
+		return read(addr, numBytes, &ms.romH)
 	}
 	if inRegion(addr, numBytes, &ms.ram) {
-		fmt.Printf("inRegion Ram\n")
-		return read(addr, numBytes, &ms.ram), nil
+		return read(addr, numBytes, &ms.ram)
 	}
-	return nil, fmt.Errorf("Cannot read memory, addr: 0x%04x, numBytes: %d", addr, numBytes)
+	panic(fmt.Sprintf("Cannot read memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
 }
 
 func inRegion(addr uint16, numBytes uint16, mr *memoryRegion) bool {

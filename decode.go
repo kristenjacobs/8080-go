@@ -4,789 +4,524 @@ import (
 	"fmt"
 )
 
-func unimplemented(opcode uint8) {
-	panic(fmt.Sprintf("Unimplemented opcode: 0x%02x\n", opcode))
-}
-
 func fetchAndDecode(ms *machineState) {
-
-	// Gets the byte at the current PC
-	opcode, err := ms.readMem(ms.pc, 1)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Printf(">>> 0x%02x\n", opcode[0])
-
-	// Opcode	Instruction	size	flags	function
+	opcode := ms.readMem(ms.pc, 1)
 	switch opcode[0] {
 	case 0x00:
-		// 0x00	NOP	1
-		unimplemented(0x00)
+		instr_0x00_NOP(ms)
 	case 0x01:
-		// 0x01	LXI B,D16	3		B <- byte 3, C <- byte 2
-		unimplemented(0x01)
+		instr_0x01_LXI(ms)
 	case 0x02:
-		// 0x02	STAX B	1		(BC) <- A
-		unimplemented(0x02)
+		instr_0x02_STAX(ms)
 	case 0x03:
-		// 0x03	INX B	1		BC <- BC+1
-		unimplemented(0x03)
+		instr_0x03_INX(ms)
 	case 0x04:
-		// 0x04	INR B	1	Z, S, P, AC	B <- B+1
-		unimplemented(0x04)
+		instr_0x04_INR(ms)
 	case 0x05:
-		// 0x05	DCR B	1	Z, S, P, AC	B <- B-1
-		unimplemented(0x05)
+		instr_0x05_DCR(ms)
 	case 0x06:
-		// 0x06	MVI B, D8	2		B <- byte 2
-		unimplemented(0x06)
+		instr_0x06_MVI(ms)
 	case 0x07:
-		// 0x07	RLC	1	CY	A = A << 1; bit 0 = prev bit 7; CY = prev bit 7
-		unimplemented(0x07)
+		instr_0x07_RLC(ms)
 	case 0x08:
-		// 0x08	-
-		unimplemented(0x08)
+		invalid(0x08)
 	case 0x09:
-		// 0x09	DAD B	1	CY	HL = HL + BC
-		unimplemented(0x09)
+		instr_0x09_DAD(ms)
 	case 0x0a:
-		// 0x0a	LDAX B	1		A <- (BC)
-		unimplemented(0x0a)
+		instr_0x0a_LDAX(ms)
 	case 0x0b:
-		// 0x0b	DCX B	1		BC = BC-1
-		unimplemented(0x0b)
+		instr_0x0b_DCX(ms)
 	case 0x0c:
-		// 0x0c	INR C	1	Z, S, P, AC	C <- C+1
-		unimplemented(0x0c)
+		instr_0x0c_INR(ms)
 	case 0x0d:
-		// 0x0d	DCR C	1	Z, S, P, AC	C <-C-1
-		unimplemented(0x0d)
+		instr_0x0d_DCR(ms)
 	case 0x0e:
-		// 0x0e	MVI C,D8	2		C <- byte 2
-		unimplemented(0x0e)
+		instr_0x0e_MVI(ms)
 	case 0x0f:
-		// 0x0f	RRC	1	CY	A = A >> 1; bit 7 = prev bit 0; CY = prev bit 0
-		unimplemented(0x0f)
+		instr_0x0f_RRC(ms)
 	case 0x10:
-		// 0x10	-
-		unimplemented(0x10)
+		invalid(0x10)
 	case 0x11:
-		// 0x11	LXI D,D16	3		D <- byte 3, E <- byte 2
-		unimplemented(0x11)
+		instr_0x11_LXI(ms)
 	case 0x12:
-		// 0x12	STAX D	1		(DE) <- A
-		unimplemented(0x12)
+		instr_0x12_STAX(ms)
 	case 0x13:
-		// 0x13	INX D	1		DE <- DE + 1
-		unimplemented(0x13)
+		instr_0x13_INX(ms)
 	case 0x14:
-		// 0x14	INR D	1	Z, S, P, AC	D <- D+1
-		unimplemented(0x14)
+		instr_0x14_INR(ms)
 	case 0x15:
-		// 0x15	DCR D	1	Z, S, P, AC	D <- D-1
-		unimplemented(0x15)
+		instr_0x15_DCR(ms)
 	case 0x16:
-		// 0x16	MVI D, D8	2		D <- byte 2
-		unimplemented(0x16)
+		instr_0x16_MVI(ms)
 	case 0x17:
-		// 0x17	RAL	1	CY	A = A << 1; bit 0 = prev CY; CY = prev bit 7
-		unimplemented(0x17)
+		instr_0x17_RAL(ms)
 	case 0x18:
-		// 0x18	-
-		unimplemented(0x18)
+		invalid(0x18)
 	case 0x19:
-		// 0x19	DAD D	1	CY	HL = HL + DE
-		unimplemented(0x19)
+		instr_0x19_DAD(ms)
 	case 0x1a:
-		// 0x1a	LDAX D	1		A <- (DE)
-		unimplemented(0x1a)
+		instr_0x1a_LDAX(ms)
 	case 0x1b:
-		// 0x1b	DCX D	1		DE = DE-1
-		unimplemented(0x1b)
+		instr_0x1b_DCX(ms)
 	case 0x1c:
-		// 0x1c	INR E	1	Z, S, P, AC	E <-E+1
-		unimplemented(0x1c)
+		instr_0x1c_INR(ms)
 	case 0x1d:
-		// 0x1d	DCR E	1	Z, S, P, AC	E <- E-1
-		unimplemented(0x1d)
+		instr_0x1d_DCR(ms)
 	case 0x1e:
-		// 0x1e	MVI E,D8	2		E <- byte 2
-		unimplemented(0x1e)
+		instr_0x1e_MVI(ms)
 	case 0x1f:
-		// 0x1f	RAR	1	CY	A = A >> 1; bit 7 = prev bit 7; CY = prev bit 0
-		unimplemented(0x1f)
+		instr_0x1f_RAR(ms)
 	case 0x20:
-		// 0x20	RIM	1		special
-		unimplemented(0x20)
+		instr_0x20_RIM(ms)
 	case 0x21:
-		// 0x21	LXI H,D16	3		H <- byte 3, L <- byte 2
-		unimplemented(0x21)
+		instr_0x21_LXI(ms)
 	case 0x22:
-		// 0x22	SHLD adr	3		(adr) <-L; (adr+1)<-H
-		unimplemented(0x22)
+		instr_0x22_SHLD(ms)
 	case 0x23:
-		// 0x23	INX H	1		HL <- HL + 1
-		unimplemented(0x23)
+		instr_0x23_INX(ms)
 	case 0x24:
-		// 0x24	INR H	1	Z, S, P, AC	H <- H+1
-		unimplemented(0x24)
+		instr_0x24_INR(ms)
 	case 0x25:
-		// 0x25	DCR H	1	Z, S, P, AC	H <- H-1
-		unimplemented(0x25)
+		instr_0x25_DCR(ms)
 	case 0x26:
-		// 0x26	MVI H,D8	2		H <- byte 2
-		unimplemented(0x26)
+		instr_0x26_MVI(ms)
 	case 0x27:
-		// 0x27	DAA	1		special
-		unimplemented(0x27)
+		instr_0x27_DAA(ms)
 	case 0x28:
-		// 0x28	-
-		unimplemented(0x28)
+		invalid(0x28)
 	case 0x29:
-		// 0x29	DAD H	1	CY	HL = HL + HI
-		unimplemented(0x29)
+		instr_0x29_DAD(ms)
 	case 0x2a:
-		// 0x2a	LHLD adr	3		L <- (adr); H<-(adr+1)
-		unimplemented(0x2a)
+		instr_0x2a_LHLD(ms)
 	case 0x2b:
-		// 0x2b	DCX H	1		HL = HL-1
-		unimplemented(0x2b)
+		instr_0x2b_DCX(ms)
 	case 0x2c:
-		// 0x2c	INR L	1	Z, S, P, AC	L <- L+1
-		unimplemented(0x2c)
+		instr_0x2c_INR(ms)
 	case 0x2d:
-		// 0x2d	DCR L	1	Z, S, P, AC	L <- L-1
-		unimplemented(0x2d)
+		instr_0x2d_DCR(ms)
 	case 0x2e:
-		// 0x2e	MVI L, D8	2		L <- byte 2
-		unimplemented(0x2e)
+		instr_0x2e_MVI(ms)
 	case 0x2f:
-		// 0x2f	CMA	1		A <- !A
-		unimplemented(0x2f)
+		instr_0x2f_CMA(ms)
 	case 0x30:
-		// 0x30	SIM	1		special
-		unimplemented(0x30)
+		instr_0x30_SIM(ms)
 	case 0x31:
-		// 0x31	LXI SP, D16	3		SP.hi <- byte 3, SP.lo <- byte 2
-		unimplemented(0x31)
+		instr_0x31_LXI(ms)
 	case 0x32:
-		// 0x32	STA adr	3		(adr) <- A
-		unimplemented(0x32)
+		instr_0x32_STA(ms)
 	case 0x33:
-		// 0x33	INX SP	1		SP = SP + 1
-		unimplemented(0x33)
+		instr_0x33_INX(ms)
 	case 0x34:
-		// 0x34	INR M	1	Z, S, P, AC	(HL) <- (HL)+1
-		unimplemented(0x34)
+		instr_0x34_INR(ms)
 	case 0x35:
-		// 0x35	DCR M	1	Z, S, P, AC	(HL) <- (HL)-1
-		unimplemented(0x35)
+		instr_0x35_DCR(ms)
 	case 0x36:
-		// 0x36	MVI M,D8	2		(HL) <- byte 2
-		unimplemented(0x36)
+		instr_0x36_MVI(ms)
 	case 0x37:
-		// 0x37	STC	1	CY	CY = 1
-		unimplemented(0x37)
+		instr_0x37_STC(ms)
 	case 0x38:
-		// 0x38	-
-		unimplemented(0x38)
+		invalid(0x30)
 	case 0x39:
-		// 0x39	DAD SP	1	CY	HL = HL + SP
-		unimplemented(0x39)
+		instr_0x39_DAD(ms)
 	case 0x3a:
-		// 0x3a	LDA adr	3		A <- (adr)
-		unimplemented(0x3a)
+		instr_0x3a_LDA(ms)
 	case 0x3b:
-		// 0x3b	DCX SP	1		SP = SP-1
-		unimplemented(0x3b)
+		instr_0x3b_DCX(ms)
 	case 0x3c:
-		// 0x3c	INR A	1	Z, S, P, AC	A <- A+1
-		unimplemented(0x3c)
+		instr_0x3c_INR(ms)
 	case 0x3d:
-		// 0x3d	DCR A	1	Z, S, P, AC	A <- A-1
-		unimplemented(0x3d)
+		instr_0x3d_DCR(ms)
 	case 0x3e:
-		// 0x3e	MVI A,D8	2		A <- byte 2
-		unimplemented(0x3e)
+		instr_0x3e_MVI(ms)
 	case 0x3f:
-		// 0x3f	CMC	1	CY	CY=!CY
-		unimplemented(0x3f)
+		instr_0x3f_CMC(ms)
 	case 0x40:
-		// 0x40	MOV B,B	1		B <- B
-		unimplemented(0x40)
+		instr_0x40_MOV(ms)
 	case 0x41:
-		// 0x41	MOV B,C	1		B <- C
-		unimplemented(0x41)
+		instr_0x41_MOV(ms)
 	case 0x42:
-		// 0x42	MOV B,D	1		B <- D
-		unimplemented(0x42)
+		instr_0x42_MOV(ms)
 	case 0x43:
-		// 0x43	MOV B,E	1		B <- E
-		unimplemented(0x43)
+		instr_0x43_MOV(ms)
 	case 0x44:
-		// 0x44	MOV B,H	1		B <- H
-		unimplemented(0x44)
+		instr_0x44_MOV(ms)
 	case 0x45:
-		// 0x45	MOV B,L	1		B <- L
-		unimplemented(0x45)
+		instr_0x45_MOV(ms)
 	case 0x46:
-		// 0x46	MOV B,M	1		B <- (HL)
-		unimplemented(0x46)
+		instr_0x46_MOV(ms)
 	case 0x47:
-		// 0x47	MOV B,A	1		B <- A
-		unimplemented(0x47)
+		instr_0x47_MOV(ms)
 	case 0x48:
-		// 0x48	MOV C,B	1		C <- B
-		unimplemented(0x48)
+		instr_0x48_MOV(ms)
 	case 0x49:
-		// 0x49	MOV C,C	1		C <- C
-		unimplemented(0x49)
+		instr_0x49_MOV(ms)
 	case 0x4a:
-		// 0x4a	MOV C,D	1		C <- D
-		unimplemented(0x4a)
+		instr_0x4a_MOV(ms)
 	case 0x4b:
-		// 0x4b	MOV C,E	1		C <- E
-		unimplemented(0x4b)
+		instr_0x4b_MOV(ms)
 	case 0x4c:
-		// 0x4c	MOV C,H	1		C <- H
-		unimplemented(0x4c)
+		instr_0x4c_MOV(ms)
 	case 0x4d:
-		// 0x4d	MOV C,L	1		C <- L
-		unimplemented(0x4d)
+		instr_0x4d_MOV(ms)
 	case 0x4e:
-		// 0x4e	MOV C,M	1		C <- (HL)
-		unimplemented(0x4e)
+		instr_0x4e_MOV(ms)
 	case 0x4f:
-		// 0x4f	MOV C,A	1		C <- A
-		unimplemented(0x4f)
+		instr_0x4f_MOV(ms)
 	case 0x50:
-		// 0x50	MOV D,B	1		D <- B
-		unimplemented(0x50)
+		instr_0x50_MOV(ms)
 	case 0x51:
-		// 0x51	MOV D,C	1		D <- C
-		unimplemented(0x51)
+		instr_0x51_MOV(ms)
 	case 0x52:
-		// 0x52	MOV D,D	1		D <- D
-		unimplemented(0x52)
+		instr_0x52_MOV(ms)
 	case 0x53:
-		// 0x53	MOV D,E	1		D <- E
-		unimplemented(0x53)
+		instr_0x53_MOV(ms)
 	case 0x54:
-		// 0x54	MOV D,H	1		D <- H
-		unimplemented(0x54)
+		instr_0x54_MOV(ms)
 	case 0x55:
-		// 0x55	MOV D,L	1		D <- L
-		unimplemented(0x55)
+		instr_0x55_MOV(ms)
 	case 0x56:
-		// 0x56	MOV D,M	1		D <- (HL)
-		unimplemented(0x56)
+		instr_0x56_MOV(ms)
 	case 0x57:
-		// 0x57	MOV D,A	1		D <- A
-		unimplemented(0x57)
+		instr_0x57_MOV(ms)
 	case 0x58:
-		// 0x58	MOV E,B	1		E <- B
-		unimplemented(0x58)
+		instr_0x58_MOV(ms)
 	case 0x59:
-		// 0x59	MOV E,C	1		E <- C
-		unimplemented(0x59)
+		instr_0x59_MOV(ms)
 	case 0x5a:
-		// 0x5a	MOV E,D	1		E <- D
-		unimplemented(0x5a)
+		instr_0x5a_MOV(ms)
 	case 0x5b:
-		// 0x5b	MOV E,E	1		E <- E
-		unimplemented(0x5b)
+		instr_0x5b_MOV(ms)
 	case 0x5c:
-		// 0x5c	MOV E,H	1		E <- H
-		unimplemented(0x5c)
+		instr_0x5c_MOV(ms)
 	case 0x5d:
-		// 0x5d	MOV E,L	1		E <- L
-		unimplemented(0x5d)
+		instr_0x5d_MOV(ms)
 	case 0x5e:
-		// 0x5e	MOV E,M	1		E <- (HL)
-		unimplemented(0x5e)
+		instr_0x5e_MOV(ms)
 	case 0x5f:
-		// 0x5f	MOV E,A	1		E <- A
-		unimplemented(0x5f)
+		instr_0x5f_MOV(ms)
 	case 0x60:
-		// 0x60	MOV H,B	1		H <- B
-		unimplemented(0x60)
+		instr_0x60_MOV(ms)
 	case 0x61:
-		// 0x61	MOV H,C	1		H <- C
-		unimplemented(0x61)
+		instr_0x61_MOV(ms)
 	case 0x62:
-		// 0x62	MOV H,D	1		H <- D
-		unimplemented(0x62)
+		instr_0x62_MOV(ms)
 	case 0x63:
-		// 0x63	MOV H,E	1		H <- E
-		unimplemented(0x63)
+		instr_0x63_MOV(ms)
 	case 0x64:
-		// 0x64	MOV H,H	1		H <- H
-		unimplemented(0x64)
+		instr_0x64_MOV(ms)
 	case 0x65:
-		// 0x65	MOV H,L	1		H <- L
-		unimplemented(0x65)
+		instr_0x65_MOV(ms)
 	case 0x66:
-		// 0x66	MOV H,M	1		H <- (HL)
-		unimplemented(0x66)
+		instr_0x66_MOV(ms)
 	case 0x67:
-		// 0x67	MOV H,A	1		H <- A
-		unimplemented(0x67)
+		instr_0x67_MOV(ms)
 	case 0x68:
-		// 0x68	MOV L,B	1		L <- B
-		unimplemented(0x68)
+		instr_0x68_MOV(ms)
 	case 0x69:
-		// 0x69	MOV L,C	1		L <- C
-		unimplemented(0x69)
+		instr_0x69_MOV(ms)
 	case 0x6a:
-		// 0x6a	MOV L,D	1		L <- D
-		unimplemented(0x6a)
+		instr_0x6a_MOV(ms)
 	case 0x6b:
-		// 0x6b	MOV L,E	1		L <- E
-		unimplemented(0x6b)
+		instr_0x6b_MOV(ms)
 	case 0x6c:
-		// 0x6c	MOV L,H	1		L <- H
-		unimplemented(0x6c)
+		instr_0x6c_MOV(ms)
 	case 0x6d:
-		// 0x6d	MOV L,L	1		L <- L
-		unimplemented(0x6d)
+		instr_0x6d_MOV(ms)
 	case 0x6e:
-		// 0x6e	MOV L,M	1		L <- (HL)
-		unimplemented(0x6e)
+		instr_0x6e_MOV(ms)
 	case 0x6f:
-		// 0x6f	MOV L,A	1		L <- A
-		unimplemented(0x6f)
+		instr_0x6f_MOV(ms)
 	case 0x70:
-		// 0x70	MOV M,B	1		(HL) <- B
-		unimplemented(0x70)
+		instr_0x70_MOV(ms)
 	case 0x71:
-		// 0x71	MOV M,C	1		(HL) <- C
-		unimplemented(0x71)
+		instr_0x71_MOV(ms)
 	case 0x72:
-		// 0x72	MOV M,D	1		(HL) <- D
-		unimplemented(0x72)
+		instr_0x72_MOV(ms)
 	case 0x73:
-		// 0x73	MOV M,E	1		(HL) <- E
-		unimplemented(0x73)
+		instr_0x73_MOV(ms)
 	case 0x74:
-		// 0x74	MOV M,H	1		(HL) <- H
-		unimplemented(0x74)
+		instr_0x74_MOV(ms)
 	case 0x75:
-		// 0x75	MOV M,L	1		(HL) <- L
-		unimplemented(0x75)
+		instr_0x75_MOV(ms)
 	case 0x76:
-		// 0x76	HLT	1		special
-		unimplemented(0x76)
+		instr_0x76_HLT(ms)
 	case 0x77:
-		// 0x77	MOV M,A	1		(HL) <- A
-		unimplemented(0x77)
+		instr_0x77_MOV(ms)
 	case 0x78:
-		// 0x78	MOV A,B	1		A <- B
-		unimplemented(0x78)
+		instr_0x78_MOV(ms)
 	case 0x79:
-		// 0x79	MOV A,C	1		A <- C
-		unimplemented(0x79)
+		instr_0x79_MOV(ms)
 	case 0x7a:
-		// 0x7a	MOV A,D	1		A <- D
-		unimplemented(0x7a)
+		instr_0x7a_MOV(ms)
 	case 0x7b:
-		// 0x7b	MOV A,E	1		A <- E
-		unimplemented(0x7b)
+		instr_0x7b_MOV(ms)
 	case 0x7c:
-		// 0x7c	MOV A,H	1		A <- H
-		unimplemented(0x7c)
+		instr_0x7c_MOV(ms)
 	case 0x7d:
-		// 0x7d	MOV A,L	1		A <- L
-		unimplemented(0x7d)
+		instr_0x7d_MOV(ms)
 	case 0x7e:
-		// 0x7e	MOV A,M	1		A <- (HL)
-		unimplemented(0x7e)
+		instr_0x7e_MOV(ms)
 	case 0x7f:
-		// 0x7f	MOV A,A	1		A <- A
-		unimplemented(0x7f)
+		instr_0x7f_MOV(ms)
 	case 0x80:
-		// 0x80	ADD B	1	Z, S, P, CY, AC	A <- A + B
-		unimplemented(0x80)
+		instr_0x80_ADD(ms)
 	case 0x81:
-		// 0x81	ADD C	1	Z, S, P, CY, AC	A <- A + C
-		unimplemented(0x81)
+		instr_0x81_ADD(ms)
 	case 0x82:
-		// 0x82	ADD D	1	Z, S, P, CY, AC	A <- A + D
-		unimplemented(0x82)
+		instr_0x82_ADD(ms)
 	case 0x83:
-		// 0x83	ADD E	1	Z, S, P, CY, AC	A <- A + E
-		unimplemented(0x83)
+		instr_0x83_ADD(ms)
 	case 0x84:
-		// 0x84	ADD H	1	Z, S, P, CY, AC	A <- A + H
-		unimplemented(0x84)
+		instr_0x84_ADD(ms)
 	case 0x85:
-		// 0x85	ADD L	1	Z, S, P, CY, AC	A <- A + L
-		unimplemented(0x85)
+		instr_0x85_ADD(ms)
 	case 0x86:
-		// 0x86	ADD M	1	Z, S, P, CY, AC	A <- A + (HL)
-		unimplemented(0x86)
+		instr_0x86_ADD(ms)
 	case 0x87:
-		// 0x87	ADD A	1	Z, S, P, CY, AC	A <- A + A
-		unimplemented(0x87)
+		instr_0x87_ADD(ms)
 	case 0x88:
-		// 0x88	ADC B	1	Z, S, P, CY, AC	A <- A + B + CY
-		unimplemented(0x88)
+		instr_0x88_ADC(ms)
 	case 0x89:
-		// 0x89	ADC C	1	Z, S, P, CY, AC	A <- A + C + CY
-		unimplemented(0x89)
+		instr_0x89_ADC(ms)
 	case 0x8a:
-		// 0x8a	ADC D	1	Z, S, P, CY, AC	A <- A + D + CY
-		unimplemented(0x8a)
+		instr_0x8a_ADC(ms)
 	case 0x8b:
-		// 0x8b	ADC E	1	Z, S, P, CY, AC	A <- A + E + CY
-		unimplemented(0x8b)
+		instr_0x8b_ADC(ms)
 	case 0x8c:
-		// 0x8c	ADC H	1	Z, S, P, CY, AC	A <- A + H + CY
-		unimplemented(0x8c)
+		instr_0x8c_ADC(ms)
 	case 0x8d:
-		// 0x8d	ADC L	1	Z, S, P, CY, AC	A <- A + L + CY
-		unimplemented(0x8d)
+		instr_0x8d_ADC(ms)
 	case 0x8e:
-		// 0x8e	ADC M	1	Z, S, P, CY, AC	A <- A + (HL) + CY
-		unimplemented(0x8e)
+		instr_0x8e_ADC(ms)
 	case 0x8f:
-		// 0x8f	ADC A	1	Z, S, P, CY, AC	A <- A + A + CY
-		unimplemented(0x8f)
+		instr_0x8f_ADC(ms)
 	case 0x90:
-		// 0x90	SUB B	1	Z, S, P, CY, AC	A <- A - B
-		unimplemented(0x90)
+		instr_0x90_SUB(ms)
 	case 0x91:
-		// 0x91	SUB C	1	Z, S, P, CY, AC	A <- A - C
-		unimplemented(0x91)
+		instr_0x91_SUB(ms)
 	case 0x92:
-		// 0x92	SUB D	1	Z, S, P, CY, AC	A <- A + D
-		unimplemented(0x92)
+		instr_0x92_SUB(ms)
 	case 0x93:
-		// 0x93	SUB E	1	Z, S, P, CY, AC	A <- A - E
-		unimplemented(0x93)
+		instr_0x93_SUB(ms)
 	case 0x94:
-		// 0x94	SUB H	1	Z, S, P, CY, AC	A <- A + H
-		unimplemented(0x94)
+		instr_0x94_SUB(ms)
 	case 0x95:
-		// 0x95	SUB L	1	Z, S, P, CY, AC	A <- A - L
-		unimplemented(0x95)
+		instr_0x95_SUB(ms)
 	case 0x96:
-		// 0x96	SUB M	1	Z, S, P, CY, AC	A <- A + (HL)
-		unimplemented(0x96)
+		instr_0x96_SUB(ms)
 	case 0x97:
-		// 0x97	SUB A	1	Z, S, P, CY, AC	A <- A - A
-		unimplemented(0x97)
+		instr_0x97_SUB(ms)
 	case 0x98:
-		// 0x98	SBB B	1	Z, S, P, CY, AC	A <- A - B - CY
-		unimplemented(0x98)
+		instr_0x98_SBB(ms)
 	case 0x99:
-		// 0x99	SBB C	1	Z, S, P, CY, AC	A <- A - C - CY
-		unimplemented(0x99)
+		instr_0x99_SBB(ms)
 	case 0x9a:
-		// 0x9a	SBB D	1	Z, S, P, CY, AC	A <- A - D - CY
-		unimplemented(0x9a)
+		instr_0x9a_SBB(ms)
 	case 0x9b:
-		// 0x9b	SBB E	1	Z, S, P, CY, AC	A <- A - E - CY
-		unimplemented(0x9b)
+		instr_0x9b_SBB(ms)
 	case 0x9c:
-		// 0x9c	SBB H	1	Z, S, P, CY, AC	A <- A - H - CY
-		unimplemented(0x9c)
+		instr_0x9c_SBB(ms)
 	case 0x9d:
-		// 0x9d	SBB L	1	Z, S, P, CY, AC	A <- A - L - CY
-		unimplemented(0x9d)
+		instr_0x9d_SBB(ms)
 	case 0x9e:
-		// 0x9e	SBB M	1	Z, S, P, CY, AC	A <- A - (HL) - CY
-		unimplemented(0x9e)
+		instr_0x9e_SBB(ms)
 	case 0x9f:
-		// 0x9f	SBB A	1	Z, S, P, CY, AC	A <- A - A - CY
-		unimplemented(0x9f)
+		instr_0x9f_SBB(ms)
 	case 0xa0:
-		// 0xa0	ANA B	1	Z, S, P, CY, AC	A <- A & B
-		unimplemented(0xa0)
+		instr_0xa0_ANA(ms)
 	case 0xa1:
-		// 0xa1	ANA C	1	Z, S, P, CY, AC	A <- A & C
-		unimplemented(0xa1)
+		instr_0xa1_ANA(ms)
 	case 0xa2:
-		// 0xa2	ANA D	1	Z, S, P, CY, AC	A <- A & D
-		unimplemented(0xa2)
+		instr_0xa2_ANA(ms)
 	case 0xa3:
-		// 0xa3	ANA E	1	Z, S, P, CY, AC	A <- A & E
-		unimplemented(0xa3)
+		instr_0xa3_ANA(ms)
 	case 0xa4:
-		// 0xa4	ANA H	1	Z, S, P, CY, AC	A <- A & H
-		unimplemented(0xa4)
+		instr_0xa4_ANA(ms)
 	case 0xa5:
-		// 0xa5	ANA L	1	Z, S, P, CY, AC	A <- A & L
-		unimplemented(0xa5)
+		instr_0xa5_ANA(ms)
 	case 0xa6:
-		// 0xa6	ANA M	1	Z, S, P, CY, AC	A <- A & (HL)
-		unimplemented(0xa6)
+		instr_0xa6_ANA(ms)
 	case 0xa7:
-		// 0xa7	ANA A	1	Z, S, P, CY, AC	A <- A & A
-		unimplemented(0xa7)
+		instr_0xa7_ANA(ms)
 	case 0xa8:
-		// 0xa8	XRA B	1	Z, S, P, CY, AC	A <- A ^ B
-		unimplemented(0xa8)
+		instr_0xa8_XRA(ms)
 	case 0xa9:
-		// 0xa9	XRA C	1	Z, S, P, CY, AC	A <- A ^ C
-		unimplemented(0xa9)
+		instr_0xa9_XRA(ms)
 	case 0xaa:
-		// 0xaa	XRA D	1	Z, S, P, CY, AC	A <- A ^ D
-		unimplemented(0xaa)
+		instr_0xaa_XRA(ms)
 	case 0xab:
-		// 0xab	XRA E	1	Z, S, P, CY, AC	A <- A ^ E
-		unimplemented(0xab)
+		instr_0xab_XRA(ms)
 	case 0xac:
-		// 0xac	XRA H	1	Z, S, P, CY, AC	A <- A ^ H
-		unimplemented(0xac)
+		instr_0xac_XRA(ms)
 	case 0xad:
-		// 0xad	XRA L	1	Z, S, P, CY, AC	A <- A ^ L
-		unimplemented(0xad)
+		instr_0xad_XRA(ms)
 	case 0xae:
-		// 0xae	XRA M	1	Z, S, P, CY, AC	A <- A ^ (HL)
-		unimplemented(0xae)
+		instr_0xae_XRA(ms)
 	case 0xaf:
-		// 0xaf	XRA A	1	Z, S, P, CY, AC	A <- A ^ A
-		unimplemented(0xaf)
+		instr_0xaf_XRA(ms)
 	case 0xb0:
-		// 0xb0	ORA B	1	Z, S, P, CY, AC	A <- A | B
-		unimplemented(0xb0)
+		instr_0xb0_ORA(ms)
 	case 0xb1:
-		// 0xb1	ORA C	1	Z, S, P, CY, AC	A <- A | C
-		unimplemented(0xb1)
+		instr_0xb1_ORA(ms)
 	case 0xb2:
-		// 0xb2	ORA D	1	Z, S, P, CY, AC	A <- A | D
-		unimplemented(0xb2)
+		instr_0xb2_ORA(ms)
 	case 0xb3:
-		// 0xb3	ORA E	1	Z, S, P, CY, AC	A <- A | E
-		unimplemented(0xb3)
+		instr_0xb3_ORA(ms)
 	case 0xb4:
-		// 0xb4	ORA H	1	Z, S, P, CY, AC	A <- A | H
-		unimplemented(0xb4)
+		instr_0xb4_ORA(ms)
 	case 0xb5:
-		// 0xb5	ORA L	1	Z, S, P, CY, AC	A <- A | L
-		unimplemented(0xb5)
+		instr_0xb5_ORA(ms)
 	case 0xb6:
-		// 0xb6	ORA M	1	Z, S, P, CY, AC	A <- A | (HL)
-		unimplemented(0xb6)
+		instr_0xb6_ORA(ms)
 	case 0xb7:
-		// 0xb7	ORA A	1	Z, S, P, CY, AC	A <- A | A
-		unimplemented(0xb7)
+		instr_0xb7_ORA(ms)
 	case 0xb8:
-		// 0xb8	CMP B	1	Z, S, P, CY, AC	A - B
-		unimplemented(0xb8)
+		instr_0xb8_CMP(ms)
 	case 0xb9:
-		// 0xb9	CMP C	1	Z, S, P, CY, AC	A - C
-		unimplemented(0xb9)
+		instr_0xb9_CMP(ms)
 	case 0xba:
-		// 0xba	CMP D	1	Z, S, P, CY, AC	A - D
-		unimplemented(0xba)
+		instr_0xba_CMP(ms)
 	case 0xbb:
-		// 0xbb	CMP E	1	Z, S, P, CY, AC	A - E
-		unimplemented(0xbb)
+		instr_0xbb_CMP(ms)
 	case 0xbc:
-		// 0xbc	CMP H	1	Z, S, P, CY, AC	A - H
-		unimplemented(0xbc)
+		instr_0xbc_CMP(ms)
 	case 0xbd:
-		// 0xbd	CMP L	1	Z, S, P, CY, AC	A - L
-		unimplemented(0xbd)
+		instr_0xbd_CMP(ms)
 	case 0xbe:
-		// 0xbe	CMP M	1	Z, S, P, CY, AC	A - (HL)
-		unimplemented(0xbe)
+		instr_0xbe_CMP(ms)
 	case 0xbf:
-		// 0xbf	CMP A	1	Z, S, P, CY, AC	A - A
-		unimplemented(0xbf)
+		instr_0xbf_CMP(ms)
 	case 0xc0:
-		// 0xc0	RNZ	1		if NZ, RET
-		unimplemented(0xc0)
+		instr_0xc0_RNZ(ms)
 	case 0xc1:
-		// 0xc1	POP B	1		C <- (sp); B <- (sp+1); sp <- sp+2
-		unimplemented(0xc1)
+		instr_0xc1_POP(ms)
 	case 0xc2:
-		// 0xc2	JNZ adr	3		if NZ, PC <- adr
-		unimplemented(0xc2)
+		instr_0xc2_JNZ(ms)
 	case 0xc3:
-		// 0xc3	JMP adr	3		PC <= adr
-		unimplemented(0xc3)
+		instr_0xc3_JMP_adr(ms)
 	case 0xc4:
-		// 0xc4	CNZ adr	3		if NZ, CALL adr
-		unimplemented(0xc4)
+		instr_0xc4_CNZ(ms)
 	case 0xc5:
-		// 0xc5	PUSH B	1		(sp-2)<-C; (sp-1)<-B; sp <- sp - 2
-		unimplemented(0xc5)
+		instr_0xc5_PUSH(ms)
 	case 0xc6:
-		// 0xc6	ADI D8	2	Z, S, P, CY, AC	A <- A + byte
-		unimplemented(0xc6)
+		instr_0xc6_ADI(ms)
 	case 0xc7:
-		// 0xc7	RST 0	1		CALL $0
-		unimplemented(0xc7)
+		instr_0xc7_RST(ms)
 	case 0xc8:
-		// 0xc8	RZ	1		if Z, RET
-		unimplemented(0xc8)
+		instr_0xc8_RZ(ms)
 	case 0xc9:
-		// 0xc9	RET	1		PC.lo <- (sp); PC.hi<-(sp+1); SP <- SP+2
-		unimplemented(0xc9)
+		instr_0xc9_RET(ms)
 	case 0xca:
-		// 0xca	JZ adr	3		if Z, PC <- adr
-		unimplemented(0xca)
+		instr_0xca_JZ(ms)
 	case 0xcb:
-		// 0xcb	-
-		unimplemented(0xcb)
+		invalid(0xcb)
 	case 0xcc:
-		// 0xcc	CZ adr	3		if Z, CALL adr
-		unimplemented(0xcc)
+		instr_0xcc_CZ(ms)
 	case 0xcd:
-		// 0xcd	CALL adr	3		(SP-1)<-PC.hi;(SP-2)<-PC.lo;SP<-SP+2;PC=adr
-		unimplemented(0xcd)
+		instr_0xcd_CALL(ms)
 	case 0xce:
-		// 0xce	ACI D8	2	Z, S, P, CY, AC	A <- A + data + CY
-		unimplemented(0xce)
+		instr_0xce_ACI(ms)
 	case 0xcf:
-		// 0xcf	RST 1	1		CALL $8
-		unimplemented(0xcf)
+		instr_0xcf_RST(ms)
 	case 0xd0:
-		// 0xd0	RNC	1		if NCY, RET
-		unimplemented(0xd0)
+		instr_0xd0_RNC(ms)
 	case 0xd1:
-		// 0xd1	POP D	1		E <- (sp); D <- (sp+1); sp <- sp+2
-		unimplemented(0xd1)
+		instr_0xd1_POP(ms)
 	case 0xd2:
-		// 0xd2	JNC adr	3		if NCY, PC<-adr
-		unimplemented(0xd2)
+		instr_0xd2_JNC(ms)
 	case 0xd3:
-		// 0xd3	OUT D8	2		special
-		unimplemented(0xd3)
+		instr_0xd3_OUT(ms)
 	case 0xd4:
-		// 0xd4	CNC adr	3		if NCY, CALL adr
-		unimplemented(0xd4)
+		instr_0xd4_CNC(ms)
 	case 0xd5:
-		// 0xd5	PUSH D	1		(sp-2)<-E; (sp-1)<-D; sp <- sp - 2
-		unimplemented(0xd5)
+		instr_0xd5_PUSH(ms)
 	case 0xd6:
-		// 0xd6	SUI D8	2	Z, S, P, CY, AC	A <- A - data
-		unimplemented(0xd6)
+		instr_0xd6_SUI(ms)
 	case 0xd7:
-		// 0xd7	RST 2	1		CALL $10
-		unimplemented(0xd7)
+		instr_0xd7_RST(ms)
 	case 0xd8:
-		// 0xd8	RC	1		if CY, RET
-		unimplemented(0xd8)
+		instr_0xd8_RC(ms)
 	case 0xd9:
-		// 0xd9	-
-		unimplemented(0xd9)
+		invalid(0xd9)
 	case 0xda:
-		// 0xda	JC adr	3		if CY, PC<-adr
-		unimplemented(0xda)
+		instr_0xda_JC(ms)
 	case 0xdb:
-		// 0xdb	IN D8	2		special
-		unimplemented(0xdb)
+		instr_0xdb_IN(ms)
 	case 0xdc:
-		// 0xdc	CC adr	3		if CY, CALL adr
-		unimplemented(0xdc)
+		instr_0xdc_CC(ms)
 	case 0xdd:
-		// 0xdd	-
-		unimplemented(0xdd)
+		invalid(0xdd)
 	case 0xde:
-		// 0xde	SBI D8	2	Z, S, P, CY, AC	A <- A - data - CY
-		unimplemented(0xde)
+		instr_0xde_SBI(ms)
 	case 0xdf:
-		// 0xdf	RST 3	1		CALL $18
-		unimplemented(0xdf)
+		instr_0xdf_RST(ms)
 	case 0xe0:
-		// 0xe0	RPO	1		if PO, RET
-		unimplemented(0xe0)
+		instr_0xe0_RPO(ms)
 	case 0xe1:
-		// 0xe1	POP H	1		L <- (sp); H <- (sp+1); sp <- sp+2
-		unimplemented(0xe1)
+		instr_0xe1_POP(ms)
 	case 0xe2:
-		// 0xe2	JPO adr	3		if PO, PC <- adr
-		unimplemented(0xe2)
+		instr_0xe2_JPO(ms)
 	case 0xe3:
-		// 0xe3	XTHL	1		L <-> (SP); H <-> (SP+1)
-		unimplemented(0xe3)
+		instr_0xe3_XTHL(ms)
 	case 0xe4:
-		// 0xe4	CPO adr	3		if PO, CALL adr
-		unimplemented(0xe4)
+		instr_0xe4_CPO(ms)
 	case 0xe5:
-		// 0xe5	PUSH H	1		(sp-2)<-L; (sp-1)<-H; sp <- sp - 2
-		unimplemented(0xe5)
+		instr_0xe5_PUSH(ms)
 	case 0xe6:
-		// 0xe6	ANI D8	2	Z, S, P, CY, AC	A <- A & data
-		unimplemented(0xe6)
+		instr_0xe6_ANI(ms)
 	case 0xe7:
-		// 0xe7	RST 4	1		CALL $20
-		unimplemented(0xe7)
+		instr_0xe7_RST(ms)
 	case 0xe8:
-		// 0xe8	RPE	1		if PE, RET
-		unimplemented(0xe8)
+		instr_0xe8_RPE(ms)
 	case 0xe9:
-		// 0xe9	PCHL	1		PC.hi <- H; PC.lo <- L
-		unimplemented(0xe9)
+		instr_0xe9_PCHL(ms)
 	case 0xea:
-		// 0xea	JPE adr	3		if PE, PC <- adr
-		unimplemented(0xea)
+		instr_0xea_JPE(ms)
 	case 0xeb:
-		// 0xeb	XCHG	1		H <-> D; L <-> E
-		unimplemented(0xeb)
+		instr_0xeb_XCHG(ms)
 	case 0xec:
-		// 0xec	CPE adr	3		if PE, CALL adr
-		unimplemented(0xec)
+		instr_0xec_CPE(ms)
 	case 0xed:
-		// 0xed	-
-		unimplemented(0xed)
+		invalid(0xed)
 	case 0xee:
-		// 0xee	XRI D8	2	Z, S, P, CY, AC	A <- A ^ data
-		unimplemented(0xee)
+		instr_0xee_XRI(ms)
 	case 0xef:
-		// 0xef	RST 5	1		CALL $28
-		unimplemented(0xef)
+		instr_0xef_RST(ms)
 	case 0xf0:
-		// 0xf0	RP	1		if P, RET
-		unimplemented(0xf0)
+		instr_0xf0_RP(ms)
 	case 0xf1:
-		// 0xf1	POP PSW	1		flags <- (sp); A <- (sp+1); sp <- sp+2
-		unimplemented(0xf1)
+		instr_0xf1_POP(ms)
 	case 0xf2:
-		// 0xf2	JP adr	3		if P=1 PC <- adr
-		unimplemented(0xf2)
+		instr_0xf2_JP(ms)
 	case 0xf3:
-		// 0xf3	DI	1		special
-		unimplemented(0xf3)
+		instr_0xf3_DI(ms)
 	case 0xf4:
-		// 0xf4	CP adr	3		if P, PC <- adr
-		unimplemented(0xf4)
+		instr_0xf4_CP(ms)
 	case 0xf5:
-		// 0xf5	PUSH PSW	1		(sp-2)<-flags; (sp-1)<-A; sp <- sp - 2
-		unimplemented(0xf5)
+		instr_0xf5_PUSH(ms)
 	case 0xf6:
-		// 0xf6	ORI D8	2	Z, S, P, CY, AC	A <- A | data
-		unimplemented(0xf6)
+		instr_0xf6_ORI(ms)
 	case 0xf7:
-		// 0xf7	RST 6	1		CALL $30
-		unimplemented(0xf7)
+		instr_0xf7_RST(ms)
 	case 0xf8:
-		// 0xf8	RM	1		if M, RET
-		unimplemented(0xf8)
+		instr_0xf8_RM(ms)
 	case 0xf9:
-		// 0xf9	SPHL	1		SP=HL
-		unimplemented(0xf9)
+		instr_0xf9_SPHL(ms)
 	case 0xfa:
-		// 0xfa	JM adr	3		if M, PC <- adr
-		unimplemented(0xfa)
+		instr_0xfa_JM(ms)
 	case 0xfb:
-		// 0xfb	EI	1		special
-		unimplemented(0xfb)
+		instr_0xfb_EI(ms)
 	case 0xfc:
-		// 0xfc	CM adr	3		if M, CALL adr
-		unimplemented(0xfc)
+		instr_0xfc_CM(ms)
 	case 0xfd:
-		// 0xfd	-
-		unimplemented(0xfd)
+		invalid(0xfd)
 	case 0xfe:
-		// 0xfe	CPI D8	2	Z, S, P, CY, AC	A - data
-		unimplemented(0xfe)
+		instr_0xfe_CPI(ms)
 	case 0xff:
-		// 0xff	RST 7	1		CALL $38
-		unimplemented(0xff)
+		instr_0xff_RST(ms)
 	}
+}
+
+func invalid(opcode uint8) {
+	panic(fmt.Sprintf("Invalid opcode: 0x%02x\n", opcode))
 }
