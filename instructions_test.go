@@ -37,6 +37,19 @@ func Test_0x3d_DCR_A(t *testing.T) {
 	check_DCR("Test_0x3d_DCR_A", t, instr_0x3d_DCR_A, ms, &ms.regA)
 }
 
+func Test_0xc9_RET(t *testing.T) {
+	ms := newMachineState()
+	ms.sp = RAM_BASE
+	ms.writeMem(ms.sp, []uint8{0x1, 0x2, 0x3}, 3)
+	instr_0xc9_RET(ms)
+	if ms.pc != 0x201 {
+		t.Errorf("instr_0xc9_RET: expected pc=0x201, got pc=0x%04x", ms.pc)
+	}
+	if ms.sp != 0x3 {
+		t.Errorf("instr_0xc9_RET: expected pc=0x3, got pc=0x%04x", ms.sp)
+	}
+}
+
 func check_DCR(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, reg *uint8) {
 	*reg = 10
 	instrFunc(ms)

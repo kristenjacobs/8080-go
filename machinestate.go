@@ -72,6 +72,7 @@ func (ms *machineState) initialiseRoms() {
 
 func (ms *machineState) initialiseRam() {
 	ms.ram.size = RAM_SIZE
+	ms.ram.base = RAM_BASE
 	ms.ram.bytes = make([]uint8, RAM_SIZE)
 }
 
@@ -94,13 +95,45 @@ func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
 	panic(fmt.Sprintf("Cannot read memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
 }
 
+func (ms *machineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
+	if inRegion(addr, numBytes, &ms.romE) {
+		write(addr, bytes, numBytes, &ms.romE)
+		return
+	}
+	if inRegion(addr, numBytes, &ms.romF) {
+		write(addr, bytes, numBytes, &ms.romF)
+		return
+	}
+	if inRegion(addr, numBytes, &ms.romG) {
+		write(addr, bytes, numBytes, &ms.romG)
+		return
+	}
+	if inRegion(addr, numBytes, &ms.romH) {
+		write(addr, bytes, numBytes, &ms.romH)
+		return
+	}
+	if inRegion(addr, numBytes, &ms.ram) {
+		write(addr, bytes, numBytes, &ms.ram)
+		return
+	}
+	panic(fmt.Sprintf("Cannot write memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
+}
+
 func inRegion(addr uint16, numBytes uint16, mr *memoryRegion) bool {
-	return addr >= mr.base && (addr+numBytes) < (mr.base+mr.size)
+	//fmt.Printf("In region: 0x%04x, %d, region: 0x%04x, %d\n", addr, numBytes, mr.base, mr.size)
+	return (addr >= mr.base) && (addr+numBytes) < (mr.base+mr.size)
 }
 
 func read(addr uint16, numBytes uint16, mr *memoryRegion) []uint8 {
 	i := addr - mr.base
 	return mr.bytes[i : i+numBytes]
+}
+
+func write(addr uint16, bytes []uint8, numBytes uint16, mr *memoryRegion) {
+	a := addr - mr.base
+	for i, b := range bytes {
+		mr.bytes[a+uint16(i)] = b
+	}
 }
 
 func (ms *machineState) setZ(result uint8) {

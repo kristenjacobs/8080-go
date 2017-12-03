@@ -182,7 +182,8 @@ func instr_0x1f_RAR(ms *machineState) {
 
 func instr_0x20_RIM(ms *machineState) {
 	// 1		special
-	panic("Unimplemented")
+	fmt.Printf("0x%02x: 0x20_RIM\n", ms.pc)
+	ms.pc += 1
 }
 
 func instr_0x21_LXI(ms *machineState) {
@@ -1045,7 +1046,14 @@ func instr_0xc8_RZ(ms *machineState) {
 
 func instr_0xc9_RET(ms *machineState) {
 	// 1		PC.lo <- (sp); PC.hi<-(sp+1); SP <- SP+2
-	panic("Unimplemented")
+	bytes := ms.readMem(ms.sp, 3)
+	pcLo := bytes[0]
+	pcHi := bytes[1]
+	newSp := uint16(bytes[2])
+	pc := (uint16(pcHi) << 8) | uint16(pcLo)
+	fmt.Printf("0x%02x: 0xc9_RET pc=0x%04x, sp=0x%04x\n", ms.pc, pc, newSp)
+	ms.pc = (uint16(pcHi) << 8) | uint16(pcLo)
+	ms.sp = newSp
 }
 
 func instr_0xca_JZ(ms *machineState) {
