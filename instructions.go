@@ -4,7 +4,7 @@ import "fmt"
 
 func instr_0x00_NOP(ms *machineState) {
 	// 1
-	fmt.Printf("0x%02x: 0x00: NOP\n", ms.pc)
+	fmt.Printf("0x%02x: 0x00_NOP\n", ms.pc)
 	ms.pc += 1
 }
 
@@ -28,9 +28,17 @@ func instr_0x04_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x05_DCR(ms *machineState) {
-	// B	1	Z, S, P, AC	B <- B-1
-	panic("Unimplemented")
+func instr_0x05_DCR_B(ms *machineState) {
+	// 1	Z, S, P, AC	B <- B-1
+	regB := ms.regB
+	ms.regB = regB - 1
+	ms.setZ(ms.regB)
+	ms.setS(ms.regB)
+	ms.setP(ms.regB)
+	ms.setAC(ms.regB)
+	fmt.Printf("0x%02x: 0x05_DCR_B regB[0x%02x]=regB[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+		ms.pc, ms.regB, regB, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x06_MVI(ms *machineState) {
@@ -63,9 +71,17 @@ func instr_0x0c_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x0d_DCR(ms *machineState) {
-	// C	1	Z, S, P, AC	C <-C-1
-	panic("Unimplemented")
+func instr_0x0d_DCR_C(ms *machineState) {
+	// 1	Z, S, P, AC	C <-C-1
+	regC := ms.regC
+	ms.regC = regC - 1
+	ms.setZ(ms.regC)
+	ms.setS(ms.regC)
+	ms.setP(ms.regC)
+	ms.setAC(ms.regC)
+	fmt.Printf("0x%02x: 0x0d_DCR_C regC[0x%02x]=regC[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+		ms.pc, ms.regC, regC, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x0e_MVI(ms *machineState) {
@@ -75,11 +91,6 @@ func instr_0x0e_MVI(ms *machineState) {
 
 func instr_0x0f_RRC(ms *machineState) {
 	// 1	CY	A = A >> 1; bit 7 = prev bit 0; CY = prev bit 0
-	panic("Unimplemented")
-}
-
-func instr_0x10(ms *machineState) {
-	// -
 	panic("Unimplemented")
 }
 
@@ -103,9 +114,17 @@ func instr_0x14_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x15_DCR(ms *machineState) {
-	// D	1	Z, S, P, AC	D <- D-1
-	panic("Unimplemented")
+func instr_0x15_DCR_D(ms *machineState) {
+	// 1	Z, S, P, AC	D <- D-1
+	regD := ms.regD
+	ms.regD = regD - 1
+	ms.setZ(ms.regD)
+	ms.setS(ms.regD)
+	ms.setP(ms.regD)
+	ms.setAC(ms.regD)
+	fmt.Printf("0x%02x: 0x15_DCR_D regD[0x%02x]=regD[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+		ms.pc, ms.regD, regD, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x16_MVI(ms *machineState) {
@@ -138,9 +157,17 @@ func instr_0x1c_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x1d_DCR(ms *machineState) {
-	// E	1	Z, S, P, AC	E <- E-1
-	panic("Unimplemented")
+func instr_0x1d_DCR_E(ms *machineState) {
+	// 1	Z, S, P, AC	E <- E-1
+	regE := ms.regE
+	ms.regE = regE - 1
+	ms.setZ(ms.regE)
+	ms.setS(ms.regE)
+	ms.setP(ms.regE)
+	ms.setAC(ms.regE)
+	fmt.Printf("0x%02x: 0x1d_DCR_E regE[0x%02x]=regE[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+		ms.pc, ms.regE, regE, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x1e_MVI(ms *machineState) {
@@ -178,9 +205,17 @@ func instr_0x24_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x25_DCR(ms *machineState) {
-	// H	1	Z, S, P, AC	H <- H-1
-	panic("Unimplemented")
+func instr_0x25_DCR_H(ms *machineState) {
+	// 1	Z, S, P, AC	H <- H-1
+	regH := ms.regH
+	ms.regH = regH - 1
+	ms.setZ(ms.regH)
+	ms.setS(ms.regH)
+	ms.setP(ms.regH)
+	ms.setAC(ms.regH)
+	fmt.Printf("0x%02x: 0x25_DCR_H regH[0x%02x]=regH[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+		ms.pc, ms.regH, regH, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x26_MVI(ms *machineState) {
@@ -213,9 +248,17 @@ func instr_0x2c_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x2d_DCR(ms *machineState) {
-	// L	1	Z, S, P, AC	L <- L-1
-	panic("Unimplemented")
+func instr_0x2d_DCR_L(ms *machineState) {
+	// 1	Z, S, P, AC	L <- L-1
+	regL := ms.regL
+	ms.regL = regL - 1
+	ms.setZ(ms.regL)
+	ms.setS(ms.regL)
+	ms.setP(ms.regL)
+	ms.setAC(ms.regL)
+	fmt.Printf("0x%02x: 0x2d_DCR_L regL[0x%02x]=regL[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+		ms.pc, ms.regL, regL, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x2e_MVI(ms *machineState) {
@@ -253,8 +296,8 @@ func instr_0x34_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x35_DCR(ms *machineState) {
-	// M	1	Z, S, P, AC	(HL) <- (HL)-1
+func instr_0x35_DCR_M(ms *machineState) {
+	// 1	Z, S, P, AC	(HL) <- (HL)-1
 	panic("Unimplemented")
 }
 
@@ -288,9 +331,17 @@ func instr_0x3c_INR(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x3d_DCR(ms *machineState) {
-	// A	1	Z, S, P, AC	A <- A-1
-	panic("Unimplemented")
+func instr_0x3d_DCR_A(ms *machineState) {
+	// 1	Z, S, P, AC	A <- A-1
+	regA := ms.regA
+	ms.regA = regA - 1
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setAC(ms.regA)
+	fmt.Printf("0x%02x: 0x3d_DCR_A regA[0x%02x]=regA[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x3e_MVI(ms *machineState) {
@@ -963,7 +1014,7 @@ func instr_0xc3_JMP_adr(ms *machineState) {
 	byte1 := ms.readMem(ms.pc+1, 1)[0]
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
-	fmt.Printf("0x%02x: 0xc3: JMP_adr 0x%04x\n", ms.pc, adr)
+	fmt.Printf("0x%02x: 0xc3_JMP_adr 0x%04x\n", ms.pc, adr)
 	ms.pc = adr
 }
 

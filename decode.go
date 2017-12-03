@@ -4,9 +4,17 @@ import (
 	"fmt"
 )
 
-func fetchAndDecode(ms *machineState) {
-	opcode := ms.readMem(ms.pc, 1)
-	switch opcode[0] {
+func step(ms *machineState) {
+	opcode := fetch(ms)
+	decodeAndExecute(ms, opcode)
+}
+
+func fetch(ms *machineState) uint8 {
+	return ms.readMem(ms.pc, 1)[0]
+}
+
+func decodeAndExecute(ms *machineState, opcode uint8) {
+	switch opcode {
 	case 0x00:
 		instr_0x00_NOP(ms)
 	case 0x01:
@@ -18,7 +26,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x04:
 		instr_0x04_INR(ms)
 	case 0x05:
-		instr_0x05_DCR(ms)
+		instr_0x05_DCR_B(ms)
 	case 0x06:
 		instr_0x06_MVI(ms)
 	case 0x07:
@@ -34,7 +42,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x0c:
 		instr_0x0c_INR(ms)
 	case 0x0d:
-		instr_0x0d_DCR(ms)
+		instr_0x0d_DCR_C(ms)
 	case 0x0e:
 		instr_0x0e_MVI(ms)
 	case 0x0f:
@@ -50,7 +58,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x14:
 		instr_0x14_INR(ms)
 	case 0x15:
-		instr_0x15_DCR(ms)
+		instr_0x15_DCR_D(ms)
 	case 0x16:
 		instr_0x16_MVI(ms)
 	case 0x17:
@@ -66,7 +74,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x1c:
 		instr_0x1c_INR(ms)
 	case 0x1d:
-		instr_0x1d_DCR(ms)
+		instr_0x1d_DCR_E(ms)
 	case 0x1e:
 		instr_0x1e_MVI(ms)
 	case 0x1f:
@@ -82,7 +90,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x24:
 		instr_0x24_INR(ms)
 	case 0x25:
-		instr_0x25_DCR(ms)
+		instr_0x25_DCR_H(ms)
 	case 0x26:
 		instr_0x26_MVI(ms)
 	case 0x27:
@@ -98,7 +106,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x2c:
 		instr_0x2c_INR(ms)
 	case 0x2d:
-		instr_0x2d_DCR(ms)
+		instr_0x2d_DCR_L(ms)
 	case 0x2e:
 		instr_0x2e_MVI(ms)
 	case 0x2f:
@@ -114,7 +122,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x34:
 		instr_0x34_INR(ms)
 	case 0x35:
-		instr_0x35_DCR(ms)
+		instr_0x35_DCR_M(ms)
 	case 0x36:
 		instr_0x36_MVI(ms)
 	case 0x37:
@@ -130,7 +138,7 @@ func fetchAndDecode(ms *machineState) {
 	case 0x3c:
 		instr_0x3c_INR(ms)
 	case 0x3d:
-		instr_0x3d_DCR(ms)
+		instr_0x3d_DCR_A(ms)
 	case 0x3e:
 		instr_0x3e_MVI(ms)
 	case 0x3f:

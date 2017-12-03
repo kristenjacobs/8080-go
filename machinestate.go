@@ -102,3 +102,25 @@ func read(addr uint16, numBytes uint16, mr *memoryRegion) []uint8 {
 	i := addr - mr.base
 	return mr.bytes[i : i+numBytes]
 }
+
+func (ms *machineState) setZ(result uint8) {
+	ms.flagZ = result == 0
+}
+
+func (ms *machineState) setS(result uint8) {
+	ms.flagS = (result >> 7) == 0x1
+}
+
+func (ms *machineState) setP(result uint8) {
+	numBitsSet := 0
+	for i := uint(0); i < 8; i++ {
+		if ((result >> i) & 0x1) == 0x1 {
+			numBitsSet++
+		}
+	}
+	ms.flagP = (numBitsSet & 0x1) == 0
+}
+
+func (ms *machineState) setAC(result uint8) {
+	// Not yet implemented.
+}
