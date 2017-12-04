@@ -5,8 +5,13 @@ import (
 )
 
 const (
-	RAM_SIZE uint16 = 0x800
-	RAM_BASE uint16 = 0x2000
+	ROM_SIZE   uint16 = 0x800
+	ROM_E_BASE uint16 = 0x1800
+	ROM_F_BASE uint16 = 0x1000
+	ROM_G_BASE uint16 = 0x0800
+	ROM_H_BASE uint16 = 0x0000
+	RAM_SIZE   uint16 = 0x800
+	RAM_BASE   uint16 = 0x2000
 )
 
 type memoryRegion struct {

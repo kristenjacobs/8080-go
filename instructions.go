@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func instr_0x00_NOP(ms *machineState) {
 	// 1
@@ -355,34 +357,52 @@ func instr_0x3f_CMC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x40_MOV(ms *machineState) {
-	// B,B	1		B <- B
-	panic("Unimplemented")
+func instr_0x40_MOV_B_B(ms *machineState) {
+	// 1		B <- B
+	ms.regB = ms.regB
+	fmt.Printf("0x%02x: instr_0x40_MOV_B_B regB[0x%02x]=regB[0x%02x]\n",
+		ms.pc, ms.regB, ms.regB)
+	ms.pc += 1
 }
 
-func instr_0x41_MOV(ms *machineState) {
-	// B,C	1		B <- C
-	panic("Unimplemented")
+func instr_0x41_MOV_B_C(ms *machineState) {
+	// 1		B <- C
+	ms.regB = ms.regC
+	fmt.Printf("0x%02x: instr_0x41_MOV_B_C regB[0x%02x]=regC[0x%02x]\n",
+		ms.pc, ms.regB, ms.regC)
+	ms.pc += 1
 }
 
-func instr_0x42_MOV(ms *machineState) {
-	// B,D	1		B <- D
-	panic("Unimplemented")
+func instr_0x42_MOV_B_D(ms *machineState) {
+	// 1		B <- D
+	ms.regB = ms.regD
+	fmt.Printf("0x%02x: instr_0x42_MOV_B_D regB[0x%02x]=regD[0x%02x]\n",
+		ms.pc, ms.regB, ms.regD)
+	ms.pc += 1
 }
 
-func instr_0x43_MOV(ms *machineState) {
-	// B,E	1		B <- E
-	panic("Unimplemented")
+func instr_0x43_MOV_B_E(ms *machineState) {
+	// 1		B <- E
+	ms.regB = ms.regE
+	fmt.Printf("0x%02x: instr_0x43_MOV_B_E regB[0x%02x]=regE[0x%02x]\n",
+		ms.pc, ms.regB, ms.regE)
+	ms.pc += 1
 }
 
-func instr_0x44_MOV(ms *machineState) {
-	// B,H	1		B <- H
-	panic("Unimplemented")
+func instr_0x44_MOV_B_H(ms *machineState) {
+	// 1		B <- H
+	ms.regB = ms.regH
+	fmt.Printf("0x%02x: instr_0x44_MOV_B_H regB[0x%02x]=regH[0x%02x]\n",
+		ms.pc, ms.regB, ms.regH)
+	ms.pc += 1
 }
 
-func instr_0x45_MOV(ms *machineState) {
-	// B,L	1		B <- L
-	panic("Unimplemented")
+func instr_0x45_MOV_B_L(ms *machineState) {
+	// 1		B <- L
+	ms.regB = ms.regL
+	fmt.Printf("0x%02x: instr_0x45_MOV_B_L regB[0x%02x]=regL[0x%02x]\n",
+		ms.pc, ms.regB, ms.regL)
+	ms.pc += 1
 }
 
 func instr_0x46_MOV(ms *machineState) {

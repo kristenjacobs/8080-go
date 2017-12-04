@@ -144,17 +144,17 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x3f:
 		instr_0x3f_CMC(ms)
 	case 0x40:
-		instr_0x40_MOV(ms)
+		instr_0x40_MOV_B_B(ms)
 	case 0x41:
-		instr_0x41_MOV(ms)
+		instr_0x41_MOV_B_C(ms)
 	case 0x42:
-		instr_0x42_MOV(ms)
+		instr_0x42_MOV_B_D(ms)
 	case 0x43:
-		instr_0x43_MOV(ms)
+		instr_0x43_MOV_B_E(ms)
 	case 0x44:
-		instr_0x44_MOV(ms)
+		instr_0x44_MOV_B_H(ms)
 	case 0x45:
-		instr_0x45_MOV(ms)
+		instr_0x45_MOV_B_L(ms)
 	case 0x46:
 		instr_0x46_MOV(ms)
 	case 0x47:
