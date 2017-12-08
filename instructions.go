@@ -48,9 +48,9 @@ func instr_0x05_DCR_B(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x06_MVI(ms *machineState) {
-	// B, D8	2		B <- byte 2
-	panic("Unimplemented")
+func instr_0x06_MVI_B_D8(ms *machineState) {
+	// 2		B <- byte 2
+	MVI("0x06_MVI_B_D8", ms, &ms.regB)
 }
 
 func instr_0x07_RLC(ms *machineState) {
@@ -91,9 +91,9 @@ func instr_0x0d_DCR_C(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x0e_MVI(ms *machineState) {
-	// C,D8	2		C <- byte 2
-	panic("Unimplemented")
+func instr_0x0e_MVI_C_D8(ms *machineState) {
+	// 2		C <- byte 2
+	MVI("0x0e_MVI_C_D8", ms, &ms.regC)
 }
 
 func instr_0x0f_RRC(ms *machineState) {
@@ -139,9 +139,9 @@ func instr_0x15_DCR_D(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x16_MVI(ms *machineState) {
-	// D, D8	2		D <- byte 2
-	panic("Unimplemented")
+func instr_0x16_MVI_D_D8(ms *machineState) {
+	// 2		D <- byte 2
+	MVI("0x16_MVI_D_D8", ms, &ms.regD)
 }
 
 func instr_0x17_RAL(ms *machineState) {
@@ -182,9 +182,9 @@ func instr_0x1d_DCR_E(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x1e_MVI(ms *machineState) {
-	// E,D8	2		E <- byte 2
-	panic("Unimplemented")
+func instr_0x1e_MVI_E_D8(ms *machineState) {
+	// 2		E <- byte 2
+	MVI("0x1e_MVI_E_D8", ms, &ms.regE)
 }
 
 func instr_0x1f_RAR(ms *machineState) {
@@ -236,9 +236,9 @@ func instr_0x25_DCR_H(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x26_MVI(ms *machineState) {
-	// H,D8	2		H <- byte 2
-	panic("Unimplemented")
+func instr_0x26_MVI_H_D8(ms *machineState) {
+	// 2		H <- byte 2
+	MVI("0x26_MVI_H_D8", ms, &ms.regH)
 }
 
 func instr_0x27_DAA(ms *machineState) {
@@ -279,9 +279,9 @@ func instr_0x2d_DCR_L(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x2e_MVI(ms *machineState) {
-	// L, D8	2		L <- byte 2
-	panic("Unimplemented")
+func instr_0x2e_MVI_L_D8(ms *machineState) {
+	// 2		L <- byte 2
+	MVI("0x2e_MVI_L_D8", ms, &ms.regL)
 }
 
 func instr_0x2f_CMA(ms *machineState) {
@@ -367,9 +367,9 @@ func instr_0x3d_DCR_A(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x3e_MVI(ms *machineState) {
-	// A,D8	2		A <- byte 2
-	panic("Unimplemented")
+func instr_0x3e_MVI_A_D8(ms *machineState) {
+	// 2		A <- byte 2
+	MVI("0x3e_MVI_A_D8", ms, &ms.regA)
 }
 
 func instr_0x3f_CMC(ms *machineState) {

@@ -31,6 +31,29 @@ func check_LXI_single(testName string, t *testing.T, instrFunc func(*machineStat
 	}
 }
 
+func Test_MVI(t *testing.T) {
+	ms := newMachineState()
+	check_MVI("Test_0x06_MVI_B_D8(ms)", t, instr_0x06_MVI_B_D8, ms, &ms.regB)
+	check_MVI("Test_0x0e_MVI_C_D8(ms)", t, instr_0x0e_MVI_C_D8, ms, &ms.regC)
+	check_MVI("Test_0x16_MVI_D_D8(ms)", t, instr_0x16_MVI_D_D8, ms, &ms.regD)
+	check_MVI("Test_0x1e_MVI_E_D8(ms)", t, instr_0x1e_MVI_E_D8, ms, &ms.regE)
+	check_MVI("Test_0x26_MVI_H_D8(ms)", t, instr_0x26_MVI_H_D8, ms, &ms.regH)
+	check_MVI("Test_0x2e_MVI_L_D8(ms)", t, instr_0x2e_MVI_L_D8, ms, &ms.regL)
+	check_MVI("Test_0x3e_MVI_A_D8(ms)", t, instr_0x3e_MVI_A_D8, ms, &ms.regA)
+}
+
+func check_MVI(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, res *uint8) {
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xAB}, 1)
+	instrFunc(ms)
+	if *res != 0xAB {
+		t.Errorf("%s: expected 0xAB, got %02x", testName, *res)
+	}
+	if ms.pc != RAM_BASE+2 {
+		t.Errorf("%s: expected pc=0x%04x, got %04x", testName, RAM_BASE+2, ms.pc)
+	}
+}
+
 func Test_DCR(t *testing.T) {
 	ms := newMachineState()
 	check_DCR("Test_0x05_DCR_B", t, instr_0x05_DCR_B, ms, &ms.regB)
