@@ -85,19 +85,62 @@ func check_DCR(testName string, t *testing.T, instrFunc func(*machineState), ms 
 func Test_MOV(t *testing.T) {
 	ms := newMachineState()
 	check_MOV("Test_0x40_MOV_B_B", t, instr_0x40_MOV_B_B, ms, &ms.regB, &ms.regB)
-	check_MOV("Test_0x41_MOV_B_C", t, instr_0x41_MOV_B_C, ms, &ms.regC, &ms.regC)
-	check_MOV("Test_0x42_MOV_B_D", t, instr_0x42_MOV_B_D, ms, &ms.regD, &ms.regD)
-	check_MOV("Test_0x43_MOV_B_E", t, instr_0x43_MOV_B_E, ms, &ms.regE, &ms.regE)
-	check_MOV("Test_0x44_MOV_B_H", t, instr_0x44_MOV_B_H, ms, &ms.regH, &ms.regH)
-	check_MOV("Test_0x45_MOV_B_L", t, instr_0x45_MOV_B_L, ms, &ms.regL, &ms.regL)
+	check_MOV("Test_0x41_MOV_B_C", t, instr_0x41_MOV_B_C, ms, &ms.regB, &ms.regC)
+	check_MOV("Test_0x42_MOV_B_D", t, instr_0x42_MOV_B_D, ms, &ms.regB, &ms.regD)
+	check_MOV("Test_0x43_MOV_B_E", t, instr_0x43_MOV_B_E, ms, &ms.regB, &ms.regE)
+	check_MOV("Test_0x44_MOV_B_H", t, instr_0x44_MOV_B_H, ms, &ms.regB, &ms.regH)
+	check_MOV("Test_0x45_MOV_B_L", t, instr_0x45_MOV_B_L, ms, &ms.regB, &ms.regL)
+	check_MOV("Test_0x47_MOV_B_A", t, instr_0x47_MOV_B_A, ms, &ms.regB, &ms.regA)
+	check_MOV("Test_0x48_MOV_C_B", t, instr_0x48_MOV_C_B, ms, &ms.regC, &ms.regB)
+	check_MOV("Test_0x49_MOV_C_C", t, instr_0x49_MOV_C_C, ms, &ms.regC, &ms.regC)
+	check_MOV("Test_0x4a_MOV_C_D", t, instr_0x4a_MOV_C_D, ms, &ms.regC, &ms.regD)
+	check_MOV("Test_0x4b_MOV_C_E", t, instr_0x4b_MOV_C_E, ms, &ms.regC, &ms.regE)
+	check_MOV("Test_0x4c_MOV_C_H", t, instr_0x4c_MOV_C_H, ms, &ms.regC, &ms.regH)
+	check_MOV("Test_0x4d_MOV_C_L", t, instr_0x4d_MOV_C_L, ms, &ms.regC, &ms.regL)
+	check_MOV("Test_0x4f_MOV_C_A", t, instr_0x4f_MOV_C_A, ms, &ms.regC, &ms.regA)
+	check_MOV("Test_0x50_MOV_D_B", t, instr_0x50_MOV_D_B, ms, &ms.regD, &ms.regB)
+	check_MOV("Test_0x51_MOV_D_C", t, instr_0x51_MOV_D_C, ms, &ms.regD, &ms.regC)
+	check_MOV("Test_0x52_MOV_D_D", t, instr_0x52_MOV_D_D, ms, &ms.regD, &ms.regD)
+	check_MOV("Test_0x53_MOV_D_E", t, instr_0x53_MOV_D_E, ms, &ms.regD, &ms.regE)
+	check_MOV("Test_0x54_MOV_D_H", t, instr_0x54_MOV_D_H, ms, &ms.regD, &ms.regH)
+	check_MOV("Test_0x55_MOV_D_L", t, instr_0x55_MOV_D_L, ms, &ms.regD, &ms.regL)
+	check_MOV("Test_0x57_MOV_D_A", t, instr_0x57_MOV_D_A, ms, &ms.regD, &ms.regA)
+	check_MOV("Test_0x58_MOV_E_B", t, instr_0x58_MOV_E_B, ms, &ms.regE, &ms.regB)
+	check_MOV("Test_0x59_MOV_E_C", t, instr_0x59_MOV_E_C, ms, &ms.regE, &ms.regC)
+	check_MOV("Test_0x5a_MOV_E_D", t, instr_0x5a_MOV_E_D, ms, &ms.regE, &ms.regD)
+	check_MOV("Test_0x5b_MOV_E_E", t, instr_0x5b_MOV_E_E, ms, &ms.regE, &ms.regE)
+	check_MOV("Test_0x5c_MOV_E_H", t, instr_0x5c_MOV_E_H, ms, &ms.regE, &ms.regH)
+	check_MOV("Test_0x5d_MOV_E_L", t, instr_0x5d_MOV_E_L, ms, &ms.regE, &ms.regL)
+	check_MOV("Test_0x5f_MOV_E_A", t, instr_0x5f_MOV_E_A, ms, &ms.regE, &ms.regA)
+	check_MOV("Test_0x60_MOV_H_B", t, instr_0x60_MOV_H_B, ms, &ms.regH, &ms.regB)
+	check_MOV("Test_0x61_MOV_H_C", t, instr_0x61_MOV_H_C, ms, &ms.regH, &ms.regC)
+	check_MOV("Test_0x62_MOV_H_D", t, instr_0x62_MOV_H_D, ms, &ms.regH, &ms.regD)
+	check_MOV("Test_0x63_MOV_H_E", t, instr_0x63_MOV_H_E, ms, &ms.regH, &ms.regE)
+	check_MOV("Test_0x64_MOV_H_H", t, instr_0x64_MOV_H_H, ms, &ms.regH, &ms.regH)
+	check_MOV("Test_0x65_MOV_H_L", t, instr_0x65_MOV_H_L, ms, &ms.regH, &ms.regL)
+	check_MOV("Test_0x67_MOV_H_A", t, instr_0x67_MOV_H_A, ms, &ms.regH, &ms.regA)
+	check_MOV("Test_0x68_MOV_L_B", t, instr_0x68_MOV_L_B, ms, &ms.regL, &ms.regB)
+	check_MOV("Test_0x69_MOV_L_C", t, instr_0x69_MOV_L_C, ms, &ms.regL, &ms.regC)
+	check_MOV("Test_0x6a_MOV_L_D", t, instr_0x6a_MOV_L_D, ms, &ms.regL, &ms.regD)
+	check_MOV("Test_0x6b_MOV_L_E", t, instr_0x6b_MOV_L_E, ms, &ms.regL, &ms.regE)
+	check_MOV("Test_0x6c_MOV_L_H", t, instr_0x6c_MOV_L_H, ms, &ms.regL, &ms.regH)
+	check_MOV("Test_0x6d_MOV_L_L", t, instr_0x6d_MOV_L_L, ms, &ms.regL, &ms.regL)
+	check_MOV("Test_0x6f_MOV_L_A", t, instr_0x6f_MOV_L_A, ms, &ms.regL, &ms.regA)
+	check_MOV("Test_0x78_MOV_A_B", t, instr_0x78_MOV_A_B, ms, &ms.regA, &ms.regB)
+	check_MOV("Test_0x79_MOV_A_C", t, instr_0x79_MOV_A_C, ms, &ms.regA, &ms.regC)
+	check_MOV("Test_0x7a_MOV_A_D", t, instr_0x7a_MOV_A_D, ms, &ms.regA, &ms.regD)
+	check_MOV("Test_0x7b_MOV_A_E", t, instr_0x7b_MOV_A_E, ms, &ms.regA, &ms.regE)
+	check_MOV("Test_0x7c_MOV_A_H", t, instr_0x7c_MOV_A_H, ms, &ms.regA, &ms.regH)
+	check_MOV("Test_0x7d_MOV_A_L", t, instr_0x7d_MOV_A_L, ms, &ms.regA, &ms.regL)
+	check_MOV("Test_0x7f_MOV_A_A", t, instr_0x7f_MOV_A_A, ms, &ms.regA, &ms.regA)
 }
 
-func check_MOV(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, fromReg *uint8, toReg *uint8) {
-	*toReg = 0
-	*fromReg = 9
+func check_MOV(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, dstReg *uint8, srcReg *uint8) {
+	*dstReg = 0
+	*srcReg = 9
 	instrFunc(ms)
-	if *toReg != 9 {
-		t.Errorf("%s: expected toReg=9, got toReg=%d", testName, *toReg)
+	if *dstReg != 9 {
+		t.Errorf("%s: expected dstReg=9, got datReg=%d", testName, *dstReg)
 	}
 }
 

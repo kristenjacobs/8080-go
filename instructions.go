@@ -379,289 +379,271 @@ func instr_0x3f_CMC(ms *machineState) {
 
 func instr_0x40_MOV_B_B(ms *machineState) {
 	// 1		B <- B
-	ms.regB = ms.regB
-	fmt.Printf("0x%04x: instr_0x40_MOV_B_B regB[0x%02x]=regB[0x%02x]\n",
-		ms.pc, ms.regB, ms.regB)
-	ms.pc += 1
+	MOV("instr_0x40_MOV_B_B", ms, &ms.regB, &ms.regB)
 }
 
 func instr_0x41_MOV_B_C(ms *machineState) {
 	// 1		B <- C
-	ms.regB = ms.regC
-	fmt.Printf("0x%04x: instr_0x41_MOV_B_C regB[0x%02x]=regC[0x%02x]\n",
-		ms.pc, ms.regB, ms.regC)
-	ms.pc += 1
+	MOV("instr_0x41_MOV_B_C", ms, &ms.regB, &ms.regC)
 }
 
 func instr_0x42_MOV_B_D(ms *machineState) {
 	// 1		B <- D
-	ms.regB = ms.regD
-	fmt.Printf("0x%04x: instr_0x42_MOV_B_D regB[0x%02x]=regD[0x%02x]\n",
-		ms.pc, ms.regB, ms.regD)
-	ms.pc += 1
+	MOV("instr_0x42_MOV_B_D", ms, &ms.regB, &ms.regD)
 }
 
 func instr_0x43_MOV_B_E(ms *machineState) {
 	// 1		B <- E
-	ms.regB = ms.regE
-	fmt.Printf("0x%04x: instr_0x43_MOV_B_E regB[0x%02x]=regE[0x%02x]\n",
-		ms.pc, ms.regB, ms.regE)
-	ms.pc += 1
+	MOV("instr_0x43_MOV_B_E", ms, &ms.regB, &ms.regE)
 }
 
 func instr_0x44_MOV_B_H(ms *machineState) {
 	// 1		B <- H
-	ms.regB = ms.regH
-	fmt.Printf("0x%04x: instr_0x44_MOV_B_H regB[0x%02x]=regH[0x%02x]\n",
-		ms.pc, ms.regB, ms.regH)
-	ms.pc += 1
+	MOV("instr_0x44_MOV_B_H", ms, &ms.regB, &ms.regH)
 }
 
 func instr_0x45_MOV_B_L(ms *machineState) {
 	// 1		B <- L
-	ms.regB = ms.regL
-	fmt.Printf("0x%04x: instr_0x45_MOV_B_L regB[0x%02x]=regL[0x%02x]\n",
-		ms.pc, ms.regB, ms.regL)
-	ms.pc += 1
+	MOV("instr_0x45_MOV_B_L", ms, &ms.regB, &ms.regL)
 }
 
-func instr_0x46_MOV(ms *machineState) {
-	// B,M	1		B <- (HL)
+func instr_0x46_MOV_B_M(ms *machineState) {
+	// 1		B <- (HL)
 	panic("Unimplemented")
 }
 
-func instr_0x47_MOV(ms *machineState) {
-	// B,A	1		B <- A
+func instr_0x47_MOV_B_A(ms *machineState) {
+	// 1		B <- A
+	MOV("instr_0x47_MOV_B_A", ms, &ms.regB, &ms.regA)
+}
+
+func instr_0x48_MOV_C_B(ms *machineState) {
+	// 1		C <- B
+	MOV("instr_0x48_MOV_C_B", ms, &ms.regC, &ms.regB)
+}
+
+func instr_0x49_MOV_C_C(ms *machineState) {
+	// 1		C <- C
+	MOV("instr_0x49_MOV_C_C", ms, &ms.regC, &ms.regC)
+}
+
+func instr_0x4a_MOV_C_D(ms *machineState) {
+	// 1		C <- D
+	MOV("instr_0x4a_MOV_C_D", ms, &ms.regC, &ms.regD)
+}
+
+func instr_0x4b_MOV_C_E(ms *machineState) {
+	// 1		C <- E
+	MOV("instr_0x4b_MOV_C_E", ms, &ms.regC, &ms.regE)
+}
+
+func instr_0x4c_MOV_C_H(ms *machineState) {
+	// 1		C <- H
+	MOV("instr_0x4c_MOV_C_H", ms, &ms.regC, &ms.regH)
+}
+
+func instr_0x4d_MOV_C_L(ms *machineState) {
+	// 1		C <- L
+	MOV("instr_0x4d_MOV_C_L", ms, &ms.regC, &ms.regL)
+}
+
+func instr_0x4e_MOV_C_M(ms *machineState) {
+	// 1		C <- (HL)
 	panic("Unimplemented")
 }
 
-func instr_0x48_MOV(ms *machineState) {
-	// C,B	1		C <- B
+func instr_0x4f_MOV_C_A(ms *machineState) {
+	// 1		C <- A
+	MOV("instr_0x4f_MOV_C_A", ms, &ms.regC, &ms.regA)
+}
+
+func instr_0x50_MOV_D_B(ms *machineState) {
+	// 1		D <- B
+	MOV("instr_0x50_MOV_D_B", ms, &ms.regD, &ms.regB)
+}
+
+func instr_0x51_MOV_D_C(ms *machineState) {
+	// 1		D <- C
+	MOV("instr_0x51_MOV_D_C", ms, &ms.regD, &ms.regC)
+}
+
+func instr_0x52_MOV_D_D(ms *machineState) {
+	// 1		D <- D
+	MOV("instr_0x52_MOV_D_D", ms, &ms.regD, &ms.regD)
+}
+
+func instr_0x53_MOV_D_E(ms *machineState) {
+	// 1		D <- E
+	MOV("instr_0x53_MOV_D_E", ms, &ms.regD, &ms.regE)
+}
+
+func instr_0x54_MOV_D_H(ms *machineState) {
+	// 1		D <- H
+	MOV("instr_0x54_MOV_D_H", ms, &ms.regD, &ms.regH)
+}
+
+func instr_0x55_MOV_D_L(ms *machineState) {
+	// 1		D <- L
+	MOV("instr_0x55_MOV_D_L", ms, &ms.regD, &ms.regL)
+}
+
+func instr_0x56_MOV_D_M(ms *machineState) {
+	// 1		D <- (HL)
 	panic("Unimplemented")
 }
 
-func instr_0x49_MOV(ms *machineState) {
-	// C,C	1		C <- C
+func instr_0x57_MOV_D_A(ms *machineState) {
+	// 1		D <- A
+	MOV("instr_0x57_MOV_D_A", ms, &ms.regD, &ms.regA)
+}
+
+func instr_0x58_MOV_E_B(ms *machineState) {
+	// 1		E <- B
+	MOV("instr_0x58_MOV_E_B", ms, &ms.regE, &ms.regB)
+}
+
+func instr_0x59_MOV_E_C(ms *machineState) {
+	// 1		E <- C
+	MOV("instr_0x59_MOV_E_C", ms, &ms.regE, &ms.regC)
+}
+
+func instr_0x5a_MOV_E_D(ms *machineState) {
+	// 1		E <- D
+	MOV("instr_0x5a_MOV_E_D", ms, &ms.regE, &ms.regD)
+}
+
+func instr_0x5b_MOV_E_E(ms *machineState) {
+	// 1		E <- E
+	MOV("instr_0x5b_MOV_E_E", ms, &ms.regE, &ms.regE)
+}
+
+func instr_0x5c_MOV_E_H(ms *machineState) {
+	// 1		E <- H
+	MOV("instr_0x5c_MOV_E_H", ms, &ms.regE, &ms.regH)
+}
+
+func instr_0x5d_MOV_E_L(ms *machineState) {
+	// 1		E <- L
+	MOV("instr_0x5d_MOV_E_L", ms, &ms.regE, &ms.regL)
+}
+
+func instr_0x5e_MOV_E_M(ms *machineState) {
+	// 1		E <- (HL)
 	panic("Unimplemented")
 }
 
-func instr_0x4a_MOV(ms *machineState) {
-	// C,D	1		C <- D
+func instr_0x5f_MOV_E_A(ms *machineState) {
+	// 1		E <- A
+	MOV("instr_0x5f_MOV_E_A", ms, &ms.regE, &ms.regA)
+}
+
+func instr_0x60_MOV_H_B(ms *machineState) {
+	// 1		H <- B
+	MOV("instr_0x60_MOV_H_B", ms, &ms.regH, &ms.regB)
+}
+
+func instr_0x61_MOV_H_C(ms *machineState) {
+	// 1		H <- C
+	MOV("instr_0x61_MOV_H_C", ms, &ms.regH, &ms.regC)
+}
+
+func instr_0x62_MOV_H_D(ms *machineState) {
+	// 1		H <- D
+	MOV("instr_0x62_MOV_H_D", ms, &ms.regH, &ms.regD)
+}
+
+func instr_0x63_MOV_H_E(ms *machineState) {
+	// 1		H <- E
+	MOV("instr_0x63_MOV_H_E", ms, &ms.regH, &ms.regE)
+}
+
+func instr_0x64_MOV_H_H(ms *machineState) {
+	// 1		H <- H
+	MOV("instr_0x64_MOV_H_H", ms, &ms.regH, &ms.regH)
+}
+
+func instr_0x65_MOV_H_L(ms *machineState) {
+	// 1		H <- L
+	MOV("instr_0x65_MOV_H_L", ms, &ms.regH, &ms.regL)
+}
+
+func instr_0x66_MOV_H_M(ms *machineState) {
+	// 1		H <- (HL)
 	panic("Unimplemented")
 }
 
-func instr_0x4b_MOV(ms *machineState) {
-	// C,E	1		C <- E
+func instr_0x67_MOV_H_A(ms *machineState) {
+	// 1		H <- A
+	MOV("instr_0x67_MOV_H_A", ms, &ms.regH, &ms.regA)
+}
+
+func instr_0x68_MOV_L_B(ms *machineState) {
+	// 1		L <- B
+	MOV("instr_0x68_MOV_L_B", ms, &ms.regL, &ms.regB)
+}
+
+func instr_0x69_MOV_L_C(ms *machineState) {
+	// 1		L <- C
+	MOV("instr_0x69_MOV_L_C", ms, &ms.regL, &ms.regC)
+}
+
+func instr_0x6a_MOV_L_D(ms *machineState) {
+	// 1		L <- D
+	MOV("instr_0x6a_MOV_L_D", ms, &ms.regL, &ms.regD)
+}
+
+func instr_0x6b_MOV_L_E(ms *machineState) {
+	// 1		L <- E
+	MOV("instr_0x6b_MOV_L_E", ms, &ms.regL, &ms.regE)
+}
+
+func instr_0x6c_MOV_L_H(ms *machineState) {
+	// 1		L <- H
+	MOV("instr_0x6c_MOV_L_H", ms, &ms.regL, &ms.regH)
+}
+
+func instr_0x6d_MOV_L_L(ms *machineState) {
+	// 1		L <- L
+	MOV("instr_0x6d_MOV_L_L", ms, &ms.regL, &ms.regL)
+}
+
+func instr_0x6e_MOV_L_M(ms *machineState) {
+	// 1		L <- (HL)
 	panic("Unimplemented")
 }
 
-func instr_0x4c_MOV(ms *machineState) {
-	// C,H	1		C <- H
+func instr_0x6f_MOV_L_A(ms *machineState) {
+	// 1		L <- A
+	MOV("instr_0x6f_MOV_L_A", ms, &ms.regL, &ms.regA)
+}
+
+func instr_0x70_MOV_M_B(ms *machineState) {
+	// 1		(HL) <- B
 	panic("Unimplemented")
 }
 
-func instr_0x4d_MOV(ms *machineState) {
-	// C,L	1		C <- L
+func instr_0x71_MOV_M_C(ms *machineState) {
+	// 1		(HL) <- C
 	panic("Unimplemented")
 }
 
-func instr_0x4e_MOV(ms *machineState) {
-	// C,M	1		C <- (HL)
+func instr_0x72_MOV_M_D(ms *machineState) {
+	// 1		(HL) <- D
 	panic("Unimplemented")
 }
 
-func instr_0x4f_MOV(ms *machineState) {
-	// C,A	1		C <- A
+func instr_0x73_MOV_M_E(ms *machineState) {
+	// 1		(HL) <- E
 	panic("Unimplemented")
 }
 
-func instr_0x50_MOV(ms *machineState) {
-	// D,B	1		D <- B
+func instr_0x74_MOV_M_H(ms *machineState) {
+	// 1		(HL) <- H
 	panic("Unimplemented")
 }
 
-func instr_0x51_MOV(ms *machineState) {
-	// D,C	1		D <- C
-	panic("Unimplemented")
-}
-
-func instr_0x52_MOV(ms *machineState) {
-	// D,D	1		D <- D
-	panic("Unimplemented")
-}
-
-func instr_0x53_MOV(ms *machineState) {
-	// D,E	1		D <- E
-	panic("Unimplemented")
-}
-
-func instr_0x54_MOV(ms *machineState) {
-	// D,H	1		D <- H
-	panic("Unimplemented")
-}
-
-func instr_0x55_MOV(ms *machineState) {
-	// D,L	1		D <- L
-	panic("Unimplemented")
-}
-
-func instr_0x56_MOV(ms *machineState) {
-	// D,M	1		D <- (HL)
-	panic("Unimplemented")
-}
-
-func instr_0x57_MOV(ms *machineState) {
-	// D,A	1		D <- A
-	panic("Unimplemented")
-}
-
-func instr_0x58_MOV(ms *machineState) {
-	// E,B	1		E <- B
-	panic("Unimplemented")
-}
-
-func instr_0x59_MOV(ms *machineState) {
-	// E,C	1		E <- C
-	panic("Unimplemented")
-}
-
-func instr_0x5a_MOV(ms *machineState) {
-	// E,D	1		E <- D
-	panic("Unimplemented")
-}
-
-func instr_0x5b_MOV(ms *machineState) {
-	// E,E	1		E <- E
-	panic("Unimplemented")
-}
-
-func instr_0x5c_MOV(ms *machineState) {
-	// E,H	1		E <- H
-	panic("Unimplemented")
-}
-
-func instr_0x5d_MOV(ms *machineState) {
-	// E,L	1		E <- L
-	panic("Unimplemented")
-}
-
-func instr_0x5e_MOV(ms *machineState) {
-	// E,M	1		E <- (HL)
-	panic("Unimplemented")
-}
-
-func instr_0x5f_MOV(ms *machineState) {
-	// E,A	1		E <- A
-	panic("Unimplemented")
-}
-
-func instr_0x60_MOV(ms *machineState) {
-	// H,B	1		H <- B
-	panic("Unimplemented")
-}
-
-func instr_0x61_MOV(ms *machineState) {
-	// H,C	1		H <- C
-	panic("Unimplemented")
-}
-
-func instr_0x62_MOV(ms *machineState) {
-	// H,D	1		H <- D
-	panic("Unimplemented")
-}
-
-func instr_0x63_MOV(ms *machineState) {
-	// H,E	1		H <- E
-	panic("Unimplemented")
-}
-
-func instr_0x64_MOV(ms *machineState) {
-	// H,H	1		H <- H
-	panic("Unimplemented")
-}
-
-func instr_0x65_MOV(ms *machineState) {
-	// H,L	1		H <- L
-	panic("Unimplemented")
-}
-
-func instr_0x66_MOV(ms *machineState) {
-	// H,M	1		H <- (HL)
-	panic("Unimplemented")
-}
-
-func instr_0x67_MOV(ms *machineState) {
-	// H,A	1		H <- A
-	panic("Unimplemented")
-}
-
-func instr_0x68_MOV(ms *machineState) {
-	// L,B	1		L <- B
-	panic("Unimplemented")
-}
-
-func instr_0x69_MOV(ms *machineState) {
-	// L,C	1		L <- C
-	panic("Unimplemented")
-}
-
-func instr_0x6a_MOV(ms *machineState) {
-	// L,D	1		L <- D
-	panic("Unimplemented")
-}
-
-func instr_0x6b_MOV(ms *machineState) {
-	// L,E	1		L <- E
-	panic("Unimplemented")
-}
-
-func instr_0x6c_MOV(ms *machineState) {
-	// L,H	1		L <- H
-	panic("Unimplemented")
-}
-
-func instr_0x6d_MOV(ms *machineState) {
-	// L,L	1		L <- L
-	panic("Unimplemented")
-}
-
-func instr_0x6e_MOV(ms *machineState) {
-	// L,M	1		L <- (HL)
-	panic("Unimplemented")
-}
-
-func instr_0x6f_MOV(ms *machineState) {
-	// L,A	1		L <- A
-	panic("Unimplemented")
-}
-
-func instr_0x70_MOV(ms *machineState) {
-	// M,B	1		(HL) <- B
-	panic("Unimplemented")
-}
-
-func instr_0x71_MOV(ms *machineState) {
-	// M,C	1		(HL) <- C
-	panic("Unimplemented")
-}
-
-func instr_0x72_MOV(ms *machineState) {
-	// M,D	1		(HL) <- D
-	panic("Unimplemented")
-}
-
-func instr_0x73_MOV(ms *machineState) {
-	// M,E	1		(HL) <- E
-	panic("Unimplemented")
-}
-
-func instr_0x74_MOV(ms *machineState) {
-	// M,H	1		(HL) <- H
-	panic("Unimplemented")
-}
-
-func instr_0x75_MOV(ms *machineState) {
-	// M,L	1		(HL) <- L
+func instr_0x75_MOV_M_L(ms *machineState) {
+	// 1		(HL) <- L
 	panic("Unimplemented")
 }
 
@@ -670,49 +652,49 @@ func instr_0x76_HLT(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x77_MOV(ms *machineState) {
-	// M,A	1		(HL) <- A
+func instr_0x77_MOV_M_A(ms *machineState) {
+	// 1		(HL) <- A
 	panic("Unimplemented")
 }
 
-func instr_0x78_MOV(ms *machineState) {
-	// A,B	1		A <- B
+func instr_0x78_MOV_A_B(ms *machineState) {
+	// 1		A <- B
+	MOV("instr_0x78_MOV_A_B", ms, &ms.regA, &ms.regB)
+}
+
+func instr_0x79_MOV_A_C(ms *machineState) {
+	// 1		A <- C
+	MOV("instr_0x79_MOV_A_C", ms, &ms.regA, &ms.regC)
+}
+
+func instr_0x7a_MOV_A_D(ms *machineState) {
+	// 1		A <- D
+	MOV("instr_0x7a_MOV_A_D", ms, &ms.regA, &ms.regD)
+}
+
+func instr_0x7b_MOV_A_E(ms *machineState) {
+	// 1		A <- E
+	MOV("instr_0x7b_MOV_A_E", ms, &ms.regA, &ms.regE)
+}
+
+func instr_0x7c_MOV_A_H(ms *machineState) {
+	// 1		A <- H
+	MOV("instr_0x7c_MOV_A_H", ms, &ms.regA, &ms.regH)
+}
+
+func instr_0x7d_MOV_A_L(ms *machineState) {
+	// 1		A <- L
+	MOV("instr_0x7d_MOV_A_L", ms, &ms.regA, &ms.regL)
+}
+
+func instr_0x7e_MOV_A_M(ms *machineState) {
+	// 1		A <- (HL)
 	panic("Unimplemented")
 }
 
-func instr_0x79_MOV(ms *machineState) {
-	// A,C	1		A <- C
-	panic("Unimplemented")
-}
-
-func instr_0x7a_MOV(ms *machineState) {
-	// A,D	1		A <- D
-	panic("Unimplemented")
-}
-
-func instr_0x7b_MOV(ms *machineState) {
-	// A,E	1		A <- E
-	panic("Unimplemented")
-}
-
-func instr_0x7c_MOV(ms *machineState) {
-	// A,H	1		A <- H
-	panic("Unimplemented")
-}
-
-func instr_0x7d_MOV(ms *machineState) {
-	// A,L	1		A <- L
-	panic("Unimplemented")
-}
-
-func instr_0x7e_MOV(ms *machineState) {
-	// A,M	1		A <- (HL)
-	panic("Unimplemented")
-}
-
-func instr_0x7f_MOV(ms *machineState) {
-	// A,A	1		A <- A
-	panic("Unimplemented")
+func instr_0x7f_MOV_A_A(ms *machineState) {
+	// 1		A <- A
+	MOV("instr_0x7f_MOV_A_A", ms, &ms.regA, &ms.regA)
 }
 
 func instr_0x80_ADD(ms *machineState) {
