@@ -18,7 +18,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x00:
 		instr_0x00_NOP(ms)
 	case 0x01:
-		instr_0x01_LXI(ms)
+		instr_0x01_LXI_B_D16(ms)
 	case 0x02:
 		instr_0x02_STAX(ms)
 	case 0x03:
@@ -50,7 +50,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x10:
 		invalid(0x10)
 	case 0x11:
-		instr_0x11_LXI(ms)
+		instr_0x11_LXI_D_D16(ms)
 	case 0x12:
 		instr_0x12_STAX(ms)
 	case 0x13:
@@ -82,7 +82,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x20:
 		instr_0x20_RIM(ms)
 	case 0x21:
-		instr_0x21_LXI(ms)
+		instr_0x21_LXI_H_D16(ms)
 	case 0x22:
 		instr_0x22_SHLD(ms)
 	case 0x23:
@@ -114,7 +114,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x30:
 		instr_0x30_SIM(ms)
 	case 0x31:
-		instr_0x31_LXI(ms)
+		instr_0x31_LXI_SP_D16(ms)
 	case 0x32:
 		instr_0x32_STA(ms)
 	case 0x33:

@@ -2,6 +2,35 @@ package main
 
 import "testing"
 
+func Test_LXI(t *testing.T) {
+	ms := newMachineState()
+	check_LXI_pair("Test_0x01_LXI_B_D16", t, instr_0x01_LXI_B_D16, ms, &ms.regB, &ms.regC)
+	check_LXI_pair("Test_0x11_LXI_D_D16", t, instr_0x11_LXI_D_D16, ms, &ms.regD, &ms.regE)
+	check_LXI_pair("Test_0x21_LXI_H_D16", t, instr_0x21_LXI_H_D16, ms, &ms.regH, &ms.regL)
+	check_LXI_single("Test_0x31_LXI_SP_D16", t, instr_0x31_LXI_SP_D16, ms, &ms.sp)
+}
+
+func check_LXI_pair(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, regHi *uint8, regLo *uint8) {
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	instrFunc(ms)
+	if *regHi != 0xBA {
+		t.Errorf("%s: expected 0xBA, got %02x", *regHi)
+	}
+	if *regLo != 0xBE {
+		t.Errorf("%s: expected 0xBE, got %02x", *regLo)
+	}
+}
+
+func check_LXI_single(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, res *uint16) {
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	instrFunc(ms)
+	if *res != 0xBABE {
+		t.Errorf("%s: expected 0xBABE, got %02x", *res)
+	}
+}
+
 func Test_DCR(t *testing.T) {
 	ms := newMachineState()
 	check_DCR("Test_0x05_DCR_B", t, instr_0x05_DCR_B, ms, &ms.regB)

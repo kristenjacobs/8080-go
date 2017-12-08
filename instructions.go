@@ -6,13 +6,18 @@ import (
 
 func instr_0x00_NOP(ms *machineState) {
 	// 1
-	fmt.Printf("0x%02x: 0x00_NOP\n", ms.pc)
+	fmt.Printf("0x%04x: 0x00_NOP\n", ms.pc)
 	ms.pc += 1
 }
 
-func instr_0x01_LXI(ms *machineState) {
-	// B,D16	3		B <- byte 3, C <- byte 2
-	panic("Unimplemented")
+func instr_0x01_LXI_B_D16(ms *machineState) {
+	// 3		B <- byte 3, C <- byte 2
+	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	ms.regB = byte3
+	ms.regC = byte2
+	fmt.Printf("0x%04x: 0x01_LXI_B_D16 0x%02x 0x%02x\n", ms.pc, ms.regB, ms.regC)
+	ms.pc += 3
 }
 
 func instr_0x02_STAX(ms *machineState) {
@@ -38,7 +43,7 @@ func instr_0x05_DCR_B(ms *machineState) {
 	ms.setS(ms.regB)
 	ms.setP(ms.regB)
 	ms.setAC(ms.regB)
-	fmt.Printf("0x%02x: 0x05_DCR_B regB[0x%02x]=regB[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	fmt.Printf("0x%04x: 0x05_DCR_B regB[0x%02x]=regB[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regB, regB, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -81,7 +86,7 @@ func instr_0x0d_DCR_C(ms *machineState) {
 	ms.setS(ms.regC)
 	ms.setP(ms.regC)
 	ms.setAC(ms.regC)
-	fmt.Printf("0x%02x: 0x0d_DCR_C regC[0x%02x]=regC[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	fmt.Printf("0x%04x: 0x0d_DCR_C regC[0x%02x]=regC[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regC, regC, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -96,9 +101,14 @@ func instr_0x0f_RRC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x11_LXI(ms *machineState) {
-	// D,D16	3		D <- byte 3, E <- byte 2
-	panic("Unimplemented")
+func instr_0x11_LXI_D_D16(ms *machineState) {
+	// 3		D <- byte 3, E <- byte 2
+	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	ms.regD = byte3
+	ms.regE = byte2
+	fmt.Printf("0x%04x: 0x11_LXI_D_D16 0x%02x 0x%02x\n", ms.pc, ms.regD, ms.regE)
+	ms.pc += 3
 }
 
 func instr_0x12_STAX(ms *machineState) {
@@ -124,7 +134,7 @@ func instr_0x15_DCR_D(ms *machineState) {
 	ms.setS(ms.regD)
 	ms.setP(ms.regD)
 	ms.setAC(ms.regD)
-	fmt.Printf("0x%02x: 0x15_DCR_D regD[0x%02x]=regD[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	fmt.Printf("0x%04x: 0x15_DCR_D regD[0x%02x]=regD[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regD, regD, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -167,7 +177,7 @@ func instr_0x1d_DCR_E(ms *machineState) {
 	ms.setS(ms.regE)
 	ms.setP(ms.regE)
 	ms.setAC(ms.regE)
-	fmt.Printf("0x%02x: 0x1d_DCR_E regE[0x%02x]=regE[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	fmt.Printf("0x%04x: 0x1d_DCR_E regE[0x%02x]=regE[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regE, regE, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -184,13 +194,18 @@ func instr_0x1f_RAR(ms *machineState) {
 
 func instr_0x20_RIM(ms *machineState) {
 	// 1		special
-	fmt.Printf("0x%02x: 0x20_RIM\n", ms.pc)
+	fmt.Printf("0x%04x: 0x20_RIM\n", ms.pc)
 	ms.pc += 1
 }
 
-func instr_0x21_LXI(ms *machineState) {
-	// H,D16	3		H <- byte 3, L <- byte 2
-	panic("Unimplemented")
+func instr_0x21_LXI_H_D16(ms *machineState) {
+	// 3		H <- byte 3, L <- byte 2
+	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	ms.regH = byte3
+	ms.regL = byte2
+	fmt.Printf("0x%04x: 0x21_LXI_H_D16 0x%02x 0x%02x\n", ms.pc, ms.regH, ms.regL)
+	ms.pc += 3
 }
 
 func instr_0x22_SHLD(ms *machineState) {
@@ -216,7 +231,7 @@ func instr_0x25_DCR_H(ms *machineState) {
 	ms.setS(ms.regH)
 	ms.setP(ms.regH)
 	ms.setAC(ms.regH)
-	fmt.Printf("0x%02x: 0x25_DCR_H regH[0x%02x]=regH[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	fmt.Printf("0x%04x: 0x25_DCR_H regH[0x%02x]=regH[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regH, regH, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -259,7 +274,7 @@ func instr_0x2d_DCR_L(ms *machineState) {
 	ms.setS(ms.regL)
 	ms.setP(ms.regL)
 	ms.setAC(ms.regL)
-	fmt.Printf("0x%02x: 0x2d_DCR_L regL[0x%02x]=regL[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	fmt.Printf("0x%04x: 0x2d_DCR_L regL[0x%02x]=regL[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regL, regL, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -279,9 +294,14 @@ func instr_0x30_SIM(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x31_LXI(ms *machineState) {
-	// SP, D16	3		SP.hi <- byte 3, SP.lo <- byte 2
-	panic("Unimplemented")
+func instr_0x31_LXI_SP_D16(ms *machineState) {
+	// 3		SP.hi <- byte 3, SP.lo <- byte 2
+	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	var sp uint16 = (uint16(byte3) << 8) | uint16(byte2)
+	fmt.Printf("0x%04x: 0x31_LXI_SP_D16 0x%04x\n", ms.pc, sp)
+	ms.sp = sp
+	ms.pc += 3
 }
 
 func instr_0x32_STA(ms *machineState) {
@@ -342,7 +362,7 @@ func instr_0x3d_DCR_A(ms *machineState) {
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
 	ms.setAC(ms.regA)
-	fmt.Printf("0x%02x: 0x3d_DCR_A regA[0x%02x]=regA[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	fmt.Printf("0x%04x: 0x3d_DCR_A regA[0x%02x]=regA[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regA, regA, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -360,7 +380,7 @@ func instr_0x3f_CMC(ms *machineState) {
 func instr_0x40_MOV_B_B(ms *machineState) {
 	// 1		B <- B
 	ms.regB = ms.regB
-	fmt.Printf("0x%02x: instr_0x40_MOV_B_B regB[0x%02x]=regB[0x%02x]\n",
+	fmt.Printf("0x%04x: instr_0x40_MOV_B_B regB[0x%02x]=regB[0x%02x]\n",
 		ms.pc, ms.regB, ms.regB)
 	ms.pc += 1
 }
@@ -368,7 +388,7 @@ func instr_0x40_MOV_B_B(ms *machineState) {
 func instr_0x41_MOV_B_C(ms *machineState) {
 	// 1		B <- C
 	ms.regB = ms.regC
-	fmt.Printf("0x%02x: instr_0x41_MOV_B_C regB[0x%02x]=regC[0x%02x]\n",
+	fmt.Printf("0x%04x: instr_0x41_MOV_B_C regB[0x%02x]=regC[0x%02x]\n",
 		ms.pc, ms.regB, ms.regC)
 	ms.pc += 1
 }
@@ -376,7 +396,7 @@ func instr_0x41_MOV_B_C(ms *machineState) {
 func instr_0x42_MOV_B_D(ms *machineState) {
 	// 1		B <- D
 	ms.regB = ms.regD
-	fmt.Printf("0x%02x: instr_0x42_MOV_B_D regB[0x%02x]=regD[0x%02x]\n",
+	fmt.Printf("0x%04x: instr_0x42_MOV_B_D regB[0x%02x]=regD[0x%02x]\n",
 		ms.pc, ms.regB, ms.regD)
 	ms.pc += 1
 }
@@ -384,7 +404,7 @@ func instr_0x42_MOV_B_D(ms *machineState) {
 func instr_0x43_MOV_B_E(ms *machineState) {
 	// 1		B <- E
 	ms.regB = ms.regE
-	fmt.Printf("0x%02x: instr_0x43_MOV_B_E regB[0x%02x]=regE[0x%02x]\n",
+	fmt.Printf("0x%04x: instr_0x43_MOV_B_E regB[0x%02x]=regE[0x%02x]\n",
 		ms.pc, ms.regB, ms.regE)
 	ms.pc += 1
 }
@@ -392,7 +412,7 @@ func instr_0x43_MOV_B_E(ms *machineState) {
 func instr_0x44_MOV_B_H(ms *machineState) {
 	// 1		B <- H
 	ms.regB = ms.regH
-	fmt.Printf("0x%02x: instr_0x44_MOV_B_H regB[0x%02x]=regH[0x%02x]\n",
+	fmt.Printf("0x%04x: instr_0x44_MOV_B_H regB[0x%02x]=regH[0x%02x]\n",
 		ms.pc, ms.regB, ms.regH)
 	ms.pc += 1
 }
@@ -400,7 +420,7 @@ func instr_0x44_MOV_B_H(ms *machineState) {
 func instr_0x45_MOV_B_L(ms *machineState) {
 	// 1		B <- L
 	ms.regB = ms.regL
-	fmt.Printf("0x%02x: instr_0x45_MOV_B_L regB[0x%02x]=regL[0x%02x]\n",
+	fmt.Printf("0x%04x: instr_0x45_MOV_B_L regB[0x%02x]=regL[0x%02x]\n",
 		ms.pc, ms.regB, ms.regL)
 	ms.pc += 1
 }
@@ -1035,7 +1055,7 @@ func instr_0xc3_JMP_adr(ms *machineState) {
 	byte1 := ms.readMem(ms.pc+1, 1)[0]
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
-	fmt.Printf("0x%02x: 0xc3_JMP_adr 0x%04x\n", ms.pc, adr)
+	fmt.Printf("0x%04x: 0xc3_JMP_adr 0x%04x\n", ms.pc, adr)
 	ms.pc = adr
 }
 
