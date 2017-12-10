@@ -165,3 +165,7 @@ func (ms *machineState) setP(result uint8) {
 func (ms *machineState) setAC(result uint8) {
 	// Not yet implemented.
 }
+
+func (ms *machineState) HLAddr() uint16 {
+	return (uint16(ms.regH) << 8) | uint16(ms.regL)
+}
