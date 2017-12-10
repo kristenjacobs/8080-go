@@ -427,7 +427,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xcc:
 		instr_0xcc_CZ(ms)
 	case 0xcd:
-		instr_0xcd_CALL(ms)
+		instr_0xcd_CALL_adr(ms)
 	case 0xce:
 		instr_0xce_ACI(ms)
 	case 0xcf:
