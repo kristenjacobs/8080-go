@@ -167,7 +167,7 @@ func check_MOV_MEM(testName string, t *testing.T, instrFunc func(*machineState),
 	*dstReg = 0
 	ms.regH = uint8(RAM_BASE >> 8)
 	ms.regL = uint8(RAM_BASE & 0xFF)
-	ms.writeMem(ms.HLAddr(), []uint8{0xFF}, 1)
+	ms.writeMem(ms.addr(ms.regL, ms.regH), []uint8{0xFF}, 1)
 	instrFunc(ms)
 	if *dstReg != 0xFF {
 		t.Errorf("%s: expected dstReg=0xFF, got datReg=%d", testName, *dstReg)
@@ -204,5 +204,21 @@ func Test_0xcd_CALL_adr(t *testing.T) {
 	}
 	if ms.pc != 0xDEAD {
 		t.Errorf("instr_0xcd_CALL_adr: expected pc=0xDEAD, got pc=0x%04x", ms.pc)
+	}
+}
+
+func Test_LDAX(t *testing.T) {
+	ms := newMachineState()
+	check_LDAX("instr_0x0a_LDAX_B", t, instr_0x0a_LDAX_B, ms, &ms.regB, &ms.regC)
+	check_LDAX("instr_0x1a_LDAX_D", t, instr_0x1a_LDAX_D, ms, &ms.regD, &ms.regE)
+}
+
+func check_LDAX(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, adrRegLo *uint8, adrRegHi *uint8) {
+	*adrRegLo = uint8(RAM_BASE >> 8)
+	*adrRegHi = uint8(RAM_BASE & 0xFF)
+	ms.writeMem(ms.addr(*adrRegLo, *adrRegHi), []uint8{0xFF}, 1)
+	instrFunc(ms)
+	if ms.regA != 0xFF {
+		t.Errorf("%s: expected regA=0xFF, got regA=0x%02x", testName, ms.regA)
 	}
 }

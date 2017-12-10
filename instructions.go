@@ -59,9 +59,9 @@ func instr_0x09_DAD(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x0a_LDAX(ms *machineState) {
-	// B	1		A <- (BC)
-	panic("Unimplemented")
+func instr_0x0a_LDAX_B(ms *machineState) {
+	// 1		A <- (BC)
+	LDAX("0x0a_LDAX_B", ms, &ms.regB, &ms.regC)
 }
 
 func instr_0x0b_DCX(ms *machineState) {
@@ -150,9 +150,9 @@ func instr_0x19_DAD(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x1a_LDAX(ms *machineState) {
-	// D	1		A <- (DE)
-	panic("Unimplemented")
+func instr_0x1a_LDAX_D(ms *machineState) {
+	// 1		A <- (DE)
+	LDAX("0x1a_LDAX_D", ms, &ms.regD, &ms.regE)
 }
 
 func instr_0x1b_DCX(ms *machineState) {

@@ -166,6 +166,6 @@ func (ms *machineState) setAC(result uint8) {
 	// Not yet implemented.
 }
 
-func (ms *machineState) HLAddr() uint16 {
-	return (uint16(ms.regH) << 8) | uint16(ms.regL)
+func (ms *machineState) addr(regLo uint8, regHi uint8) uint16 {
+	return (uint16(regHi) << 8) | uint16(regLo)
 }
