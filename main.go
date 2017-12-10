@@ -23,7 +23,7 @@ func main() {
 	InitLogging(os.Stdout, ioutil.Discard)
 
 	ms := newMachineState()
-	for {
+	for ms.halt == false {
 		step(ms)
 	}
 }

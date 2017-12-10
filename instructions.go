@@ -645,7 +645,8 @@ func instr_0x75_MOV_M_L(ms *machineState) {
 
 func instr_0x76_HLT(ms *machineState) {
 	// 1		special
-	panic("Unimplemented")
+	Trace.Printf("0x%04x: 0x76_HLT\n", ms.pc)
+	ms.halt = true
 }
 
 func instr_0x77_MOV_M_A(ms *machineState) {

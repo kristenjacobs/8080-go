@@ -43,6 +43,8 @@ type machineState struct {
 
 	pc uint16
 	sp uint16
+
+	halt bool
 }
 
 func newMachineState() *machineState {
@@ -54,6 +56,7 @@ func newMachineState() *machineState {
 	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
 
+	ms.halt = false
 	return &ms
 }
 
