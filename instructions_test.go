@@ -1,6 +1,13 @@
 package main
 
-import "testing"
+import (
+	"io/ioutil"
+	"testing"
+)
+
+func init() {
+	InitLogging(ioutil.Discard, ioutil.Discard)
+}
 
 func Test_LXI(t *testing.T) {
 	ms := newMachineState()

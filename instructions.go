@@ -1,12 +1,8 @@
 package main
 
-import (
-	"fmt"
-)
-
 func instr_0x00_NOP(ms *machineState) {
 	// 1
-	fmt.Printf("0x%04x: 0x00_NOP\n", ms.pc)
+	Trace.Printf("0x%04x: 0x00_NOP\n", ms.pc)
 	ms.pc += 1
 }
 
@@ -16,7 +12,7 @@ func instr_0x01_LXI_B_D16(ms *machineState) {
 	byte3 := ms.readMem(ms.pc+2, 1)[0]
 	ms.regB = byte3
 	ms.regC = byte2
-	fmt.Printf("0x%04x: 0x01_LXI_B_D16 0x%02x 0x%02x\n", ms.pc, ms.regB, ms.regC)
+	Trace.Printf("0x%04x: 0x01_LXI_B_D16 0x%02x 0x%02x\n", ms.pc, ms.regB, ms.regC)
 	ms.pc += 3
 }
 
@@ -43,7 +39,7 @@ func instr_0x05_DCR_B(ms *machineState) {
 	ms.setS(ms.regB)
 	ms.setP(ms.regB)
 	ms.setAC(ms.regB)
-	fmt.Printf("0x%04x: 0x05_DCR_B regB[0x%02x]=regB[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	Trace.Printf("0x%04x: 0x05_DCR_B regB[0x%02x]=regB[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regB, regB, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -86,7 +82,7 @@ func instr_0x0d_DCR_C(ms *machineState) {
 	ms.setS(ms.regC)
 	ms.setP(ms.regC)
 	ms.setAC(ms.regC)
-	fmt.Printf("0x%04x: 0x0d_DCR_C regC[0x%02x]=regC[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	Trace.Printf("0x%04x: 0x0d_DCR_C regC[0x%02x]=regC[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regC, regC, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -107,7 +103,7 @@ func instr_0x11_LXI_D_D16(ms *machineState) {
 	byte3 := ms.readMem(ms.pc+2, 1)[0]
 	ms.regD = byte3
 	ms.regE = byte2
-	fmt.Printf("0x%04x: 0x11_LXI_D_D16 0x%02x 0x%02x\n", ms.pc, ms.regD, ms.regE)
+	Trace.Printf("0x%04x: 0x11_LXI_D_D16 0x%02x 0x%02x\n", ms.pc, ms.regD, ms.regE)
 	ms.pc += 3
 }
 
@@ -134,7 +130,7 @@ func instr_0x15_DCR_D(ms *machineState) {
 	ms.setS(ms.regD)
 	ms.setP(ms.regD)
 	ms.setAC(ms.regD)
-	fmt.Printf("0x%04x: 0x15_DCR_D regD[0x%02x]=regD[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	Trace.Printf("0x%04x: 0x15_DCR_D regD[0x%02x]=regD[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regD, regD, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -177,7 +173,7 @@ func instr_0x1d_DCR_E(ms *machineState) {
 	ms.setS(ms.regE)
 	ms.setP(ms.regE)
 	ms.setAC(ms.regE)
-	fmt.Printf("0x%04x: 0x1d_DCR_E regE[0x%02x]=regE[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	Trace.Printf("0x%04x: 0x1d_DCR_E regE[0x%02x]=regE[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regE, regE, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -194,7 +190,7 @@ func instr_0x1f_RAR(ms *machineState) {
 
 func instr_0x20_RIM(ms *machineState) {
 	// 1		special
-	fmt.Printf("0x%04x: 0x20_RIM\n", ms.pc)
+	Trace.Printf("0x%04x: 0x20_RIM\n", ms.pc)
 	ms.pc += 1
 }
 
@@ -204,7 +200,7 @@ func instr_0x21_LXI_H_D16(ms *machineState) {
 	byte3 := ms.readMem(ms.pc+2, 1)[0]
 	ms.regH = byte3
 	ms.regL = byte2
-	fmt.Printf("0x%04x: 0x21_LXI_H_D16 0x%02x 0x%02x\n", ms.pc, ms.regH, ms.regL)
+	Trace.Printf("0x%04x: 0x21_LXI_H_D16 0x%02x 0x%02x\n", ms.pc, ms.regH, ms.regL)
 	ms.pc += 3
 }
 
@@ -231,7 +227,7 @@ func instr_0x25_DCR_H(ms *machineState) {
 	ms.setS(ms.regH)
 	ms.setP(ms.regH)
 	ms.setAC(ms.regH)
-	fmt.Printf("0x%04x: 0x25_DCR_H regH[0x%02x]=regH[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	Trace.Printf("0x%04x: 0x25_DCR_H regH[0x%02x]=regH[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regH, regH, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -274,7 +270,7 @@ func instr_0x2d_DCR_L(ms *machineState) {
 	ms.setS(ms.regL)
 	ms.setP(ms.regL)
 	ms.setAC(ms.regL)
-	fmt.Printf("0x%04x: 0x2d_DCR_L regL[0x%02x]=regL[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	Trace.Printf("0x%04x: 0x2d_DCR_L regL[0x%02x]=regL[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regL, regL, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -299,7 +295,7 @@ func instr_0x31_LXI_SP_D16(ms *machineState) {
 	byte2 := ms.readMem(ms.pc+1, 1)[0]
 	byte3 := ms.readMem(ms.pc+2, 1)[0]
 	var sp uint16 = (uint16(byte3) << 8) | uint16(byte2)
-	fmt.Printf("0x%04x: 0x31_LXI_SP_D16 0x%04x\n", ms.pc, sp)
+	Trace.Printf("0x%04x: 0x31_LXI_SP_D16 0x%04x\n", ms.pc, sp)
 	ms.sp = sp
 	ms.pc += 3
 }
@@ -362,7 +358,7 @@ func instr_0x3d_DCR_A(ms *machineState) {
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
 	ms.setAC(ms.regA)
-	fmt.Printf("0x%04x: 0x3d_DCR_A regA[0x%02x]=regA[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
+	Trace.Printf("0x%04x: 0x3d_DCR_A regA[0x%02x]=regA[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
 		ms.pc, ms.regA, regA, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
 	ms.pc += 1
 }
@@ -1037,7 +1033,7 @@ func instr_0xc3_JMP_adr(ms *machineState) {
 	byte1 := ms.readMem(ms.pc+1, 1)[0]
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
-	fmt.Printf("0x%04x: 0xc3_JMP_adr 0x%04x\n", ms.pc, adr)
+	Trace.Printf("0x%04x: 0xc3_JMP_adr 0x%04x\n", ms.pc, adr)
 	ms.pc = adr
 }
 
@@ -1073,7 +1069,7 @@ func instr_0xc9_RET(ms *machineState) {
 	pcHi := bytes[1]
 	newSp := uint16(bytes[2])
 	pc := (uint16(pcHi) << 8) | uint16(pcLo)
-	fmt.Printf("0x%02x: 0xc9_RET pc=0x%04x, sp=0x%04x\n", ms.pc, pc, newSp)
+	Trace.Printf("0x%02x: 0xc9_RET pc=0x%04x, sp=0x%04x\n", ms.pc, pc, newSp)
 	ms.pc = (uint16(pcHi) << 8) | uint16(pcLo)
 	ms.sp = newSp
 }

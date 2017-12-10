@@ -14,6 +14,7 @@ func fetch(ms *machineState) uint8 {
 }
 
 func decodeAndExecute(ms *machineState, opcode uint8) {
+	Debug.Printf("decodeAndExecute, opcode: 0x%02x\n", opcode)
 	switch opcode {
 	case 0x00:
 		instr_0x00_NOP(ms)
