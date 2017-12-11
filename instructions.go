@@ -21,9 +21,9 @@ func instr_0x02_STAX(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x03_INX(ms *machineState) {
-	// B	1		BC <- BC+1
-	panic("Unimplemented")
+func instr_0x03_INX_B(ms *machineState) {
+	// 1		BC <- BC+1
+	INX("0x03_INX_B", ms, &ms.regB, &ms.regC)
 }
 
 func instr_0x04_INR(ms *machineState) {
@@ -112,9 +112,9 @@ func instr_0x12_STAX(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x13_INX(ms *machineState) {
-	// D	1		DE <- DE + 1
-	panic("Unimplemented")
+func instr_0x13_INX_D(ms *machineState) {
+	// 1		DE <- DE + 1
+	INX("0x13_INX_D", ms, &ms.regD, &ms.regE)
 }
 
 func instr_0x14_INR(ms *machineState) {
@@ -209,9 +209,9 @@ func instr_0x22_SHLD(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x23_INX(ms *machineState) {
-	// H	1		HL <- HL + 1
-	panic("Unimplemented")
+func instr_0x23_INX_H(ms *machineState) {
+	// 1		HL <- HL + 1
+	INX("0x23_INX_H", ms, &ms.regH, &ms.regL)
 }
 
 func instr_0x24_INR(ms *machineState) {
@@ -305,9 +305,11 @@ func instr_0x32_STA(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x33_INX(ms *machineState) {
-	// SP	1		SP = SP + 1
-	panic("Unimplemented")
+func instr_0x33_INX_SP(ms *machineState) {
+	// 1		SP = SP + 1
+	ms.sp = ms.sp + 1
+	Trace.Printf("0x%04x: 0x33_INX_SP 0x%04x\n", ms.pc, ms.sp)
+	ms.pc += 1
 }
 
 func instr_0x34_INR(ms *machineState) {

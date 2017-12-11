@@ -246,3 +246,28 @@ func check_LDAX(testName string, t *testing.T, instrFunc func(*machineState), ms
 		t.Errorf("%s: expected regA=0xFF, got regA=0x%02x", testName, ms.regA)
 	}
 }
+
+func Test_INX(t *testing.T) {
+	ms := newMachineState()
+	check_INX("Test_0x03_INX_B", t, instr_0x03_INX_B, ms, &ms.regB, &ms.regC)
+	check_INX("Test_0x13_INX_D", t, instr_0x13_INX_D, ms, &ms.regD, &ms.regE)
+	check_INX("Test_0x23_INX_H", t, instr_0x23_INX_H, ms, &ms.regH, &ms.regL)
+
+	ms.sp = 0x1234
+	instr_0x33_INX_SP(ms)
+	if ms.sp != 0x1235 {
+		t.Errorf("Test_0x33)INX_SP: expected 0x1235, got 0x%02x", ms.sp)
+	}
+}
+
+func check_INX(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, adrRegHi *uint8, adrRegLo *uint8) {
+	*adrRegLo = uint8(0x12)
+	*adrRegHi = uint8(0x34)
+	instrFunc(ms)
+	if *adrRegLo != 0x13 {
+		t.Errorf("%s: expected 0x13, got 0x%02x", testName, *adrRegLo)
+	}
+	if *adrRegHi != 0x34 {
+		t.Errorf("%s: expected 0x13, got 0x%02x", testName, *adrRegLo)
+	}
+}

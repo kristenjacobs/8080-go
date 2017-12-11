@@ -167,5 +167,5 @@ func (ms *machineState) setAC(result uint8) {
 }
 
 func (ms *machineState) addr(regLo uint8, regHi uint8) uint16 {
-	return (uint16(regHi) << 8) | uint16(regLo)
+	return (uint16(regHi) << 8) | uint16(regLo&0xFF)
 }

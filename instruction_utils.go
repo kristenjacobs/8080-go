@@ -32,3 +32,11 @@ func LDAX(instrName string, ms *machineState, adrRegLo *uint8, adrRegHi *uint8) 
 	Trace.Printf("0x%04x: %s 0x%02x 0x%04x\n", ms.pc, instrName, ms.regA, adr)
 	ms.pc += 1
 }
+
+func INX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+	result := ms.addr(*regLo, *regHi) + 1
+	*regHi = uint8(result >> 8)
+	*regLo = uint8(result & 0xFF)
+	Trace.Printf("0x%04x: %s 0x%04x\n", ms.pc, instrName, result)
+	ms.pc += 1
+}
