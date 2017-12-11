@@ -1,4 +1,4 @@
-all: build
+all: build fmt vet
 
 build:
 	go build

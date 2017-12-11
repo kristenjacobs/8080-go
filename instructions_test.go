@@ -22,10 +22,10 @@ func check_LXI_pair(testName string, t *testing.T, instrFunc func(*machineState)
 	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
 	instrFunc(ms)
 	if *regHi != 0xBA {
-		t.Errorf("%s: expected 0xBA, got %02x", *regHi)
+		t.Errorf("%s: expected 0xBA, got %02x", testName, *regHi)
 	}
 	if *regLo != 0xBE {
-		t.Errorf("%s: expected 0xBE, got %02x", *regLo)
+		t.Errorf("%s: expected 0xBE, got %02x", testName, *regLo)
 	}
 }
 
@@ -34,7 +34,7 @@ func check_LXI_single(testName string, t *testing.T, instrFunc func(*machineStat
 	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
 	instrFunc(ms)
 	if *res != 0xBABE {
-		t.Errorf("%s: expected 0xBABE, got %02x", *res)
+		t.Errorf("%s: expected 0xBABE, got %02x", testName, *res)
 	}
 }
 
