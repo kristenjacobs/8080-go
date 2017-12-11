@@ -19,6 +19,13 @@ func MOV_REG_MEM(instrName string, ms *machineState, dst *uint8) {
 	ms.pc += 1
 }
 
+func MOV_MEM_REG(instrName string, ms *machineState, srcReg *uint8) {
+	addr := ms.addr(ms.regL, ms.regH)
+	ms.writeMem(addr, []uint8{*srcReg}, 1)
+	Trace.Printf("0x%04x: %s [0x%04x] 0x%02x\n", ms.pc, instrName, addr, *srcReg)
+	ms.pc += 1
+}
+
 func LDAX(instrName string, ms *machineState, adrRegLo *uint8, adrRegHi *uint8) {
 	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
 	ms.regA = ms.readMem(adr, 1)[0]

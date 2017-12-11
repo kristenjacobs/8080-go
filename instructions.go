@@ -615,32 +615,32 @@ func instr_0x6f_MOV_L_A(ms *machineState) {
 
 func instr_0x70_MOV_M_B(ms *machineState) {
 	// 1		(HL) <- B
-	panic("Unimplemented")
+	MOV_MEM_REG("instr_0x70_MOV_M_B", ms, &ms.regB)
 }
 
 func instr_0x71_MOV_M_C(ms *machineState) {
 	// 1		(HL) <- C
-	panic("Unimplemented")
+	MOV_MEM_REG("instr_0x71_MOV_M_C", ms, &ms.regC)
 }
 
 func instr_0x72_MOV_M_D(ms *machineState) {
 	// 1		(HL) <- D
-	panic("Unimplemented")
+	MOV_MEM_REG("instr_0x72_MOV_M_D", ms, &ms.regD)
 }
 
 func instr_0x73_MOV_M_E(ms *machineState) {
 	// 1		(HL) <- E
-	panic("Unimplemented")
+	MOV_MEM_REG("instr_0x73_MOV_M_E", ms, &ms.regE)
 }
 
 func instr_0x74_MOV_M_H(ms *machineState) {
 	// 1		(HL) <- H
-	panic("Unimplemented")
+	MOV_MEM_REG("instr_0x74_MOV_M_H", ms, &ms.regH)
 }
 
 func instr_0x75_MOV_M_L(ms *machineState) {
 	// 1		(HL) <- L
-	panic("Unimplemented")
+	MOV_MEM_REG("instr_0x75_MOV_M_L", ms, &ms.regL)
 }
 
 func instr_0x76_HLT(ms *machineState) {
@@ -651,7 +651,7 @@ func instr_0x76_HLT(ms *machineState) {
 
 func instr_0x77_MOV_M_A(ms *machineState) {
 	// 1		(HL) <- A
-	panic("Unimplemented")
+	MOV_MEM_REG("instr_0x77_MOV_M_A", ms, &ms.regA)
 }
 
 func instr_0x78_MOV_A_B(ms *machineState) {
