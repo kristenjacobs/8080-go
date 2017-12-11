@@ -375,272 +375,272 @@ func instr_0x3f_CMC(ms *machineState) {
 
 func instr_0x40_MOV_B_B(ms *machineState) {
 	// 1		B <- B
-	MOV_REG_REG("instr_0x40_MOV_B_B", ms, &ms.regB, &ms.regB)
+	MOV_REG_REG("0x40_MOV_B_B", ms, &ms.regB, &ms.regB)
 }
 
 func instr_0x41_MOV_B_C(ms *machineState) {
 	// 1		B <- C
-	MOV_REG_REG("instr_0x41_MOV_B_C", ms, &ms.regB, &ms.regC)
+	MOV_REG_REG("0x41_MOV_B_C", ms, &ms.regB, &ms.regC)
 }
 
 func instr_0x42_MOV_B_D(ms *machineState) {
 	// 1		B <- D
-	MOV_REG_REG("instr_0x42_MOV_B_D", ms, &ms.regB, &ms.regD)
+	MOV_REG_REG("0x42_MOV_B_D", ms, &ms.regB, &ms.regD)
 }
 
 func instr_0x43_MOV_B_E(ms *machineState) {
 	// 1		B <- E
-	MOV_REG_REG("instr_0x43_MOV_B_E", ms, &ms.regB, &ms.regE)
+	MOV_REG_REG("0x43_MOV_B_E", ms, &ms.regB, &ms.regE)
 }
 
 func instr_0x44_MOV_B_H(ms *machineState) {
 	// 1		B <- H
-	MOV_REG_REG("instr_0x44_MOV_B_H", ms, &ms.regB, &ms.regH)
+	MOV_REG_REG("0x44_MOV_B_H", ms, &ms.regB, &ms.regH)
 }
 
 func instr_0x45_MOV_B_L(ms *machineState) {
 	// 1		B <- L
-	MOV_REG_REG("instr_0x45_MOV_B_L", ms, &ms.regB, &ms.regL)
+	MOV_REG_REG("0x45_MOV_B_L", ms, &ms.regB, &ms.regL)
 }
 
 func instr_0x46_MOV_B_M(ms *machineState) {
 	// 1		B <- (HL)
-	MOV_REG_MEM("instr_0x46_MOV_B_M", ms, &ms.regB)
+	MOV_REG_MEM("0x46_MOV_B_M", ms, &ms.regB)
 }
 
 func instr_0x47_MOV_B_A(ms *machineState) {
 	// 1		B <- A
-	MOV_REG_REG("instr_0x47_MOV_B_A", ms, &ms.regB, &ms.regA)
+	MOV_REG_REG("0x47_MOV_B_A", ms, &ms.regB, &ms.regA)
 }
 
 func instr_0x48_MOV_C_B(ms *machineState) {
 	// 1		C <- B
-	MOV_REG_REG("instr_0x48_MOV_C_B", ms, &ms.regC, &ms.regB)
+	MOV_REG_REG("0x48_MOV_C_B", ms, &ms.regC, &ms.regB)
 }
 
 func instr_0x49_MOV_C_C(ms *machineState) {
 	// 1		C <- C
-	MOV_REG_REG("instr_0x49_MOV_C_C", ms, &ms.regC, &ms.regC)
+	MOV_REG_REG("0x49_MOV_C_C", ms, &ms.regC, &ms.regC)
 }
 
 func instr_0x4a_MOV_C_D(ms *machineState) {
 	// 1		C <- D
-	MOV_REG_REG("instr_0x4a_MOV_C_D", ms, &ms.regC, &ms.regD)
+	MOV_REG_REG("0x4a_MOV_C_D", ms, &ms.regC, &ms.regD)
 }
 
 func instr_0x4b_MOV_C_E(ms *machineState) {
 	// 1		C <- E
-	MOV_REG_REG("instr_0x4b_MOV_C_E", ms, &ms.regC, &ms.regE)
+	MOV_REG_REG("0x4b_MOV_C_E", ms, &ms.regC, &ms.regE)
 }
 
 func instr_0x4c_MOV_C_H(ms *machineState) {
 	// 1		C <- H
-	MOV_REG_REG("instr_0x4c_MOV_C_H", ms, &ms.regC, &ms.regH)
+	MOV_REG_REG("0x4c_MOV_C_H", ms, &ms.regC, &ms.regH)
 }
 
 func instr_0x4d_MOV_C_L(ms *machineState) {
 	// 1		C <- L
-	MOV_REG_REG("instr_0x4d_MOV_C_L", ms, &ms.regC, &ms.regL)
+	MOV_REG_REG("0x4d_MOV_C_L", ms, &ms.regC, &ms.regL)
 }
 
 func instr_0x4e_MOV_C_M(ms *machineState) {
 	// 1		C <- (HL)
-	MOV_REG_MEM("instr_0x4e_MOV_C_M", ms, &ms.regC)
+	MOV_REG_MEM("0x4e_MOV_C_M", ms, &ms.regC)
 }
 
 func instr_0x4f_MOV_C_A(ms *machineState) {
 	// 1		C <- A
-	MOV_REG_REG("instr_0x4f_MOV_C_A", ms, &ms.regC, &ms.regA)
+	MOV_REG_REG("0x4f_MOV_C_A", ms, &ms.regC, &ms.regA)
 }
 
 func instr_0x50_MOV_D_B(ms *machineState) {
 	// 1		D <- B
-	MOV_REG_REG("instr_0x50_MOV_D_B", ms, &ms.regD, &ms.regB)
+	MOV_REG_REG("0x50_MOV_D_B", ms, &ms.regD, &ms.regB)
 }
 
 func instr_0x51_MOV_D_C(ms *machineState) {
 	// 1		D <- C
-	MOV_REG_REG("instr_0x51_MOV_D_C", ms, &ms.regD, &ms.regC)
+	MOV_REG_REG("0x51_MOV_D_C", ms, &ms.regD, &ms.regC)
 }
 
 func instr_0x52_MOV_D_D(ms *machineState) {
 	// 1		D <- D
-	MOV_REG_REG("instr_0x52_MOV_D_D", ms, &ms.regD, &ms.regD)
+	MOV_REG_REG("0x52_MOV_D_D", ms, &ms.regD, &ms.regD)
 }
 
 func instr_0x53_MOV_D_E(ms *machineState) {
 	// 1		D <- E
-	MOV_REG_REG("instr_0x53_MOV_D_E", ms, &ms.regD, &ms.regE)
+	MOV_REG_REG("0x53_MOV_D_E", ms, &ms.regD, &ms.regE)
 }
 
 func instr_0x54_MOV_D_H(ms *machineState) {
 	// 1		D <- H
-	MOV_REG_REG("instr_0x54_MOV_D_H", ms, &ms.regD, &ms.regH)
+	MOV_REG_REG("0x54_MOV_D_H", ms, &ms.regD, &ms.regH)
 }
 
 func instr_0x55_MOV_D_L(ms *machineState) {
 	// 1		D <- L
-	MOV_REG_REG("instr_0x55_MOV_D_L", ms, &ms.regD, &ms.regL)
+	MOV_REG_REG("0x55_MOV_D_L", ms, &ms.regD, &ms.regL)
 }
 
 func instr_0x56_MOV_D_M(ms *machineState) {
 	// 1		D <- (HL)
-	MOV_REG_MEM("instr_0x56_MOV_D_M", ms, &ms.regD)
+	MOV_REG_MEM("0x56_MOV_D_M", ms, &ms.regD)
 }
 
 func instr_0x57_MOV_D_A(ms *machineState) {
 	// 1		D <- A
-	MOV_REG_REG("instr_0x57_MOV_D_A", ms, &ms.regD, &ms.regA)
+	MOV_REG_REG("0x57_MOV_D_A", ms, &ms.regD, &ms.regA)
 }
 
 func instr_0x58_MOV_E_B(ms *machineState) {
 	// 1		E <- B
-	MOV_REG_REG("instr_0x58_MOV_E_B", ms, &ms.regE, &ms.regB)
+	MOV_REG_REG("0x58_MOV_E_B", ms, &ms.regE, &ms.regB)
 }
 
 func instr_0x59_MOV_E_C(ms *machineState) {
 	// 1		E <- C
-	MOV_REG_REG("instr_0x59_MOV_E_C", ms, &ms.regE, &ms.regC)
+	MOV_REG_REG("0x59_MOV_E_C", ms, &ms.regE, &ms.regC)
 }
 
 func instr_0x5a_MOV_E_D(ms *machineState) {
 	// 1		E <- D
-	MOV_REG_REG("instr_0x5a_MOV_E_D", ms, &ms.regE, &ms.regD)
+	MOV_REG_REG("0x5a_MOV_E_D", ms, &ms.regE, &ms.regD)
 }
 
 func instr_0x5b_MOV_E_E(ms *machineState) {
 	// 1		E <- E
-	MOV_REG_REG("instr_0x5b_MOV_E_E", ms, &ms.regE, &ms.regE)
+	MOV_REG_REG("0x5b_MOV_E_E", ms, &ms.regE, &ms.regE)
 }
 
 func instr_0x5c_MOV_E_H(ms *machineState) {
 	// 1		E <- H
-	MOV_REG_REG("instr_0x5c_MOV_E_H", ms, &ms.regE, &ms.regH)
+	MOV_REG_REG("0x5c_MOV_E_H", ms, &ms.regE, &ms.regH)
 }
 
 func instr_0x5d_MOV_E_L(ms *machineState) {
 	// 1		E <- L
-	MOV_REG_REG("instr_0x5d_MOV_E_L", ms, &ms.regE, &ms.regL)
+	MOV_REG_REG("0x5d_MOV_E_L", ms, &ms.regE, &ms.regL)
 }
 
 func instr_0x5e_MOV_E_M(ms *machineState) {
 	// 1		E <- (HL)
-	MOV_REG_MEM("instr_0x5e_MOV_E_M", ms, &ms.regE)
+	MOV_REG_MEM("0x5e_MOV_E_M", ms, &ms.regE)
 }
 
 func instr_0x5f_MOV_E_A(ms *machineState) {
 	// 1		E <- A
-	MOV_REG_REG("instr_0x5f_MOV_E_A", ms, &ms.regE, &ms.regA)
+	MOV_REG_REG("0x5f_MOV_E_A", ms, &ms.regE, &ms.regA)
 }
 
 func instr_0x60_MOV_H_B(ms *machineState) {
 	// 1		H <- B
-	MOV_REG_REG("instr_0x60_MOV_H_B", ms, &ms.regH, &ms.regB)
+	MOV_REG_REG("0x60_MOV_H_B", ms, &ms.regH, &ms.regB)
 }
 
 func instr_0x61_MOV_H_C(ms *machineState) {
 	// 1		H <- C
-	MOV_REG_REG("instr_0x61_MOV_H_C", ms, &ms.regH, &ms.regC)
+	MOV_REG_REG("0x61_MOV_H_C", ms, &ms.regH, &ms.regC)
 }
 
 func instr_0x62_MOV_H_D(ms *machineState) {
 	// 1		H <- D
-	MOV_REG_REG("instr_0x62_MOV_H_D", ms, &ms.regH, &ms.regD)
+	MOV_REG_REG("0x62_MOV_H_D", ms, &ms.regH, &ms.regD)
 }
 
 func instr_0x63_MOV_H_E(ms *machineState) {
 	// 1		H <- E
-	MOV_REG_REG("instr_0x63_MOV_H_E", ms, &ms.regH, &ms.regE)
+	MOV_REG_REG("0x63_MOV_H_E", ms, &ms.regH, &ms.regE)
 }
 
 func instr_0x64_MOV_H_H(ms *machineState) {
 	// 1		H <- H
-	MOV_REG_REG("instr_0x64_MOV_H_H", ms, &ms.regH, &ms.regH)
+	MOV_REG_REG("0x64_MOV_H_H", ms, &ms.regH, &ms.regH)
 }
 
 func instr_0x65_MOV_H_L(ms *machineState) {
 	// 1		H <- L
-	MOV_REG_REG("instr_0x65_MOV_H_L", ms, &ms.regH, &ms.regL)
+	MOV_REG_REG("0x65_MOV_H_L", ms, &ms.regH, &ms.regL)
 }
 
 func instr_0x66_MOV_H_M(ms *machineState) {
 	// 1		H <- (HL)
-	MOV_REG_MEM("instr_0x66_MOV_H_M", ms, &ms.regH)
+	MOV_REG_MEM("0x66_MOV_H_M", ms, &ms.regH)
 }
 
 func instr_0x67_MOV_H_A(ms *machineState) {
 	// 1		H <- A
-	MOV_REG_REG("instr_0x67_MOV_H_A", ms, &ms.regH, &ms.regA)
+	MOV_REG_REG("0x67_MOV_H_A", ms, &ms.regH, &ms.regA)
 }
 
 func instr_0x68_MOV_L_B(ms *machineState) {
 	// 1		L <- B
-	MOV_REG_REG("instr_0x68_MOV_L_B", ms, &ms.regL, &ms.regB)
+	MOV_REG_REG("0x68_MOV_L_B", ms, &ms.regL, &ms.regB)
 }
 
 func instr_0x69_MOV_L_C(ms *machineState) {
 	// 1		L <- C
-	MOV_REG_REG("instr_0x69_MOV_L_C", ms, &ms.regL, &ms.regC)
+	MOV_REG_REG("0x69_MOV_L_C", ms, &ms.regL, &ms.regC)
 }
 
 func instr_0x6a_MOV_L_D(ms *machineState) {
 	// 1		L <- D
-	MOV_REG_REG("instr_0x6a_MOV_L_D", ms, &ms.regL, &ms.regD)
+	MOV_REG_REG("0x6a_MOV_L_D", ms, &ms.regL, &ms.regD)
 }
 
 func instr_0x6b_MOV_L_E(ms *machineState) {
 	// 1		L <- E
-	MOV_REG_REG("instr_0x6b_MOV_L_E", ms, &ms.regL, &ms.regE)
+	MOV_REG_REG("0x6b_MOV_L_E", ms, &ms.regL, &ms.regE)
 }
 
 func instr_0x6c_MOV_L_H(ms *machineState) {
 	// 1		L <- H
-	MOV_REG_REG("instr_0x6c_MOV_L_H", ms, &ms.regL, &ms.regH)
+	MOV_REG_REG("0x6c_MOV_L_H", ms, &ms.regL, &ms.regH)
 }
 
 func instr_0x6d_MOV_L_L(ms *machineState) {
 	// 1		L <- L
-	MOV_REG_REG("instr_0x6d_MOV_L_L", ms, &ms.regL, &ms.regL)
+	MOV_REG_REG("0x6d_MOV_L_L", ms, &ms.regL, &ms.regL)
 }
 
 func instr_0x6e_MOV_L_M(ms *machineState) {
 	// 1		L <- (HL)
-	MOV_REG_MEM("instr_0x6e_MOV_L_M", ms, &ms.regL)
+	MOV_REG_MEM("0x6e_MOV_L_M", ms, &ms.regL)
 }
 
 func instr_0x6f_MOV_L_A(ms *machineState) {
 	// 1		L <- A
-	MOV_REG_REG("instr_0x6f_MOV_L_A", ms, &ms.regL, &ms.regA)
+	MOV_REG_REG("0x6f_MOV_L_A", ms, &ms.regL, &ms.regA)
 }
 
 func instr_0x70_MOV_M_B(ms *machineState) {
 	// 1		(HL) <- B
-	MOV_MEM_REG("instr_0x70_MOV_M_B", ms, &ms.regB)
+	MOV_MEM_REG("0x70_MOV_M_B", ms, &ms.regB)
 }
 
 func instr_0x71_MOV_M_C(ms *machineState) {
 	// 1		(HL) <- C
-	MOV_MEM_REG("instr_0x71_MOV_M_C", ms, &ms.regC)
+	MOV_MEM_REG("0x71_MOV_M_C", ms, &ms.regC)
 }
 
 func instr_0x72_MOV_M_D(ms *machineState) {
 	// 1		(HL) <- D
-	MOV_MEM_REG("instr_0x72_MOV_M_D", ms, &ms.regD)
+	MOV_MEM_REG("0x72_MOV_M_D", ms, &ms.regD)
 }
 
 func instr_0x73_MOV_M_E(ms *machineState) {
 	// 1		(HL) <- E
-	MOV_MEM_REG("instr_0x73_MOV_M_E", ms, &ms.regE)
+	MOV_MEM_REG("0x73_MOV_M_E", ms, &ms.regE)
 }
 
 func instr_0x74_MOV_M_H(ms *machineState) {
 	// 1		(HL) <- H
-	MOV_MEM_REG("instr_0x74_MOV_M_H", ms, &ms.regH)
+	MOV_MEM_REG("0x74_MOV_M_H", ms, &ms.regH)
 }
 
 func instr_0x75_MOV_M_L(ms *machineState) {
 	// 1		(HL) <- L
-	MOV_MEM_REG("instr_0x75_MOV_M_L", ms, &ms.regL)
+	MOV_MEM_REG("0x75_MOV_M_L", ms, &ms.regL)
 }
 
 func instr_0x76_HLT(ms *machineState) {
@@ -651,47 +651,47 @@ func instr_0x76_HLT(ms *machineState) {
 
 func instr_0x77_MOV_M_A(ms *machineState) {
 	// 1		(HL) <- A
-	MOV_MEM_REG("instr_0x77_MOV_M_A", ms, &ms.regA)
+	MOV_MEM_REG("0x77_MOV_M_A", ms, &ms.regA)
 }
 
 func instr_0x78_MOV_A_B(ms *machineState) {
 	// 1		A <- B
-	MOV_REG_REG("instr_0x78_MOV_A_B", ms, &ms.regA, &ms.regB)
+	MOV_REG_REG("0x78_MOV_A_B", ms, &ms.regA, &ms.regB)
 }
 
 func instr_0x79_MOV_A_C(ms *machineState) {
 	// 1		A <- C
-	MOV_REG_REG("instr_0x79_MOV_A_C", ms, &ms.regA, &ms.regC)
+	MOV_REG_REG("0x79_MOV_A_C", ms, &ms.regA, &ms.regC)
 }
 
 func instr_0x7a_MOV_A_D(ms *machineState) {
 	// 1		A <- D
-	MOV_REG_REG("instr_0x7a_MOV_A_D", ms, &ms.regA, &ms.regD)
+	MOV_REG_REG("0x7a_MOV_A_D", ms, &ms.regA, &ms.regD)
 }
 
 func instr_0x7b_MOV_A_E(ms *machineState) {
 	// 1		A <- E
-	MOV_REG_REG("instr_0x7b_MOV_A_E", ms, &ms.regA, &ms.regE)
+	MOV_REG_REG("0x7b_MOV_A_E", ms, &ms.regA, &ms.regE)
 }
 
 func instr_0x7c_MOV_A_H(ms *machineState) {
 	// 1		A <- H
-	MOV_REG_REG("instr_0x7c_MOV_A_H", ms, &ms.regA, &ms.regH)
+	MOV_REG_REG("0x7c_MOV_A_H", ms, &ms.regA, &ms.regH)
 }
 
 func instr_0x7d_MOV_A_L(ms *machineState) {
 	// 1		A <- L
-	MOV_REG_REG("instr_0x7d_MOV_A_L", ms, &ms.regA, &ms.regL)
+	MOV_REG_REG("0x7d_MOV_A_L", ms, &ms.regA, &ms.regL)
 }
 
 func instr_0x7e_MOV_A_M(ms *machineState) {
 	// 1		A <- (HL)
-	MOV_REG_MEM("instr_0x7e_MOV_A_M", ms, &ms.regA)
+	MOV_REG_MEM("0x7e_MOV_A_M", ms, &ms.regA)
 }
 
 func instr_0x7f_MOV_A_A(ms *machineState) {
 	// 1		A <- A
-	MOV_REG_REG("instr_0x7f_MOV_A_A", ms, &ms.regA, &ms.regA)
+	MOV_REG_REG("0x7f_MOV_A_A", ms, &ms.regA, &ms.regA)
 }
 
 func instr_0x80_ADD(ms *machineState) {
