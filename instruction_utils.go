@@ -26,7 +26,7 @@ func MOV_MEM_REG(instrName string, ms *machineState, srcReg *uint8) {
 	ms.pc += 1
 }
 
-func LDAX(instrName string, ms *machineState, adrRegLo *uint8, adrRegHi *uint8) {
+func LDAX(instrName string, ms *machineState, adrRegHi *uint8, adrRegLo *uint8) {
 	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
 	ms.regA = ms.readMem(adr, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x 0x%04x\n", ms.pc, instrName, ms.regA, adr)

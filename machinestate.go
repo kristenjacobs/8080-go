@@ -134,7 +134,9 @@ func inRegion(addr uint16, numBytes uint16, mr *memoryRegion) bool {
 
 func read(addr uint16, numBytes uint16, mr *memoryRegion) []uint8 {
 	i := addr - mr.base
-	return mr.bytes[i : i+numBytes]
+	bytes := mr.bytes[i : i+numBytes]
+	Debug.Printf("read %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
+	return bytes
 }
 
 func write(addr uint16, bytes []uint8, numBytes uint16, mr *memoryRegion) {
@@ -142,6 +144,7 @@ func write(addr uint16, bytes []uint8, numBytes uint16, mr *memoryRegion) {
 	for i, b := range bytes {
 		mr.bytes[a+uint16(i)] = b
 	}
+	Debug.Printf("wrote %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
 }
 
 func (ms *machineState) setZ(result uint8) {

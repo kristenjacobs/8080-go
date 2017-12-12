@@ -405,7 +405,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xc1:
 		instr_0xc1_POP(ms)
 	case 0xc2:
-		instr_0xc2_JNZ(ms)
+		instr_0xc2_JNZ_adr(ms)
 	case 0xc3:
 		instr_0xc3_JMP_adr(ms)
 	case 0xc4:

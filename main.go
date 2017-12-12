@@ -21,6 +21,7 @@ func InitLogging(
 
 func main() {
 	InitLogging(os.Stdout, ioutil.Discard)
+	//InitLogging(os.Stdout, os.Stdout)
 
 	ms := newMachineState()
 	for ms.halt == false {

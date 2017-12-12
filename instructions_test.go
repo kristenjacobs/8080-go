@@ -237,7 +237,7 @@ func Test_LDAX(t *testing.T) {
 	check_LDAX("instr_0x1a_LDAX_D", t, instr_0x1a_LDAX_D, ms, &ms.regD, &ms.regE)
 }
 
-func check_LDAX(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, adrRegLo *uint8, adrRegHi *uint8) {
+func check_LDAX(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, adrRegHi *uint8, adrRegLo *uint8) {
 	*adrRegLo = uint8(RAM_BASE >> 8)
 	*adrRegHi = uint8(RAM_BASE & 0xFF)
 	ms.writeMem(ms.addr(*adrRegLo, *adrRegHi), []uint8{0xFF}, 1)
@@ -269,5 +269,34 @@ func check_INX(testName string, t *testing.T, instrFunc func(*machineState), ms 
 	}
 	if *adrRegHi != 0x34 {
 		t.Errorf("%s: expected 0x13, got 0x%02x", testName, *adrRegLo)
+	}
+}
+
+func Test_0xc2_JNZ_adr(t *testing.T) {
+	ms := newMachineState()
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagZ = false
+	instr_0xc2_JNZ_adr(ms)
+	if ms.pc != 0xBABE {
+		t.Errorf("instr_0xc2_JNZ_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
+	}
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagZ = true
+	instr_0xc2_JNZ_adr(ms)
+	if ms.pc != RAM_BASE+3 {
+		t.Errorf("instr_0xc2_JNZ_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
+	}
+}
+
+func Test_0xc3_JMP_adr(t *testing.T) {
+	//ms := newMachineState()
+	ms := newMachineState()
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	instr_0xc2_JNZ_adr(ms)
+	if ms.pc != 0xBABE {
+		t.Errorf("instr_0xc3_JMP_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
 	}
 }

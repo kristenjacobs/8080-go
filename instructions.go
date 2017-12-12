@@ -1026,9 +1026,17 @@ func instr_0xc1_POP(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xc2_JNZ(ms *machineState) {
-	// adr	3		if NZ, PC <- adr
-	panic("Unimplemented")
+func instr_0xc2_JNZ_adr(ms *machineState) {
+	// 3		if NZ, PC <- adr
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xc2_JNZ_adr 0x%04x, Z=%t\n", ms.pc, adr, ms.flagZ)
+	if !ms.flagZ {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xc3_JMP_adr(ms *machineState) {
