@@ -1075,10 +1075,10 @@ func instr_0xc8_RZ(ms *machineState) {
 
 func instr_0xc9_RET(ms *machineState) {
 	// 1		PC.lo <- (sp); PC.hi<-(sp+1); SP <- SP+2
-	bytes := ms.readMem(ms.sp, 3)
+	bytes := ms.readMem(ms.sp, 2)
 	pcLo := bytes[0]
 	pcHi := bytes[1]
-	newSp := uint16(bytes[2])
+	newSp := ms.sp + 2
 	pc := (uint16(pcHi) << 8) | uint16(pcLo)
 	Trace.Printf("0x%02x: 0xc9_RET pc=0x%04x, sp=0x%04x\n", ms.pc, pc, newSp)
 	ms.pc = (uint16(pcHi) << 8) | uint16(pcLo)
@@ -1096,15 +1096,16 @@ func instr_0xcc_CZ(ms *machineState) {
 }
 
 func instr_0xcd_CALL_adr(ms *machineState) {
-	// 3		(SP-1)<-PC.hi;(SP-2)<-PC.lo;SP<-SP+2;PC=adr
+	// 3		(SP-1)<-PC.hi;(SP-2)<-PC.lo;SP<-SP-2;PC=adr
 	byte1 := ms.readMem(ms.pc+1, 1)[0]
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
-	pcHi := uint8(ms.pc >> 8)
-	pcLo := uint8(ms.pc & 0xFF)
+	nextPC := ms.pc + 3
+	pcHi := uint8(nextPC >> 8)
+	pcLo := uint8(nextPC & 0xFF)
 	ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
 	Trace.Printf("0x%04x: 0xcd_CALL_adr 0x%04x\n", ms.pc, adr)
-	ms.sp = ms.sp + 2
+	ms.sp = ms.sp - 2
 	ms.pc = adr
 }
 
