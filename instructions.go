@@ -1133,9 +1133,17 @@ func instr_0xd1_POP(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xd2_JNC(ms *machineState) {
-	// adr	3		if NCY, PC<-adr
-	panic("Unimplemented")
+func instr_0xd2_JNC_adr(ms *machineState) {
+	// 3		if NCY, PC<-adr
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xd2_JNC_adr 0x%04x, C=%t\n", ms.pc, adr, ms.flagCY)
+	if !ms.flagCY {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xd3_OUT(ms *machineState) {

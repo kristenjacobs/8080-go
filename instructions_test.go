@@ -304,6 +304,24 @@ func Test_0xc2_JNZ_adr(t *testing.T) {
 	}
 }
 
+func Test_0xd2_JNC_adr(t *testing.T) {
+	ms := newMachineState()
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagCY = false
+	instr_0xd2_JNC_adr(ms)
+	if ms.pc != 0xBABE {
+		t.Errorf("instr_0xd2_JNC_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
+	}
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagCY = true
+	instr_0xd2_JNC_adr(ms)
+	if ms.pc != RAM_BASE+3 {
+		t.Errorf("instr_0xd2_JNC_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
+	}
+}
+
 func Test_0xc3_JMP_adr(t *testing.T) {
 	//ms := newMachineState()
 	ms := newMachineState()

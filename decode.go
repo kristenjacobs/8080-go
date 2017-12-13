@@ -437,7 +437,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xd1:
 		instr_0xd1_POP(ms)
 	case 0xd2:
-		instr_0xd2_JNC(ms)
+		instr_0xd2_JNC_adr(ms)
 	case 0xd3:
 		instr_0xd3_OUT(ms)
 	case 0xd4:
