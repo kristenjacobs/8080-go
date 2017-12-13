@@ -47,6 +47,19 @@ func Test_MVI(t *testing.T) {
 	check_MVI("Test_0x26_MVI_H_D8(ms)", t, instr_0x26_MVI_H_D8, ms, &ms.regH)
 	check_MVI("Test_0x2e_MVI_L_D8(ms)", t, instr_0x2e_MVI_L_D8, ms, &ms.regL)
 	check_MVI("Test_0x3e_MVI_A_D8(ms)", t, instr_0x3e_MVI_A_D8, ms, &ms.regA)
+
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xAB}, 1)
+	ms.regH = uint8(RAM_BASE >> 8)
+	ms.regL = uint8(RAM_BASE & 0xFF)
+	instr_0x36_MVI_M_D8(ms)
+	result := ms.readMem(RAM_BASE, 1)[0]
+	if result != 0xAB {
+		t.Errorf("Test_0x3e_MVI_M_D8: expected 0xAB, got %02x", result)
+	}
+	if ms.pc != RAM_BASE+2 {
+		t.Errorf("Test_0x3e_MVI_M_D8: expected pc=0x%04x, got %04x", RAM_BASE+2, ms.pc)
+	}
 }
 
 func check_MVI(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, res *uint8) {

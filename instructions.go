@@ -322,9 +322,13 @@ func instr_0x35_DCR_M(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x36_MVI(ms *machineState) {
-	// M,D8	2		(HL) <- byte 2
-	panic("Unimplemented")
+func instr_0x36_MVI_M_D8(ms *machineState) {
+	// 2		(HL) <- byte 2
+	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	addr := ms.addr(ms.regL, ms.regH)
+	ms.writeMem(addr, []uint8{byte2}, 1)
+	Trace.Printf("0x%04x: 0x36_MVI_M_D8 [0x%04x] 0x%02x\n", ms.pc, addr, byte2)
+	ms.pc += 2
 }
 
 func instr_0x37_STC(ms *machineState) {

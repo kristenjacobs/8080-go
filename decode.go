@@ -125,7 +125,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x35:
 		instr_0x35_DCR_M(ms)
 	case 0x36:
-		instr_0x36_MVI(ms)
+		instr_0x36_MVI_M_D8(ms)
 	case 0x37:
 		instr_0x37_STC(ms)
 	case 0x38:
