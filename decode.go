@@ -475,7 +475,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xe4:
 		instr_0xe4_CPO(ms)
 	case 0xe5:
-		instr_0xe5_PUSH(ms)
+		instr_0xe5_PUSH_H(ms)
 	case 0xe6:
 		instr_0xe6_ANI(ms)
 	case 0xe7:

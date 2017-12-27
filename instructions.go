@@ -1058,6 +1058,7 @@ func instr_0xc4_CNZ(ms *machineState) {
 }
 
 func instr_0xc5_PUSH_B(ms *machineState) {
+	// B	1		(sp-2)<-C; (sp-1)<-B; sp <- sp - 2
 	PUSH("0xc5_PUSH_B", ms, &ms.regC, &ms.regB)
 }
 
@@ -1225,9 +1226,9 @@ func instr_0xe4_CPO(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xe5_PUSH(ms *machineState) {
-	// H	1		(sp-2)<-L; (sp-1)<-H; sp <- sp - 2
-	panic("Unimplemented")
+func instr_0xe5_PUSH_H(ms *machineState) {
+	// 1		(sp-2)<-L; (sp-1)<-H; sp <- sp - 2
+	PUSH("0xe5_PUSH_H", ms, &ms.regL, &ms.regH)
 }
 
 func instr_0xe6_ANI(ms *machineState) {

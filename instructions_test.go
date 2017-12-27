@@ -337,6 +337,7 @@ func Test_PUSH(t *testing.T) {
 	ms := newMachineState()
 	check_PUSH("Test_0xc5_PUSH_B", t, instr_0xc5_PUSH_B, ms, &ms.regC, &ms.regB)
 	check_PUSH("Test_0xd5_PUSH_D", t, instr_0xd5_PUSH_D, ms, &ms.regE, &ms.regD)
+	check_PUSH("Test_0xe5_PUSH_H", t, instr_0xe5_PUSH_H, ms, &ms.regL, &ms.regH)
 }
 
 func check_PUSH(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, regHi *uint8, regLo *uint8) {
