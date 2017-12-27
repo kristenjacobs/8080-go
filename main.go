@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"io"
 	"io/ioutil"
 	"log"
@@ -20,8 +21,19 @@ func InitLogging(
 }
 
 func main() {
-	InitLogging(os.Stdout, ioutil.Discard)
-	//InitLogging(os.Stdout, os.Stdout)
+	trace := flag.Bool("t", false, "enables instruction tracing")
+	debug := flag.Bool("d", false, "enables debug")
+	flag.Parse()
+
+	traceStream := ioutil.Discard
+	if *trace {
+		traceStream = os.Stdout
+	}
+	debugStream := ioutil.Discard
+	if *debug {
+		debugStream = os.Stdout
+	}
+	InitLogging(traceStream, debugStream)
 
 	ms := newMachineState()
 	for ms.halt == false {

@@ -243,7 +243,7 @@ func instr_0x27_DAA(ms *machineState) {
 }
 
 func instr_0x29_DAD(ms *machineState) {
-	// H	1	CY	HL = HL + HI
+	// H	1	CY	HL = HL + HL
 	panic("Unimplemented")
 }
 

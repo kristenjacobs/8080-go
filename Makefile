@@ -8,7 +8,7 @@ clean:
 	rm -rf trace.txt
 
 run:
-	./8080-go 2>&1 | tee trace.txt
+	./8080-go -t 2>&1 | tee trace.txt
 
 test:
 	go test -v
