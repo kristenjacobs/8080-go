@@ -282,7 +282,7 @@ func check_INX(testName string, t *testing.T, instrFunc func(*machineState), ms 
 		t.Errorf("%s: expected 0x13, got 0x%02x", testName, *adrRegLo)
 	}
 	if *adrRegHi != 0x34 {
-		t.Errorf("%s: expected 0x13, got 0x%02x", testName, *adrRegLo)
+		t.Errorf("%s: expected 0x34, got 0x%02x", testName, *adrRegHi)
 	}
 }
 
@@ -330,5 +330,29 @@ func Test_0xc3_JMP_adr(t *testing.T) {
 	instr_0xc2_JNZ_adr(ms)
 	if ms.pc != 0xBABE {
 		t.Errorf("instr_0xc3_JMP_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
+	}
+}
+
+func Test_PUSH(t *testing.T) {
+	ms := newMachineState()
+	check_PUSH("Test_0xc5_PUSH_B", t, instr_0xc5_PUSH_B, ms, &ms.regC, &ms.regB)
+	check_PUSH("Test_0xd5_PUSH_D", t, instr_0xd5_PUSH_D, ms, &ms.regE, &ms.regD)
+}
+
+func check_PUSH(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, regHi *uint8, regLo *uint8) {
+	ms.sp = RAM_BASE + 2
+	*regLo = uint8(0x13)
+	*regHi = uint8(0x34)
+	instrFunc(ms)
+	resLo := ms.readMem(RAM_BASE+1, 1)[0]
+	resHi := ms.readMem(RAM_BASE, 1)[0]
+	if resLo != 0x13 {
+		t.Errorf("%s: expected 0x13, got 0x%02x", testName, resLo)
+	}
+	if resHi != 0x34 {
+		t.Errorf("%s: expected 0x34, got 0x%02x", testName, resHi)
+	}
+	if ms.sp != RAM_BASE {
+		t.Errorf("%s: expected sp=0x%04x, got 0x%02x", testName, RAM_BASE, ms.sp)
 	}
 }

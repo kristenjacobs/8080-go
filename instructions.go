@@ -1057,9 +1057,8 @@ func instr_0xc4_CNZ(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xc5_PUSH(ms *machineState) {
-	// B	1		(sp-2)<-C; (sp-1)<-B; sp <- sp - 2
-	panic("Unimplemented")
+func instr_0xc5_PUSH_B(ms *machineState) {
+	PUSH("0xc5_PUSH_B", ms, &ms.regC, &ms.regB)
 }
 
 func instr_0xc6_ADI(ms *machineState) {
@@ -1156,9 +1155,9 @@ func instr_0xd4_CNC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xd5_PUSH(ms *machineState) {
+func instr_0xd5_PUSH_D(ms *machineState) {
 	// D	1		(sp-2)<-E; (sp-1)<-D; sp <- sp - 2
-	panic("Unimplemented")
+	PUSH("0xd5_PUSH_D", ms, &ms.regE, &ms.regD)
 }
 
 func instr_0xd6_SUI(ms *machineState) {

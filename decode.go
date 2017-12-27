@@ -411,7 +411,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xc4:
 		instr_0xc4_CNZ(ms)
 	case 0xc5:
-		instr_0xc5_PUSH(ms)
+		instr_0xc5_PUSH_B(ms)
 	case 0xc6:
 		instr_0xc6_ADI(ms)
 	case 0xc7:
@@ -443,7 +443,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xd4:
 		instr_0xd4_CNC(ms)
 	case 0xd5:
-		instr_0xd5_PUSH(ms)
+		instr_0xd5_PUSH_D(ms)
 	case 0xd6:
 		instr_0xd6_SUI(ms)
 	case 0xd7:
