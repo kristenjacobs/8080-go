@@ -10,7 +10,7 @@ const (
 	ROM_F_BASE uint16 = 0x1000
 	ROM_G_BASE uint16 = 0x0800
 	ROM_H_BASE uint16 = 0x0000
-	RAM_SIZE   uint16 = 0x800
+	RAM_SIZE   uint16 = 0x2000
 	RAM_BASE   uint16 = 0x2000
 )
 
@@ -128,8 +128,9 @@ func (ms *machineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
 }
 
 func inRegion(addr uint16, numBytes uint16, mr *memoryRegion) bool {
-	//fmt.Printf("In region: 0x%04x, %d, region: 0x%04x, %d\n", addr, numBytes, mr.base, mr.size)
-	return (addr >= mr.base) && (addr+numBytes) < (mr.base+mr.size)
+	result := (addr >= mr.base) && (addr+numBytes) <= (mr.base+mr.size)
+	Debug.Printf("In region: 0x%04x, %d, region: 0x%04x->0x%04x, result: %t\n", addr, numBytes, mr.base, mr.base+mr.size, result)
+	return result
 }
 
 func read(addr uint16, numBytes uint16, mr *memoryRegion) []uint8 {
