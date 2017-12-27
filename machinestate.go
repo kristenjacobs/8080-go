@@ -165,6 +165,10 @@ func (ms *machineState) setP(result uint8) {
 	ms.flagP = (numBitsSet & 0x1) == 0
 }
 
+func (ms *machineState) setCY(val bool) {
+	ms.flagCY = val
+}
+
 func (ms *machineState) setAC(result uint8) {
 	// Not yet implemented.
 }

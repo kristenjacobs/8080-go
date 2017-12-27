@@ -525,7 +525,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xfd:
 		invalid(0xfd)
 	case 0xfe:
-		instr_0xfe_CPI(ms)
+		instr_0xfe_CPI_D8(ms)
 	case 0xff:
 		instr_0xff_RST(ms)
 	}

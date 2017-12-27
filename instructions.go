@@ -1341,9 +1341,19 @@ func instr_0xfc_CM(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xfe_CPI(ms *machineState) {
-	// D8	2	Z, S, P, CY, AC	A - data
-	panic("Unimplemented")
+func instr_0xfe_CPI_D8(ms *machineState) {
+	// 2	Z, S, P, CY, AC	A - data
+	data := ms.readMem(ms.pc+1, 1)[0]
+	regA := ms.regA
+	ms.regA = regA - data
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(regA < data)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xfe_CPI_D8 regA[0x%02x]=regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 2
 }
 
 func instr_0xff_RST(ms *machineState) {
