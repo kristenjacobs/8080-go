@@ -45,8 +45,8 @@ func PUSH(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.writeMem(ms.sp-2, []uint8{*regHi}, 1)
 	ms.writeMem(ms.sp-1, []uint8{*regLo}, 1)
 	newSp := ms.sp - 2
-	Trace.Printf("0x%02x: %s pc=0x%04x, (0x%04x) <- 0x%02x, (0x%04x) <- 0x%02x, sp <- 0x%04x\n",
-		ms.pc, instrName, ms.pc, ms.sp-2, *regHi, ms.sp-1, *regLo, newSp)
-	ms.pc += 3
+	Trace.Printf("0x%04x: %s (0x%04x) <- 0x%02x, (0x%04x) <- 0x%02x, sp <- 0x%04x\n",
+		ms.pc, instrName, ms.sp-2, *regHi, ms.sp-1, *regLo, newSp)
+	ms.pc += 1
 	ms.sp = newSp
 }
