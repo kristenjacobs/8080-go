@@ -180,7 +180,7 @@ func check_MOV_REG_MEM(testName string, t *testing.T, instrFunc func(*machineSta
 	*dstReg = 0
 	ms.regH = uint8(RAM_BASE >> 8)
 	ms.regL = uint8(RAM_BASE & 0xFF)
-	ms.writeMem(ms.addr(ms.regL, ms.regH), []uint8{0xFF}, 1)
+	ms.writeMem(getPair(ms.regH, ms.regL), []uint8{0xFF}, 1)
 	instrFunc(ms)
 	if *dstReg != 0xFF {
 		t.Errorf("%s: expected dstReg=0xFF, got datReg=%d", testName, *dstReg)
@@ -203,7 +203,7 @@ func check_MOV_MEM_REG(testName string, t *testing.T, instrFunc func(*machineSta
 	ms.regH = uint8(RAM_BASE >> 8)
 	ms.regL = uint8(RAM_BASE & 0xFF)
 	expected := *srcReg
-	ms.writeMem(ms.addr(ms.regL, ms.regH), []uint8{0x00}, 1)
+	ms.writeMem(getPair(ms.regH, ms.regL), []uint8{0x00}, 1)
 	instrFunc(ms)
 	result := ms.readMem(RAM_BASE, 1)[0]
 	if result != expected {
@@ -254,7 +254,7 @@ func Test_LDAX(t *testing.T) {
 func check_LDAX(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, adrRegHi *uint8, adrRegLo *uint8) {
 	*adrRegLo = uint8(RAM_BASE >> 8)
 	*adrRegHi = uint8(RAM_BASE & 0xFF)
-	ms.writeMem(ms.addr(*adrRegLo, *adrRegHi), []uint8{0xFF}, 1)
+	ms.writeMem(getPair(*adrRegHi, *adrRegLo), []uint8{0xFF}, 1)
 	instrFunc(ms)
 	if ms.regA != 0xFF {
 		t.Errorf("%s: expected regA=0xFF, got regA=0x%02x", testName, ms.regA)
@@ -355,5 +355,46 @@ func check_PUSH(testName string, t *testing.T, instrFunc func(*machineState), ms
 	}
 	if ms.sp != RAM_BASE {
 		t.Errorf("%s: expected sp=0x%04x, got 0x%02x", testName, RAM_BASE, ms.sp)
+	}
+}
+
+func Test_DAD(t *testing.T) {
+
+	//var a uint16 = 0x8001
+	//var b uint16 = 0x8001
+	//var c uint32 = uint32(a) + uint32(b)
+	//t.Errorf(">>>>> 0x%04x\n", c)
+	//t.Errorf(">>>>> 0x%04x\n", a+b)
+
+	ms := newMachineState()
+	check_DAD("Test_0x09_DAD_B", t, instr_0x09_DAD_B, ms, &ms.regB, &ms.regC)
+	check_DAD("Test_0x19_DAD_D", t, instr_0x19_DAD_D, ms, &ms.regD, &ms.regE)
+	check_DAD("Test_0x29_DAD_H", t, instr_0x29_DAD_H, ms, &ms.regH, &ms.regL)
+}
+
+func check_DAD(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, regHi *uint8, regLo *uint8) {
+	// Non-carry test
+	ms.flagCY = false
+	setPair(&ms.regH, &ms.regL, 14)
+	setPair(regHi, regLo, 14)
+	instrFunc(ms)
+	result := getPair(ms.regH, ms.regL)
+	if result != 28 {
+		t.Errorf("%s: expected 26, got %d", testName, result)
+	}
+	if ms.flagCY != false {
+		t.Errorf("%s: expected CY=false, CY=%t", testName, ms.flagCY)
+	}
+	// Carry test
+	ms.flagCY = false
+	setPair(&ms.regH, &ms.regL, 0x8001)
+	setPair(regHi, regLo, 0x8001)
+	instrFunc(ms)
+	result = getPair(ms.regH, ms.regL)
+	if result != 2 {
+		t.Errorf("%s: expected 2, got %d", testName, result)
+	}
+	if ms.flagCY != true {
+		t.Errorf("%s: expected CY=true, CY=%t", testName, ms.flagCY)
 	}
 }

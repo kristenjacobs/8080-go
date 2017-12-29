@@ -54,9 +54,9 @@ func instr_0x07_RLC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x09_DAD(ms *machineState) {
-	// B	1	CY	HL = HL + BC
-	panic("Unimplemented")
+func instr_0x09_DAD_B(ms *machineState) {
+	// 1	CY	HL = HL + BC
+	DAD("0x09_DAD_B", ms, &ms.regB, &ms.regC)
 }
 
 func instr_0x0a_LDAX_B(ms *machineState) {
@@ -145,9 +145,9 @@ func instr_0x17_RAL(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x19_DAD(ms *machineState) {
-	// D	1	CY	HL = HL + DE
-	panic("Unimplemented")
+func instr_0x19_DAD_D(ms *machineState) {
+	// 1	CY	HL = HL + DE
+	DAD("0x19_DAD_D", ms, &ms.regD, &ms.regE)
 }
 
 func instr_0x1a_LDAX_D(ms *machineState) {
@@ -242,9 +242,9 @@ func instr_0x27_DAA(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x29_DAD(ms *machineState) {
-	// H	1	CY	HL = HL + HL
-	panic("Unimplemented")
+func instr_0x29_DAD_H(ms *machineState) {
+	// 1	CY	HL = HL + HL
+	DAD("0x29_DAD_H", ms, &ms.regH, &ms.regL)
 }
 
 func instr_0x2a_LHLD(ms *machineState) {
@@ -325,7 +325,7 @@ func instr_0x35_DCR_M(ms *machineState) {
 func instr_0x36_MVI_M_D8(ms *machineState) {
 	// 2		(HL) <- byte 2
 	byte2 := ms.readMem(ms.pc+1, 1)[0]
-	addr := ms.addr(ms.regL, ms.regH)
+	addr := getPair(ms.regH, ms.regL)
 	ms.writeMem(addr, []uint8{byte2}, 1)
 	Trace.Printf("0x%04x: 0x36_MVI_M_D8 [0x%04x] 0x%02x\n", ms.pc, addr, byte2)
 	ms.pc += 2

@@ -13,14 +13,14 @@ func MOV_REG_REG(instrName string, ms *machineState, dst *uint8, src *uint8) {
 }
 
 func MOV_REG_MEM(instrName string, ms *machineState, dst *uint8) {
-	addr := ms.addr(ms.regL, ms.regH)
+	addr := getPair(ms.regH, ms.regL)
 	*dst = ms.readMem(addr, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x [0x%04x]\n", ms.pc, instrName, *dst, addr)
 	ms.pc += 1
 }
 
 func MOV_MEM_REG(instrName string, ms *machineState, srcReg *uint8) {
-	addr := ms.addr(ms.regL, ms.regH)
+	addr := getPair(ms.regH, ms.regL)
 	ms.writeMem(addr, []uint8{*srcReg}, 1)
 	Trace.Printf("0x%04x: %s [0x%04x] 0x%02x\n", ms.pc, instrName, addr, *srcReg)
 	ms.pc += 1
@@ -34,7 +34,7 @@ func LDAX(instrName string, ms *machineState, adrRegHi *uint8, adrRegLo *uint8) 
 }
 
 func INX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
-	result := ms.addr(*regLo, *regHi) + 1
+	result := getPair(*regHi, *regLo) + 1
 	*regHi = uint8(result >> 8)
 	*regLo = uint8(result & 0xFF)
 	Trace.Printf("0x%04x: %s 0x%04x\n", ms.pc, instrName, result)
@@ -49,4 +49,18 @@ func PUSH(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 		ms.pc, instrName, ms.sp-2, *regHi, ms.sp-1, *regLo, newSp)
 	ms.pc += 1
 	ms.sp = newSp
+}
+
+func DAD(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+	lhs := getPair(ms.regH, ms.regL)
+	rhs := getPair(*regHi, *regLo)
+	if (uint32(lhs) + uint32(rhs)) > 0xffff {
+		ms.setCY(true)
+	} else {
+		ms.setCY(false)
+	}
+	result := lhs + rhs
+	setPair(&ms.regH, &ms.regL, result)
+	Trace.Printf("0x%04x: %s 0x%04x = 0x%04x + 0x%04x, CY=%t\n", ms.pc, instrName, result, lhs, rhs, ms.flagCY)
+	ms.pc += 1
 }

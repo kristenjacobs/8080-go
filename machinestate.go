@@ -174,6 +174,11 @@ func (ms *machineState) setAC(result uint8) {
 	// Not yet implemented.
 }
 
-func (ms *machineState) addr(regLo uint8, regHi uint8) uint16 {
+func getPair(regHi uint8, regLo uint8) uint16 {
 	return (uint16(regHi) << 8) | uint16(regLo&0xFF)
+}
+
+func setPair(regHi *uint8, regLo *uint8, val uint16) {
+	*regLo = uint8(val & 0xFF)
+	*regHi = uint8((val >> 8) & 0xFF)
 }
