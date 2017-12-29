@@ -403,7 +403,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xc0:
 		instr_0xc0_RNZ(ms)
 	case 0xc1:
-		instr_0xc1_POP(ms)
+		instr_0xc1_POP_B(ms)
 	case 0xc2:
 		instr_0xc2_JNZ_adr(ms)
 	case 0xc3:
@@ -435,7 +435,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xd0:
 		instr_0xd0_RNC(ms)
 	case 0xd1:
-		instr_0xd1_POP(ms)
+		instr_0xd1_POP_D(ms)
 	case 0xd2:
 		instr_0xd2_JNC_adr(ms)
 	case 0xd3:
@@ -467,7 +467,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xe0:
 		instr_0xe0_RPO(ms)
 	case 0xe1:
-		instr_0xe1_POP(ms)
+		instr_0xe1_POP_H(ms)
 	case 0xe2:
 		instr_0xe2_JPO(ms)
 	case 0xe3:

@@ -51,6 +51,16 @@ func PUSH(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.sp = newSp
 }
 
+func POP(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+	*regHi = ms.readMem(ms.sp, 1)[0]
+	*regLo = ms.readMem(ms.sp+1, 1)[0]
+	newSp := ms.sp + 2
+	Trace.Printf("0x%04x: %s 0x%02x <- (0x%04x), 0x%02x <- (0x%04x), sp <- 0x%04x\n",
+		ms.pc, instrName, *regHi, ms.sp, *regLo, ms.sp+1, newSp)
+	ms.pc += 1
+	ms.sp = newSp
+}
+
 func DAD(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	lhs := getPair(ms.regH, ms.regL)
 	rhs := getPair(*regHi, *regLo)

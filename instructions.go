@@ -1025,9 +1025,9 @@ func instr_0xc0_RNZ(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xc1_POP(ms *machineState) {
-	// B	1		C <- (sp); B <- (sp+1); sp <- sp+2
-	panic("Unimplemented")
+func instr_0xc1_POP_B(ms *machineState) {
+	// 1		C <- (sp); B <- (sp+1); sp <- sp+2
+	POP("0xc1_POP_B", ms, &ms.regC, &ms.regB)
 }
 
 func instr_0xc2_JNZ_adr(ms *machineState) {
@@ -1128,9 +1128,9 @@ func instr_0xd0_RNC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xd1_POP(ms *machineState) {
-	// D	1		E <- (sp); D <- (sp+1); sp <- sp+2
-	panic("Unimplemented")
+func instr_0xd1_POP_D(ms *machineState) {
+	// 1		E <- (sp); D <- (sp+1); sp <- sp+2
+	POP("0xd1_POP_D", ms, &ms.regE, &ms.regD)
 }
 
 func instr_0xd2_JNC_adr(ms *machineState) {
@@ -1206,9 +1206,9 @@ func instr_0xe0_RPO(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xe1_POP(ms *machineState) {
-	// H	1		L <- (sp); H <- (sp+1); sp <- sp+2
-	panic("Unimplemented")
+func instr_0xe1_POP_H(ms *machineState) {
+	// 1		L <- (sp); H <- (sp+1); sp <- sp+2
+	POP("0xe1_POP_H", ms, &ms.regL, &ms.regH)
 }
 
 func instr_0xe2_JPO(ms *machineState) {

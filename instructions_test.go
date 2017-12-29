@@ -356,6 +356,28 @@ func check_PUSH(testName string, t *testing.T, instrFunc func(*machineState), ms
 	}
 }
 
+func Test_POP(t *testing.T) {
+	ms := newMachineState()
+	check_POP("Test_0xc1_POP_B", t, instr_0xc1_POP_B, ms, &ms.regC, &ms.regB)
+	check_POP("Test_0xd1_POP_D", t, instr_0xd1_POP_D, ms, &ms.regE, &ms.regD)
+	check_POP("Test_0xe1_POP_H", t, instr_0xe1_POP_H, ms, &ms.regL, &ms.regH)
+}
+
+func check_POP(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, regHi *uint8, regLo *uint8) {
+	ms.sp = RAM_BASE
+	ms.writeMem(ms.sp, []uint8{0x12, 0x34}, 2)
+	instrFunc(ms)
+	if *regHi != 0x12 {
+		t.Errorf("%s: expected 0x12, got 0x%02x", testName, regHi)
+	}
+	if *regLo != 0x34 {
+		t.Errorf("%s: expected 0x34, got 0x%02x", testName, regLo)
+	}
+	if ms.sp != RAM_BASE+2 {
+		t.Errorf("%s: expected sp=0x%04x, got 0x%02x", testName, RAM_BASE, ms.sp)
+	}
+}
+
 func Test_DAD(t *testing.T) {
 	ms := newMachineState()
 	check_DAD("Test_0x09_DAD_B", t, instr_0x09_DAD_B, ms, &ms.regB, &ms.regC)
