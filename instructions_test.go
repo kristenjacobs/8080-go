@@ -359,13 +359,6 @@ func check_PUSH(testName string, t *testing.T, instrFunc func(*machineState), ms
 }
 
 func Test_DAD(t *testing.T) {
-
-	//var a uint16 = 0x8001
-	//var b uint16 = 0x8001
-	//var c uint32 = uint32(a) + uint32(b)
-	//t.Errorf(">>>>> 0x%04x\n", c)
-	//t.Errorf(">>>>> 0x%04x\n", a+b)
-
 	ms := newMachineState()
 	check_DAD("Test_0x09_DAD_B", t, instr_0x09_DAD_B, ms, &ms.regB, &ms.regC)
 	check_DAD("Test_0x19_DAD_D", t, instr_0x19_DAD_D, ms, &ms.regD, &ms.regE)
