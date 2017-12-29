@@ -1067,9 +1067,9 @@ func instr_0xc6_ADI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xc7_RST(ms *machineState) {
-	// 0	1		CALL $0
-	panic("Unimplemented")
+func instr_0xc7_RST_0(ms *machineState) {
+	// 1		CALL $0
+	RST("instr_0xc7_RST_0", ms, 0)
 }
 
 func instr_0xc8_RZ(ms *machineState) {
@@ -1118,9 +1118,9 @@ func instr_0xce_ACI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xcf_RST(ms *machineState) {
-	// 1	1		CALL $8
-	panic("Unimplemented")
+func instr_0xcf_RST_1(ms *machineState) {
+	// 1		CALL $8
+	RST("instr_0xcf_RST_1", ms, 0x8)
 }
 
 func instr_0xd0_RNC(ms *machineState) {
@@ -1166,9 +1166,9 @@ func instr_0xd6_SUI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xd7_RST(ms *machineState) {
-	// 2	1		CALL $10
-	panic("Unimplemented")
+func instr_0xd7_RST_2(ms *machineState) {
+	// 1		CALL $10
+	RST("instr_0xd7_RST_2", ms, 0x10)
 }
 
 func instr_0xd8_RC(ms *machineState) {
@@ -1196,9 +1196,9 @@ func instr_0xde_SBI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xdf_RST(ms *machineState) {
-	// 3	1		CALL $18
-	panic("Unimplemented")
+func instr_0xdf_RST_3(ms *machineState) {
+	// 1		CALL $18
+	RST("instr_0xdf_RST_3", ms, 0x18)
 }
 
 func instr_0xe0_RPO(ms *machineState) {
@@ -1236,9 +1236,9 @@ func instr_0xe6_ANI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xe7_RST(ms *machineState) {
-	// 4	1		CALL $20
-	panic("Unimplemented")
+func instr_0xe7_RST_4(ms *machineState) {
+	// 1		CALL $20
+	RST("instr_0xe7_RST_4", ms, 0x20)
 }
 
 func instr_0xe8_RPE(ms *machineState) {
@@ -1281,9 +1281,9 @@ func instr_0xee_XRI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xef_RST(ms *machineState) {
-	// 5	1		CALL $28
-	panic("Unimplemented")
+func instr_0xef_RST_5(ms *machineState) {
+	// 1		CALL $28
+	RST("instr_0xef_RST_5", ms, 0x28)
 }
 
 func instr_0xf0_RP(ms *machineState) {
@@ -1321,9 +1321,9 @@ func instr_0xf6_ORI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xf7_RST(ms *machineState) {
-	// 6	1		CALL $30
-	panic("Unimplemented")
+func instr_0xf7_RST_6(ms *machineState) {
+	// 1		CALL $30
+	RST("instr_0xf7_RST_6", ms, 0x30)
 }
 
 func instr_0xf8_RM(ms *machineState) {
@@ -1366,7 +1366,7 @@ func instr_0xfe_CPI_D8(ms *machineState) {
 	ms.pc += 2
 }
 
-func instr_0xff_RST(ms *machineState) {
-	// 7	1		CALL $38
-	panic("Unimplemented")
+func instr_0xff_RST_7(ms *machineState) {
+	// 1		CALL $38
+	RST("instr_0xff_RST_7", ms, 0x38)
 }

@@ -64,3 +64,13 @@ func DAD(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	Trace.Printf("0x%04x: %s 0x%04x = 0x%04x + 0x%04x, CY=%t\n", ms.pc, instrName, result, lhs, rhs, ms.flagCY)
 	ms.pc += 1
 }
+
+func RST(instrName string, ms *machineState, addr uint16) {
+	nextPC := ms.pc + 1
+	pcHi := uint8(nextPC >> 8)
+	pcLo := uint8(nextPC & 0xFF)
+	ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
+	Trace.Printf("0x%04x: %s 0x%04x\n", ms.pc, instrName, addr)
+	ms.sp = ms.sp - 2
+	ms.pc = addr
+}

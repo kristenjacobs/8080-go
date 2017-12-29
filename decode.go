@@ -415,7 +415,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xc6:
 		instr_0xc6_ADI(ms)
 	case 0xc7:
-		instr_0xc7_RST(ms)
+		instr_0xc7_RST_0(ms)
 	case 0xc8:
 		instr_0xc8_RZ(ms)
 	case 0xc9:
@@ -431,7 +431,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xce:
 		instr_0xce_ACI(ms)
 	case 0xcf:
-		instr_0xcf_RST(ms)
+		instr_0xcf_RST_1(ms)
 	case 0xd0:
 		instr_0xd0_RNC(ms)
 	case 0xd1:
@@ -447,7 +447,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xd6:
 		instr_0xd6_SUI(ms)
 	case 0xd7:
-		instr_0xd7_RST(ms)
+		instr_0xd7_RST_2(ms)
 	case 0xd8:
 		instr_0xd8_RC(ms)
 	case 0xd9:
@@ -463,7 +463,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xde:
 		instr_0xde_SBI(ms)
 	case 0xdf:
-		instr_0xdf_RST(ms)
+		instr_0xdf_RST_3(ms)
 	case 0xe0:
 		instr_0xe0_RPO(ms)
 	case 0xe1:
@@ -479,7 +479,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xe6:
 		instr_0xe6_ANI(ms)
 	case 0xe7:
-		instr_0xe7_RST(ms)
+		instr_0xe7_RST_4(ms)
 	case 0xe8:
 		instr_0xe8_RPE(ms)
 	case 0xe9:
@@ -495,7 +495,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xee:
 		instr_0xee_XRI(ms)
 	case 0xef:
-		instr_0xef_RST(ms)
+		instr_0xef_RST_5(ms)
 	case 0xf0:
 		instr_0xf0_RP(ms)
 	case 0xf1:
@@ -511,7 +511,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xf6:
 		instr_0xf6_ORI(ms)
 	case 0xf7:
-		instr_0xf7_RST(ms)
+		instr_0xf7_RST_6(ms)
 	case 0xf8:
 		instr_0xf8_RM(ms)
 	case 0xf9:
@@ -527,7 +527,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xfe:
 		instr_0xfe_CPI_D8(ms)
 	case 0xff:
-		instr_0xff_RST(ms)
+		instr_0xff_RST_7(ms)
 	}
 }
 

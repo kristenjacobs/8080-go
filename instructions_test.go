@@ -410,3 +410,33 @@ func Test_0xeb_XCHG(t *testing.T) {
 		t.Errorf("instr_0xeb_XCHG: expected regL=2, got regL=%d", ms.regL)
 	}
 }
+
+func Test_RST(t *testing.T) {
+	ms := newMachineState()
+	check_RST("Test_0xc7_RST_0", t, instr_0xc7_RST_0, ms, 0x0)
+	check_RST("Test_0xcf_RST_1", t, instr_0xcf_RST_1, ms, 0x8)
+	check_RST("Test_0xd7_RST_2", t, instr_0xd7_RST_2, ms, 0x10)
+	check_RST("Test_0xdf_RST_3", t, instr_0xdf_RST_3, ms, 0x18)
+	check_RST("Test_0xe7_RST_4", t, instr_0xe7_RST_4, ms, 0x20)
+	check_RST("Test_0xef_RST_5", t, instr_0xef_RST_5, ms, 0x28)
+	check_RST("Test_0xf7_RST_6", t, instr_0xf7_RST_6, ms, 0x30)
+	check_RST("Test_0xff_RST_7", t, instr_0xff_RST_7, ms, 0x38)
+}
+
+func check_RST(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, addr uint16) {
+	ms.sp = RAM_BASE + 2
+	ms.writeMem(ms.sp-2, []uint8{0x00, 0x00}, 2)
+	ms.pc = RAM_BASE + 10
+	instrFunc(ms)
+	bytes := ms.readMem(RAM_BASE, 2)
+	var sp uint16 = (uint16(bytes[1]) << 8) | uint16(bytes[0])
+	if sp != RAM_BASE+11 {
+		t.Errorf("%s: expected [sp]=0x%04X, got [sp]=0x%04x", testName, RAM_BASE+13, sp)
+	}
+	if ms.sp != RAM_BASE {
+		t.Errorf("%s: expected sp=0x%04X, got sp=0x%04x", testName, RAM_BASE, ms.sp)
+	}
+	if ms.pc != addr {
+		t.Errorf("%s: expected pc=0x%04x, got pc=0x%04x", testName, addr, ms.pc)
+	}
+}
