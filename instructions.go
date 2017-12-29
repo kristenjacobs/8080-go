@@ -1258,7 +1258,17 @@ func instr_0xea_JPE(ms *machineState) {
 
 func instr_0xeb_XCHG(ms *machineState) {
 	// 1		H <-> D; L <-> E
-	panic("Unimplemented")
+	regD := ms.regD
+	regE := ms.regE
+	regH := ms.regH
+	regL := ms.regL
+	ms.regH = regD
+	ms.regD = regH
+	ms.regL = regE
+	ms.regE = regL
+	Trace.Printf("0x%04x: 0xeb_XCHG regH[0x%02x]<->regD[0x%02x], regH[0x%02x]<->regD[0x%02x]\n",
+		ms.pc, ms.regH, ms.regD, ms.regL, ms.regE)
+	ms.pc += 1
 }
 
 func instr_0xec_CPE(ms *machineState) {

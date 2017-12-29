@@ -212,7 +212,6 @@ func check_MOV_MEM_REG(testName string, t *testing.T, instrFunc func(*machineSta
 }
 
 func Test_0xc9_RET(t *testing.T) {
-	// 1		PC.lo <- (sp); PC.hi<-(sp+1); SP <- SP+2
 	ms := newMachineState()
 	ms.sp = RAM_BASE
 	ms.writeMem(ms.sp, []uint8{0x1, 0x2}, 2)
@@ -323,7 +322,6 @@ func Test_0xd2_JNC_adr(t *testing.T) {
 }
 
 func Test_0xc3_JMP_adr(t *testing.T) {
-	//ms := newMachineState()
 	ms := newMachineState()
 	ms.pc = RAM_BASE
 	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
@@ -389,5 +387,26 @@ func check_DAD(testName string, t *testing.T, instrFunc func(*machineState), ms 
 	}
 	if ms.flagCY != true {
 		t.Errorf("%s: expected CY=true, CY=%t", testName, ms.flagCY)
+	}
+}
+
+func Test_0xeb_XCHG(t *testing.T) {
+	ms := newMachineState()
+	ms.regD = 1
+	ms.regE = 2
+	ms.regH = 3
+	ms.regL = 4
+	instr_0xeb_XCHG(ms)
+	if ms.regD != 3 {
+		t.Errorf("instr_0xeb_XCHG: expected regD=3, got regD=%d", ms.regD)
+	}
+	if ms.regE != 4 {
+		t.Errorf("instr_0xeb_XCHG: expected regE=4, got regE=%d", ms.regE)
+	}
+	if ms.regH != 1 {
+		t.Errorf("instr_0xeb_XCHG: expected regH=1, got regH=%d", ms.regH)
+	}
+	if ms.regL != 2 {
+		t.Errorf("instr_0xeb_XCHG: expected regL=2, got regL=%d", ms.regL)
 	}
 }
