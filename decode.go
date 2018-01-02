@@ -439,7 +439,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xd2:
 		instr_0xd2_JNC_adr(ms)
 	case 0xd3:
-		instr_0xd3_OUT(ms)
+		instr_0xd3_OUT_D8(ms)
 	case 0xd4:
 		instr_0xd4_CNC(ms)
 	case 0xd5:

@@ -23,6 +23,7 @@ func InitLogging(
 func main() {
 	trace := flag.Bool("t", false, "enables instruction tracing")
 	debug := flag.Bool("d", false, "enables debug")
+	test := flag.Bool("test", false, "executes inbuilt instruction test rom")
 	flag.Parse()
 
 	traceStream := ioutil.Discard
@@ -35,7 +36,13 @@ func main() {
 	}
 	InitLogging(traceStream, debugStream)
 
-	ms := newMachineState()
+	var ms *machineState
+	if *test {
+		ms = newTestMachineState()
+	} else {
+		ms = newMachineState()
+	}
+
 	for ms.halt == false {
 		step(ms)
 	}

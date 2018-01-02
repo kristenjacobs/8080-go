@@ -1084,7 +1084,7 @@ func instr_0xc9_RET(ms *machineState) {
 	pcHi := bytes[1]
 	newSp := ms.sp + 2
 	pc := (uint16(pcHi) << 8) | uint16(pcLo)
-	Trace.Printf("0x%02x: 0xc9_RET pc=0x%04x, sp=0x%04x\n", ms.pc, pc, newSp)
+	Trace.Printf("0x%04x: 0xc9_RET pc=0x%04x, sp=0x%04x\n", ms.pc, pc, newSp)
 	ms.pc = (uint16(pcHi) << 8) | uint16(pcLo)
 	ms.sp = newSp
 }
@@ -1146,9 +1146,11 @@ func instr_0xd2_JNC_adr(ms *machineState) {
 	}
 }
 
-func instr_0xd3_OUT(ms *machineState) {
-	// D8	2		special
-	panic("Unimplemented")
+func instr_0xd3_OUT_D8(ms *machineState) {
+	// 2		special
+	port := ms.readMem(ms.pc+1, 1)[0]
+	Trace.Printf("0x%04x: 0xd3_OUT_D8 %d\n", ms.pc, port)
+	ms.pc += 2
 }
 
 func instr_0xd4_CNC(ms *machineState) {

@@ -5,13 +5,15 @@ import (
 )
 
 const (
-	ROM_SIZE   uint16 = 0x800
-	ROM_E_BASE uint16 = 0x1800
-	ROM_F_BASE uint16 = 0x1000
-	ROM_G_BASE uint16 = 0x0800
-	ROM_H_BASE uint16 = 0x0000
-	RAM_SIZE   uint16 = 0x2000
-	RAM_BASE   uint16 = 0x2000
+	ROM_SIZE      uint16 = 0x800
+	ROM_E_BASE    uint16 = 0x1800
+	ROM_F_BASE    uint16 = 0x1000
+	ROM_G_BASE    uint16 = 0x0800
+	ROM_H_BASE    uint16 = 0x0000
+	RAM_SIZE      uint16 = 0x2000
+	RAM_BASE      uint16 = 0x2000
+	TEST_ROM_BASE uint16 = 0x100
+	TEST_ROM_SIZE uint16 = 0x1000
 )
 
 type memoryRegion struct {
@@ -21,10 +23,7 @@ type memoryRegion struct {
 }
 
 type machineState struct {
-	romE memoryRegion
-	romF memoryRegion
-	romG memoryRegion
-	romH memoryRegion
+	roms []memoryRegion
 	ram  memoryRegion
 
 	regA uint8
@@ -49,33 +48,37 @@ type machineState struct {
 
 func newMachineState() *machineState {
 	ms := machineState{}
-
-	ms.initialiseRoms()
 	ms.initialiseRam()
-
+	ms.initialiseSpaceInvadersRoms()
 	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
-
 	ms.halt = false
 	return &ms
 }
 
-func (ms *machineState) initialiseRoms() {
-	ms.romE.size = ROM_SIZE
-	ms.romE.base = ROM_E_BASE
-	ms.romE.bytes = InvadersE
+func newTestMachineState() *machineState {
+	ms := machineState{}
+	ms.initialiseRam()
+	ms.initialiseTestRom()
+	ms.pc = TEST_ROM_BASE
+	ms.sp = RAM_BASE
+	ms.halt = false
+	return &ms
+}
 
-	ms.romF.size = ROM_SIZE
-	ms.romF.base = ROM_F_BASE
-	ms.romF.bytes = InvadersF
+func (ms *machineState) initialiseSpaceInvadersRoms() {
+	ms.roms = []memoryRegion{
+		memoryRegion{ROM_SIZE, ROM_E_BASE, InvadersE},
+		memoryRegion{ROM_SIZE, ROM_F_BASE, InvadersF},
+		memoryRegion{ROM_SIZE, ROM_G_BASE, InvadersG},
+		memoryRegion{ROM_SIZE, ROM_H_BASE, InvadersH},
+	}
+}
 
-	ms.romG.size = ROM_SIZE
-	ms.romG.base = ROM_G_BASE
-	ms.romG.bytes = InvadersG
-
-	ms.romH.size = ROM_SIZE
-	ms.romH.base = ROM_H_BASE
-	ms.romH.bytes = InvadersH
+func (ms *machineState) initialiseTestRom() {
+	ms.roms = []memoryRegion{
+		memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, TestRom},
+	}
 }
 
 func (ms *machineState) initialiseRam() {
@@ -85,17 +88,10 @@ func (ms *machineState) initialiseRam() {
 }
 
 func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
-	if inRegion(addr, numBytes, &ms.romE) {
-		return read(addr, numBytes, &ms.romE)
-	}
-	if inRegion(addr, numBytes, &ms.romF) {
-		return read(addr, numBytes, &ms.romF)
-	}
-	if inRegion(addr, numBytes, &ms.romG) {
-		return read(addr, numBytes, &ms.romG)
-	}
-	if inRegion(addr, numBytes, &ms.romH) {
-		return read(addr, numBytes, &ms.romH)
+	for _, rom := range ms.roms {
+		if inRegion(addr, numBytes, &rom) {
+			return read(addr, numBytes, &rom)
+		}
 	}
 	if inRegion(addr, numBytes, &ms.ram) {
 		return read(addr, numBytes, &ms.ram)
@@ -104,21 +100,11 @@ func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
 }
 
 func (ms *machineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
-	if inRegion(addr, numBytes, &ms.romE) {
-		write(addr, bytes, numBytes, &ms.romE)
-		return
-	}
-	if inRegion(addr, numBytes, &ms.romF) {
-		write(addr, bytes, numBytes, &ms.romF)
-		return
-	}
-	if inRegion(addr, numBytes, &ms.romG) {
-		write(addr, bytes, numBytes, &ms.romG)
-		return
-	}
-	if inRegion(addr, numBytes, &ms.romH) {
-		write(addr, bytes, numBytes, &ms.romH)
-		return
+	for _, rom := range ms.roms {
+		if inRegion(addr, numBytes, &rom) {
+			write(addr, bytes, numBytes, &rom)
+			return
+		}
 	}
 	if inRegion(addr, numBytes, &ms.ram) {
 		write(addr, bytes, numBytes, &ms.ram)
