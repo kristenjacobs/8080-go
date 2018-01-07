@@ -1229,9 +1229,17 @@ func instr_0xe1_POP_H(ms *machineState) {
 	POP("0xe1_POP_H", ms, &ms.regL, &ms.regH)
 }
 
-func instr_0xe2_JPO(ms *machineState) {
-	// adr	3		if PO, PC <- adr
-	panic("Unimplemented")
+func instr_0xe2_JPO_adr(ms *machineState) {
+	// 3		if PO, PC <- adr
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xe2_JPO_adr 0x%04x, P=%t\n", ms.pc, adr, ms.flagP)
+	if !ms.flagP {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xe3_XTHL(ms *machineState) {
@@ -1279,9 +1287,17 @@ func instr_0xe9_PCHL(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xea_JPE(ms *machineState) {
-	// adr	3		if PE, PC <- adr
-	panic("Unimplemented")
+func instr_0xea_JPE_adr(ms *machineState) {
+	// 3		if PE, PC <- adr
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xea_JPE_adr 0x%04x, P=%t\n", ms.pc, adr, ms.flagP)
+	if ms.flagP {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xeb_XCHG(ms *machineState) {

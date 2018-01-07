@@ -285,75 +285,30 @@ func check_INX(testName string, t *testing.T, instrFunc func(*machineState), ms 
 	}
 }
 
-func Test_0xc2_JNZ_adr(t *testing.T) {
+func Test_conditional_jump(t *testing.T) {
 	ms := newMachineState()
-	ms.pc = RAM_BASE
-	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagZ = false
-	instr_0xc2_JNZ_adr(ms)
-	if ms.pc != 0xBABE {
-		t.Errorf("instr_0xc2_JNZ_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
-	}
-	ms.pc = RAM_BASE
-	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagZ = true
-	instr_0xc2_JNZ_adr(ms)
-	if ms.pc != RAM_BASE+3 {
-		t.Errorf("instr_0xc2_JNZ_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
-	}
+	check_conditional_jump("0xc2_JNZ_adr", t, instr_0xc2_JNZ_adr, ms, &ms.flagZ, false)
+	check_conditional_jump("0xca_JZ_adr", t, instr_0xca_JZ_adr, ms, &ms.flagZ, true)
+	check_conditional_jump("0xd2_JNC_adr", t, instr_0xd2_JNC_adr, ms, &ms.flagCY, false)
+	check_conditional_jump("0xda_JC_adr", t, instr_0xda_JC_adr, ms, &ms.flagCY, true)
+	check_conditional_jump("0xe2_JPO_adr", t, instr_0xe2_JPO_adr, ms, &ms.flagP, false)
+	check_conditional_jump("0xea_JPE_adr", t, instr_0xea_JPE_adr, ms, &ms.flagP, true)
 }
 
-func Test_0xca_JZ_adr(t *testing.T) {
-	ms := newMachineState()
+func check_conditional_jump(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, flag *bool, val bool) {
 	ms.pc = RAM_BASE
 	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagZ = true
-	instr_0xca_JZ_adr(ms)
+	*flag = val
+	instrFunc(ms)
 	if ms.pc != 0xBABE {
-		t.Errorf("instr_0xca_JZ_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
+		t.Errorf("%s: expected pc=0xBABE, got pc=0x%04x", testName, ms.pc)
 	}
 	ms.pc = RAM_BASE
 	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagZ = false
-	instr_0xca_JZ_adr(ms)
+	*flag = !val
+	instrFunc(ms)
 	if ms.pc != RAM_BASE+3 {
-		t.Errorf("instr_0xca_JZ_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
-	}
-}
-
-func Test_0xd2_JNC_adr(t *testing.T) {
-	ms := newMachineState()
-	ms.pc = RAM_BASE
-	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagCY = false
-	instr_0xd2_JNC_adr(ms)
-	if ms.pc != 0xBABE {
-		t.Errorf("instr_0xd2_JNC_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
-	}
-	ms.pc = RAM_BASE
-	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagCY = true
-	instr_0xd2_JNC_adr(ms)
-	if ms.pc != RAM_BASE+3 {
-		t.Errorf("instr_0xd2_JNC_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
-	}
-}
-
-func Test_0xda_JC_adr(t *testing.T) {
-	ms := newMachineState()
-	ms.pc = RAM_BASE
-	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagCY = true
-	instr_0xda_JC_adr(ms)
-	if ms.pc != 0xBABE {
-		t.Errorf("instr_0xda_JC_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
-	}
-	ms.pc = RAM_BASE
-	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
-	ms.flagCY = false
-	instr_0xda_JC_adr(ms)
-	if ms.pc != RAM_BASE+3 {
-		t.Errorf("instr_0xda_JC_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
+		t.Errorf("%s: expected pc=0x%04x, got pc=0x%04x", testName, RAM_BASE+3, ms.pc)
 	}
 }
 

@@ -469,7 +469,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xe1:
 		instr_0xe1_POP_H(ms)
 	case 0xe2:
-		instr_0xe2_JPO(ms)
+		instr_0xe2_JPO_adr(ms)
 	case 0xe3:
 		instr_0xe3_XTHL(ms)
 	case 0xe4:
@@ -485,7 +485,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xe9:
 		instr_0xe9_PCHL(ms)
 	case 0xea:
-		instr_0xea_JPE(ms)
+		instr_0xea_JPE_adr(ms)
 	case 0xeb:
 		instr_0xeb_XCHG(ms)
 	case 0xec:
