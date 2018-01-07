@@ -1113,12 +1113,14 @@ func instr_0xcd_CALL_adr(ms *machineState) {
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	nextPC := ms.pc + 3
-	pcHi := uint8(nextPC >> 8)
-	pcLo := uint8(nextPC & 0xFF)
-	ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
-	Trace.Printf("0x%04x: 0xcd_CALL_adr 0x%04x\n", ms.pc, adr)
-	ms.sp = ms.sp - 2
-	ms.pc = adr
+	if !handleSyscall(ms, adr) {
+		pcHi := uint8(nextPC >> 8)
+		pcLo := uint8(nextPC & 0xFF)
+		ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
+		Trace.Printf("0x%04x: 0xcd_CALL_adr 0x%04x\n", ms.pc, adr)
+		ms.sp = ms.sp - 2
+		ms.pc = adr
+	}
 }
 
 func instr_0xce_ACI(ms *machineState) {

@@ -84,3 +84,20 @@ func RST(instrName string, ms *machineState, addr uint16) {
 	ms.sp = ms.sp - 2
 	ms.pc = addr
 }
+
+func handleSyscall(ms *machineState, adr uint16) bool {
+	if adr == 0x5 {
+		Trace.Printf("0x%04x: 0xcd_CALL_adr 0x%04x [SYSCALL]\n", ms.pc, adr)
+		// TODO: Handle the system call here.
+
+		// uint16_t offset = (state->d<<8) | (state->e);
+		// char *str = &state->memory[offset+3];  //skip the prefix bytes
+		// while (*str != '$')
+		//     printf("%c", *str++);
+		// printf("\n");
+
+		ms.pc += 3
+		return true
+	}
+	return false
+}
