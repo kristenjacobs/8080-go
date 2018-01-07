@@ -15,7 +15,7 @@ run:
 
 .PHONY: run-test
 run-test:
-	./8080-go -test 2>&1 | tee trace.txt
+	./8080-go -test -t 2>&1 | tee trace.txt
 
 .PHONY: test
 test:

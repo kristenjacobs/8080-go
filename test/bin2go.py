@@ -5,7 +5,7 @@ import sys
 
 BYTES_PER_LINE = 16
 
-asm_file = os.path.dirname(__file__) + "/cpudiag.asm"
+asm_file = os.path.dirname(__file__) + "/cpudiag.bin"
 with open(asm_file, "rb") as fin:
     line_num = 0
     sys.stdout.write('package main\n')
