@@ -70,16 +70,16 @@ func newTestMachineState() *machineState {
 
 func (ms *machineState) initialiseSpaceInvadersRoms() {
 	ms.roms = []memoryRegion{
-		memoryRegion{ROM_SIZE, ROM_E_BASE, InvadersE},
-		memoryRegion{ROM_SIZE, ROM_F_BASE, InvadersF},
-		memoryRegion{ROM_SIZE, ROM_G_BASE, InvadersG},
-		memoryRegion{ROM_SIZE, ROM_H_BASE, InvadersH},
+		memoryRegion{ROM_SIZE, ROM_E_BASE, newRomBytes(ROM_SIZE, InvadersE)},
+		memoryRegion{ROM_SIZE, ROM_F_BASE, newRomBytes(ROM_SIZE, InvadersF)},
+		memoryRegion{ROM_SIZE, ROM_G_BASE, newRomBytes(ROM_SIZE, InvadersG)},
+		memoryRegion{ROM_SIZE, ROM_H_BASE, newRomBytes(ROM_SIZE, InvadersH)},
 	}
 }
 
 func (ms *machineState) initialiseTestRom() {
 	ms.roms = []memoryRegion{
-		memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, TestRom},
+		memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, newRomBytes(TEST_ROM_SIZE, TestRom)},
 	}
 }
 
@@ -177,4 +177,10 @@ func getPair(regHi uint8, regLo uint8) uint16 {
 func setPair(regHi *uint8, regLo *uint8, val uint16) {
 	*regLo = uint8(val & 0xFF)
 	*regHi = uint8((val >> 8) & 0xFF)
+}
+
+func newRomBytes(romSize uint16, romBytes []uint8) []uint8 {
+	bytes := make([]uint8, romSize)
+	copy(bytes, romBytes)
+	return bytes
 }
