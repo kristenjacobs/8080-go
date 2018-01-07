@@ -501,7 +501,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xf1:
 		instr_0xf1_POP(ms)
 	case 0xf2:
-		instr_0xf2_JP(ms)
+		instr_0xf2_JP_adr(ms)
 	case 0xf3:
 		instr_0xf3_DI(ms)
 	case 0xf4:
@@ -517,7 +517,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xf9:
 		instr_0xf9_SPHL(ms)
 	case 0xfa:
-		instr_0xfa_JM(ms)
+		instr_0xfa_JM_adr(ms)
 	case 0xfb:
 		instr_0xfb_EI(ms)
 	case 0xfc:

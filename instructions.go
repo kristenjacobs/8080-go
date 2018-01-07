@@ -1340,9 +1340,17 @@ func instr_0xf1_POP(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xf2_JP(ms *machineState) {
-	// adr	3		if P=1 PC <- adr
-	panic("Unimplemented")
+func instr_0xf2_JP_adr(ms *machineState) {
+	// 3		if P=1 PC <- adr
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xf2_JP_adr 0x%04x, S=%t\n", ms.pc, adr, ms.flagS)
+	if ms.flagS {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xf3_DI(ms *machineState) {
@@ -1380,9 +1388,17 @@ func instr_0xf9_SPHL(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xfa_JM(ms *machineState) {
-	// adr	3		if M, PC <- adr
-	panic("Unimplemented")
+func instr_0xfa_JM_adr(ms *machineState) {
+	// 3		if M, PC <- adr
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xfa_JM_adr 0x%04x, S=%t\n", ms.pc, adr, ms.flagS)
+	if !ms.flagS {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xfb_EI(ms *machineState) {

@@ -293,6 +293,8 @@ func Test_conditional_jump(t *testing.T) {
 	check_conditional_jump("0xda_JC_adr", t, instr_0xda_JC_adr, ms, &ms.flagCY, true)
 	check_conditional_jump("0xe2_JPO_adr", t, instr_0xe2_JPO_adr, ms, &ms.flagP, false)
 	check_conditional_jump("0xea_JPE_adr", t, instr_0xea_JPE_adr, ms, &ms.flagP, true)
+	check_conditional_jump("0xf2_JP_adr", t, instr_0xf2_JP_adr, ms, &ms.flagS, true)
+	check_conditional_jump("0xfa_JM_adr", t, instr_0xfa_JM_adr, ms, &ms.flagS, false)
 }
 
 func check_conditional_jump(testName string, t *testing.T, instrFunc func(*machineState), ms *machineState, flag *bool, val bool) {

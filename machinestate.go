@@ -50,6 +50,7 @@ func newMachineState() *machineState {
 	ms := machineState{}
 	ms.initialiseRam()
 	ms.initialiseSpaceInvadersRoms()
+	ms.initialiseFlags()
 	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
 	ms.halt = false
@@ -60,6 +61,7 @@ func newTestMachineState() *machineState {
 	ms := machineState{}
 	ms.initialiseRam()
 	ms.initialiseTestRom()
+	ms.initialiseFlags()
 	ms.pc = TEST_ROM_BASE
 	ms.sp = RAM_BASE
 	ms.halt = false
@@ -85,6 +87,14 @@ func (ms *machineState) initialiseRam() {
 	ms.ram.size = RAM_SIZE
 	ms.ram.base = RAM_BASE
 	ms.ram.bytes = make([]uint8, RAM_SIZE)
+}
+
+func (ms *machineState) initialiseFlags() {
+	ms.flagZ = false
+	ms.flagS = false
+	ms.flagP = false
+	ms.flagCY = false
+	ms.flagAC = false
 }
 
 func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
