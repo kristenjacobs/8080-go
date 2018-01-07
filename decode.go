@@ -421,7 +421,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xc9:
 		instr_0xc9_RET(ms)
 	case 0xca:
-		instr_0xca_JZ(ms)
+		instr_0xca_JZ_adr(ms)
 	case 0xcb:
 		invalid(0xcb)
 	case 0xcc:
@@ -453,7 +453,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xd9:
 		invalid(0xd9)
 	case 0xda:
-		instr_0xda_JC(ms)
+		instr_0xda_JC_adr(ms)
 	case 0xdb:
 		instr_0xdb_IN(ms)
 	case 0xdc:
@@ -477,7 +477,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xe5:
 		instr_0xe5_PUSH_H(ms)
 	case 0xe6:
-		instr_0xe6_ANI(ms)
+		instr_0xe6_ANI_D8(ms)
 	case 0xe7:
 		instr_0xe7_RST_4(ms)
 	case 0xe8:

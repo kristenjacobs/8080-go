@@ -1089,9 +1089,17 @@ func instr_0xc9_RET(ms *machineState) {
 	ms.sp = newSp
 }
 
-func instr_0xca_JZ(ms *machineState) {
+func instr_0xca_JZ_adr(ms *machineState) {
 	// adr	3		if Z, PC <- adr
-	panic("Unimplemented")
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xca_JZ_adr Z=%t 0x%04x\n", ms.pc, ms.flagZ, adr)
+	if ms.flagZ {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xcc_CZ(ms *machineState) {
@@ -1178,9 +1186,17 @@ func instr_0xd8_RC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xda_JC(ms *machineState) {
-	// adr	3		if CY, PC<-adr
-	panic("Unimplemented")
+func instr_0xda_JC_adr(ms *machineState) {
+	// 3		if CY, PC<-adr
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	Trace.Printf("0x%04x: 0xda_JC_adr 0x%04x, C=%t\n", ms.pc, adr, ms.flagCY)
+	if ms.flagCY {
+		ms.pc = adr
+	} else {
+		ms.pc += 3
+	}
 }
 
 func instr_0xdb_IN(ms *machineState) {
@@ -1233,9 +1249,19 @@ func instr_0xe5_PUSH_H(ms *machineState) {
 	PUSH("0xe5_PUSH_H", ms, &ms.regL, &ms.regH)
 }
 
-func instr_0xe6_ANI(ms *machineState) {
-	// D8	2	Z, S, P, CY, AC	A <- A & data
-	panic("Unimplemented")
+func instr_0xe6_ANI_D8(ms *machineState) {
+	// 2	Z, S, P, CY, AC	A <- A & data
+	data := ms.readMem(ms.pc+1, 1)[0]
+	regA := ms.regA
+	ms.regA = regA - data
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(false)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xe6_ANI_D8 regA[0x%02x]=regA[0x%02x]&0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 2
 }
 
 func instr_0xe7_RST_4(ms *machineState) {

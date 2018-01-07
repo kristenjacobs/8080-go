@@ -303,6 +303,24 @@ func Test_0xc2_JNZ_adr(t *testing.T) {
 	}
 }
 
+func Test_0xca_JZ_adr(t *testing.T) {
+	ms := newMachineState()
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagZ = true
+	instr_0xca_JZ_adr(ms)
+	if ms.pc != 0xBABE {
+		t.Errorf("instr_0xca_JZ_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
+	}
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagZ = false
+	instr_0xca_JZ_adr(ms)
+	if ms.pc != RAM_BASE+3 {
+		t.Errorf("instr_0xca_JZ_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
+	}
+}
+
 func Test_0xd2_JNC_adr(t *testing.T) {
 	ms := newMachineState()
 	ms.pc = RAM_BASE
@@ -318,6 +336,24 @@ func Test_0xd2_JNC_adr(t *testing.T) {
 	instr_0xd2_JNC_adr(ms)
 	if ms.pc != RAM_BASE+3 {
 		t.Errorf("instr_0xd2_JNC_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
+	}
+}
+
+func Test_0xda_JC_adr(t *testing.T) {
+	ms := newMachineState()
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagCY = true
+	instr_0xda_JC_adr(ms)
+	if ms.pc != 0xBABE {
+		t.Errorf("instr_0xda_JC_adr: expected pc=0xBABE, got pc=0x%04x", ms.pc)
+	}
+	ms.pc = RAM_BASE
+	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
+	ms.flagCY = false
+	instr_0xda_JC_adr(ms)
+	if ms.pc != RAM_BASE+3 {
+		t.Errorf("instr_0xda_JC_adr: expected pc=0x%04x, got pc=0x%04x", RAM_BASE+3, ms.pc)
 	}
 }
 
