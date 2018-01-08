@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func MVI(instrName string, ms *machineState, reg *uint8) {
 	*reg = ms.readMem(ms.pc+1, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x\n", ms.pc, instrName, *reg)
@@ -88,14 +90,18 @@ func RST(instrName string, ms *machineState, addr uint16) {
 func handleSyscall(ms *machineState, adr uint16) bool {
 	if adr == 0x5 {
 		Trace.Printf("0x%04x: 0xcd_CALL_adr 0x%04x [SYSCALL]\n", ms.pc, adr)
-		// TODO: Handle the system call here.
-
-		// uint16_t offset = (state->d<<8) | (state->e);
-		// char *str = &state->memory[offset+3];  //skip the prefix bytes
-		// while (*str != '$')
-		//     printf("%c", *str++);
-		// printf("\n");
-
+		offset := getPair(ms.regD, ms.regE)
+		for i := 0; ; i++ {
+			char := ms.readMem(offset+3+uint16(i), 1)[0]
+			if char == '$' {
+				break
+			}
+			fmt.Printf("%c", char)
+			if char == '$' {
+				fmt.Println("", char)
+				break
+			}
+		}
 		ms.pc += 3
 		return true
 	}
