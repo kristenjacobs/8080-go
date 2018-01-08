@@ -1201,9 +1201,19 @@ func instr_0xd5_PUSH_D(ms *machineState) {
 	PUSH("0xd5_PUSH_D", ms, &ms.regE, &ms.regD)
 }
 
-func instr_0xd6_SUI(ms *machineState) {
+func instr_0xd6_SUI_D8(ms *machineState) {
 	// D8	2	Z, S, P, CY, AC	A <- A - data
-	panic("Unimplemented")
+	data := ms.readMem(ms.pc+1, 1)[0]
+	regA := ms.regA
+	ms.regA = regA - data
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)+uint(data) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xd6_SUI_D8 regA[0x%02x]=regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 2
 }
 
 func instr_0xd7_RST_2(ms *machineState) {
@@ -1239,9 +1249,25 @@ func instr_0xdc_CC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xde_SBI(ms *machineState) {
-	// D8	2	Z, S, P, CY, AC	A <- A - data - CY
-	panic("Unimplemented")
+func instr_0xde_SBI_D8(ms *machineState) {
+	// 2	Z, S, P, CY, AC	A <- A - data - CY
+	data := ms.readMem(ms.pc+1, 1)[0]
+	regA := ms.regA
+	var carry uint8
+	if ms.flagCY {
+		carry = 1
+	} else {
+		carry = 0
+	}
+	ms.regA = regA - data - carry
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)+uint(data)+uint(carry) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xde_SBI_D8 regA[0x%02x]=regA[0x%02x]+0x%02x+0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, data, carry, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 2
 }
 
 func instr_0xdf_RST_3(ms *machineState) {
@@ -1350,9 +1376,19 @@ func instr_0xec_CPE(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xee_XRI(ms *machineState) {
-	// D8	2	Z, S, P, CY, AC	A <- A ^ data
-	panic("Unimplemented")
+func instr_0xee_XRI_D8(ms *machineState) {
+	// 2	Z, S, P, CY, AC	A <- A ^ data
+	data := ms.readMem(ms.pc+1, 1)[0]
+	regA := ms.regA
+	ms.regA = regA ^ data
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)^uint(data) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xee_XRI_D8 regA[0x%02x]=regA[0x%02x]^0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 2
 }
 
 func instr_0xef_RST_5(ms *machineState) {
@@ -1398,9 +1434,19 @@ func instr_0xf5_PUSH(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xf6_ORI(ms *machineState) {
-	// D8	2	Z, S, P, CY, AC	A <- A | data
-	panic("Unimplemented")
+func instr_0xf6_ORI_D8(ms *machineState) {
+	// 2	Z, S, P, CY, AC	A <- A | data
+	data := ms.readMem(ms.pc+1, 1)[0]
+	regA := ms.regA
+	ms.regA = regA | data
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)|uint(data) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xf6_ORI_D8 regA[0x%02x]=regA[0x%02x]|0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 2
 }
 
 func instr_0xf7_RST_6(ms *machineState) {
