@@ -1348,7 +1348,7 @@ func instr_0xf2_JP_adr(ms *machineState) {
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xf2_JP_adr 0x%04x, S=%t\n", ms.pc, adr, ms.flagS)
-	if ms.flagS {
+	if !ms.flagS {
 		ms.pc = adr
 	} else {
 		ms.pc += 3
@@ -1396,7 +1396,7 @@ func instr_0xfa_JM_adr(ms *machineState) {
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xfa_JM_adr 0x%04x, S=%t\n", ms.pc, adr, ms.flagS)
-	if !ms.flagS {
+	if ms.flagS {
 		ms.pc = adr
 	} else {
 		ms.pc += 3

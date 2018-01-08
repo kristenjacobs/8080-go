@@ -98,7 +98,7 @@ func handleSyscall(ms *machineState, adr uint16) bool {
 			}
 			fmt.Printf("%c", char)
 			if char == '$' {
-				fmt.Println("", char)
+				fmt.Print("\n")
 				break
 			}
 		}
