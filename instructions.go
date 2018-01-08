@@ -1135,9 +1135,25 @@ func instr_0xcd_CALL_adr(ms *machineState) {
 	}
 }
 
-func instr_0xce_ACI(ms *machineState) {
-	// D8	2	Z, S, P, CY, AC	A <- A + data + CY
-	panic("Unimplemented")
+func instr_0xce_ACI_D8(ms *machineState) {
+	// 2	Z, S, P, CY, AC	A <- A + data + CY
+	data := ms.readMem(ms.pc+1, 1)[0]
+	regA := ms.regA
+	var carry uint8
+	if ms.flagCY {
+		carry = 1
+	} else {
+		carry = 0
+	}
+	ms.regA = regA + data + carry
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)+uint(data)+uint(carry) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xce_ACI_D8 regA[0x%02x]=regA[0x%02x]+0x%02x+0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, data, carry, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 2
 }
 
 func instr_0xcf_RST_1(ms *machineState) {
@@ -1429,12 +1445,12 @@ func instr_0xfe_CPI_D8(ms *machineState) {
 	// 2	Z, S, P, CY, AC	A - data
 	data := ms.readMem(ms.pc+1, 1)[0]
 	regA := ms.regA
-	ms.regA = regA - data
-	ms.setZ(ms.regA)
-	ms.setS(ms.regA)
-	ms.setP(ms.regA)
+	result := regA - data
+	ms.setZ(result)
+	ms.setS(result)
+	ms.setP(result)
 	ms.setCY(regA < data)
-	ms.setAC(ms.regA)
+	ms.setAC(result)
 	Trace.Printf("0x%04x: 0xfe_CPI_D8 regA[0x%02x]=regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
 		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 2
