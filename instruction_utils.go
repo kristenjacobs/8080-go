@@ -87,9 +87,18 @@ func RST(instrName string, ms *machineState, addr uint16) {
 	ms.pc = addr
 }
 
-func handleSyscall(ms *machineState, adr uint16) bool {
-	if adr == 0x5 {
-		Trace.Printf("0x%04x: 0xcd_CALL_adr 0x%04x [SYSCALL]\n", ms.pc, adr)
+func CALL(instrName string, ms *machineState, condFlagName string, condFlagVal bool) {
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	PC := ms.pc
+	nextPC := ms.pc + 3
+	var syscall string
+	if !condFlagVal {
+		ms.pc = nextPC
+		syscall = ""
+
+	} else if isSyscallAddress(adr) {
 		offset := getPair(ms.regD, ms.regE)
 		for i := 0; ; i++ {
 			char := ms.readMem(offset+3+uint16(i), 1)[0]
@@ -102,8 +111,24 @@ func handleSyscall(ms *machineState, adr uint16) bool {
 				break
 			}
 		}
-		ms.pc += 3
-		return true
+		ms.pc = nextPC
+		syscall = "[SYSCALL]"
+
+	} else {
+		pcHi := uint8(nextPC >> 8)
+		pcLo := uint8(nextPC & 0xFF)
+		ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
+		ms.sp = ms.sp - 2
+		ms.pc = adr
+		syscall = ""
 	}
-	return false
+	if condFlagName != "" {
+		Trace.Printf("0x%04x: %s 0x%04x, %s=%t %s\n", PC, instrName, adr, condFlagName, condFlagVal, syscall)
+	} else {
+		Trace.Printf("0x%04x: %s 0x%04x %s\n", PC, instrName, adr, syscall)
+	}
+}
+
+func isSyscallAddress(adr uint16) bool {
+	return adr == 0x5
 }

@@ -117,7 +117,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x31:
 		instr_0x31_LXI_SP_D16(ms)
 	case 0x32:
-		instr_0x32_STA(ms)
+		instr_0x32_STA_adr(ms)
 	case 0x33:
 		instr_0x33_INX_SP(ms)
 	case 0x34:
@@ -367,7 +367,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xae:
 		instr_0xae_XRA(ms)
 	case 0xaf:
-		instr_0xaf_XRA(ms)
+		instr_0xaf_XRA_A(ms)
 	case 0xb0:
 		instr_0xb0_ORA(ms)
 	case 0xb1:
@@ -441,7 +441,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xd3:
 		instr_0xd3_OUT_D8(ms)
 	case 0xd4:
-		instr_0xd4_CNC(ms)
+		instr_0xd4_CNC_adr(ms)
 	case 0xd5:
 		instr_0xd5_PUSH_D(ms)
 	case 0xd6:
@@ -457,7 +457,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xdb:
 		instr_0xdb_IN(ms)
 	case 0xdc:
-		instr_0xdc_CC(ms)
+		instr_0xdc_CC_adr(ms)
 	case 0xdd:
 		invalid(0xdd)
 	case 0xde:

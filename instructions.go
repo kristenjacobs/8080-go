@@ -302,9 +302,14 @@ func instr_0x31_LXI_SP_D16(ms *machineState) {
 	ms.pc += 3
 }
 
-func instr_0x32_STA(ms *machineState) {
-	// adr	3		(adr) <- A
-	panic("Unimplemented")
+func instr_0x32_STA_adr(ms *machineState) {
+	// 3		(adr) <- A
+	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	var addr uint16 = (uint16(byte3) << 8) | uint16(byte2)
+	ms.writeMem(addr, []uint8{ms.regA}, 1)
+	Trace.Printf("0x%04x: 0x32_STA_adr (0x%04x) = regA[0x%02x]\n", ms.pc, addr, ms.regA)
+	ms.pc += 3
 }
 
 func instr_0x33_INX_SP(ms *machineState) {
@@ -937,9 +942,18 @@ func instr_0xae_XRA(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xaf_XRA(ms *machineState) {
-	// A	1	Z, S, P, CY, AC	A <- A ^ A
-	panic("Unimplemented")
+func instr_0xaf_XRA_A(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A ^ A
+	regA := ms.regA
+	ms.regA = regA ^ regA
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)^uint(regA) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: 0xaf_XRA_A regA[0x%02x]=regA[0x%02x]^regA[0x%02x], Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, regA, regA, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0xb0_ORA(ms *machineState) {
@@ -1121,18 +1135,7 @@ func instr_0xcc_CZ(ms *machineState) {
 
 func instr_0xcd_CALL_adr(ms *machineState) {
 	// 3		(SP-1)<-PC.hi;(SP-2)<-PC.lo;SP<-SP-2;PC=adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
-	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
-	nextPC := ms.pc + 3
-	if !handleSyscall(ms, adr) {
-		pcHi := uint8(nextPC >> 8)
-		pcLo := uint8(nextPC & 0xFF)
-		ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
-		Trace.Printf("0x%04x: 0xcd_CALL_adr 0x%04x\n", ms.pc, adr)
-		ms.sp = ms.sp - 2
-		ms.pc = adr
-	}
+	CALL("0xcd_CALL_adr", ms, "", true)
 }
 
 func instr_0xce_ACI_D8(ms *machineState) {
@@ -1191,9 +1194,9 @@ func instr_0xd3_OUT_D8(ms *machineState) {
 	ms.pc += 2
 }
 
-func instr_0xd4_CNC(ms *machineState) {
-	// adr	3		if NCY, CALL adr
-	panic("Unimplemented")
+func instr_0xd4_CNC_adr(ms *machineState) {
+	// 3		if NCY, CALL adr
+	CALL("0xd4_CNC_adr", ms, "CY", !ms.flagCY)
 }
 
 func instr_0xd5_PUSH_D(ms *machineState) {
@@ -1244,9 +1247,9 @@ func instr_0xdb_IN(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xdc_CC(ms *machineState) {
-	// adr	3		if CY, CALL adr
-	panic("Unimplemented")
+func instr_0xdc_CC_adr(ms *machineState) {
+	// 3		if CY, CALL adr
+	CALL("0xdc_CC_adr", ms, "CY", ms.flagCY)
 }
 
 func instr_0xde_SBI_D8(ms *machineState) {
@@ -1425,7 +1428,7 @@ func instr_0xf3_DI(ms *machineState) {
 }
 
 func instr_0xf4_CP(ms *machineState) {
-	// adr	3		if P, PC <- adr
+	// adr	3		if P, CALL adr
 	panic("Unimplemented")
 }
 
