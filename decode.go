@@ -409,7 +409,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xc3:
 		instr_0xc3_JMP_adr(ms)
 	case 0xc4:
-		instr_0xc4_CNZ(ms)
+		instr_0xc4_CNZ_adr(ms)
 	case 0xc5:
 		instr_0xc5_PUSH_B(ms)
 	case 0xc6:
@@ -425,7 +425,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xcb:
 		invalid(0xcb)
 	case 0xcc:
-		instr_0xcc_CZ(ms)
+		instr_0xcc_CZ_adr(ms)
 	case 0xcd:
 		instr_0xcd_CALL_adr(ms)
 	case 0xce:
@@ -473,7 +473,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xe3:
 		instr_0xe3_XTHL(ms)
 	case 0xe4:
-		instr_0xe4_CPO(ms)
+		instr_0xe4_CPO_adr(ms)
 	case 0xe5:
 		instr_0xe5_PUSH_H(ms)
 	case 0xe6:
@@ -489,7 +489,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xeb:
 		instr_0xeb_XCHG(ms)
 	case 0xec:
-		instr_0xec_CPE(ms)
+		instr_0xec_CPE_adr(ms)
 	case 0xed:
 		invalid(0xed)
 	case 0xee:
@@ -505,7 +505,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xf3:
 		instr_0xf3_DI(ms)
 	case 0xf4:
-		instr_0xf4_CP(ms)
+		instr_0xf4_CP_adr(ms)
 	case 0xf5:
 		instr_0xf5_PUSH(ms)
 	case 0xf6:
@@ -521,7 +521,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xfb:
 		instr_0xfb_EI(ms)
 	case 0xfc:
-		instr_0xfc_CM(ms)
+		instr_0xfc_CM_adr(ms)
 	case 0xfd:
 		invalid(0xfd)
 	case 0xfe:

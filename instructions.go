@@ -1068,9 +1068,9 @@ func instr_0xc3_JMP_adr(ms *machineState) {
 	ms.pc = adr
 }
 
-func instr_0xc4_CNZ(ms *machineState) {
-	// adr	3		if NZ, CALL adr
-	panic("Unimplemented")
+func instr_0xc4_CNZ_adr(ms *machineState) {
+	// 3		if NZ, CALL adr
+	CALL("0xc4_CNZ_adr", ms, "Z", !ms.flagZ)
 }
 
 func instr_0xc5_PUSH_B(ms *machineState) {
@@ -1128,9 +1128,9 @@ func instr_0xca_JZ_adr(ms *machineState) {
 	}
 }
 
-func instr_0xcc_CZ(ms *machineState) {
-	// adr	3		if Z, CALL adr
-	panic("Unimplemented")
+func instr_0xcc_CZ_adr(ms *machineState) {
+	// 3		if Z, CALL adr
+	CALL("0xcc_CZ_adr", ms, "Z", ms.flagZ)
 }
 
 func instr_0xcd_CALL_adr(ms *machineState) {
@@ -1212,7 +1212,7 @@ func instr_0xd6_SUI_D8(ms *machineState) {
 	ms.setZ(ms.regA)
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
-	ms.setCY(uint(regA)+uint(data) > math.MaxUint8)
+	ms.setCY(uint(regA)-uint(data) > math.MaxUint8)
 	ms.setAC(ms.regA)
 	Trace.Printf("0x%04x: 0xd6_SUI_D8 regA[0x%02x]=regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
 		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
@@ -1306,9 +1306,10 @@ func instr_0xe3_XTHL(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xe4_CPO(ms *machineState) {
-	// adr	3		if PO, CALL adr
-	panic("Unimplemented")
+func instr_0xe4_CPO_adr(ms *machineState) {
+	// 3		if PO, CALL adr
+	CALL("0xe4_CPO_adr", ms, "P", !ms.flagP)
+
 }
 
 func instr_0xe5_PUSH_H(ms *machineState) {
@@ -1374,9 +1375,9 @@ func instr_0xeb_XCHG(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0xec_CPE(ms *machineState) {
-	// adr	3		if PE, CALL adr
-	panic("Unimplemented")
+func instr_0xec_CPE_adr(ms *machineState) {
+	// 3		if PE, CALL adr
+	CALL("0xe4_CPO_adr", ms, "P", ms.flagP)
 }
 
 func instr_0xee_XRI_D8(ms *machineState) {
@@ -1427,9 +1428,9 @@ func instr_0xf3_DI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xf4_CP(ms *machineState) {
-	// adr	3		if P, CALL adr
-	panic("Unimplemented")
+func instr_0xf4_CP_adr(ms *machineState) {
+	// 3		if P, CALL adr
+	CALL("0xf4_CP_adr", ms, "S", !ms.flagS)
 }
 
 func instr_0xf5_PUSH(ms *machineState) {
@@ -1485,9 +1486,9 @@ func instr_0xfb_EI(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xfc_CM(ms *machineState) {
-	// adr	3		if M, CALL adr
-	panic("Unimplemented")
+func instr_0xfc_CM_adr(ms *machineState) {
+	// 3		if M, CALL adr
+	CALL("0xfc_CM_adr", ms, "S", ms.flagS)
 }
 
 func instr_0xfe_CPI_D8(ms *machineState) {

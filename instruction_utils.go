@@ -123,7 +123,7 @@ func CALL(instrName string, ms *machineState, condFlagName string, condFlagVal b
 		syscall = ""
 	}
 	if condFlagName != "" {
-		Trace.Printf("0x%04x: %s 0x%04x, %s=%t %s\n", PC, instrName, adr, condFlagName, condFlagVal, syscall)
+		Trace.Printf("0x%04x: %s 0x%04x, Taken=%t %s\n", PC, instrName, adr, condFlagVal, syscall)
 	} else {
 		Trace.Printf("0x%04x: %s 0x%04x %s\n", PC, instrName, adr, syscall)
 	}
