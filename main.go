@@ -16,8 +16,8 @@ var (
 func InitLogging(
 	traceHandle io.Writer,
 	debugHandle io.Writer) {
-	Trace = log.New(traceHandle, "TRACE: ", log.Ltime)
-	Debug = log.New(debugHandle, "DEBUG: ", log.Ltime|log.Lshortfile)
+	Trace = log.New(traceHandle, "TRACE: ", 0)
+	Debug = log.New(debugHandle, "DEBUG: ", log.Lshortfile)
 }
 
 func main() {

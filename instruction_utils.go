@@ -129,6 +129,26 @@ func CALL(instrName string, ms *machineState, condFlagName string, condFlagVal b
 	}
 }
 
+func RET(instrName string, ms *machineState, condFlagName string, condFlagVal bool) {
+	currentPc := ms.pc
+	bytes := ms.readMem(ms.sp, 2)
+	pcLo := bytes[0]
+	pcHi := bytes[1]
+	newSp := ms.sp + 2
+	pc := (uint16(pcHi) << 8) | uint16(pcLo)
+	if condFlagVal {
+		ms.pc = (uint16(pcHi) << 8) | uint16(pcLo)
+		ms.sp = newSp
+	} else {
+		ms.pc = currentPc + 1
+	}
+	if condFlagName != "" {
+		Trace.Printf("0x%04x: %s 0x%04x, Taken=%t\n", currentPc, instrName, pc, condFlagVal)
+	} else {
+		Trace.Printf("0x%04x: %s 0x%04x\n", currentPc, instrName, pc)
+	}
+}
+
 func isSyscallAddress(adr uint16) bool {
 	return adr == 0x5
 }

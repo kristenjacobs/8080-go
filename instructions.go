@@ -1105,14 +1105,7 @@ func instr_0xc8_RZ(ms *machineState) {
 
 func instr_0xc9_RET(ms *machineState) {
 	// 1		PC.lo <- (sp); PC.hi<-(sp+1); SP <- SP+2
-	bytes := ms.readMem(ms.sp, 2)
-	pcLo := bytes[0]
-	pcHi := bytes[1]
-	newSp := ms.sp + 2
-	pc := (uint16(pcHi) << 8) | uint16(pcLo)
-	Trace.Printf("0x%04x: 0xc9_RET pc=0x%04x, sp=0x%04x\n", ms.pc, pc, newSp)
-	ms.pc = (uint16(pcHi) << 8) | uint16(pcLo)
-	ms.sp = newSp
+	RET("0xc9_RET", ms, "", true)
 }
 
 func instr_0xca_JZ_adr(ms *machineState) {
@@ -1339,7 +1332,7 @@ func instr_0xe7_RST_4(ms *machineState) {
 
 func instr_0xe8_RPE(ms *machineState) {
 	// 1		if PE, RET
-	panic("Unimplemented")
+	RET("0xe8_RPE", ms, "P", ms.flagP)
 }
 
 func instr_0xe9_PCHL(ms *machineState) {
@@ -1377,7 +1370,7 @@ func instr_0xeb_XCHG(ms *machineState) {
 
 func instr_0xec_CPE_adr(ms *machineState) {
 	// 3		if PE, CALL adr
-	CALL("0xe4_CPO_adr", ms, "P", ms.flagP)
+	CALL("0xec_CPE_adr", ms, "P", ms.flagP)
 }
 
 func instr_0xee_XRI_D8(ms *machineState) {
