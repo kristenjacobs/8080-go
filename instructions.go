@@ -1038,7 +1038,7 @@ func instr_0xbf_CMP(ms *machineState) {
 
 func instr_0xc0_RNZ(ms *machineState) {
 	// 1		if NZ, RET
-	panic("Unimplemented")
+	RET("0xc0_RNZ", ms, "Z", !ms.flagZ)
 }
 
 func instr_0xc1_POP_B(ms *machineState) {
@@ -1100,7 +1100,7 @@ func instr_0xc7_RST_0(ms *machineState) {
 
 func instr_0xc8_RZ(ms *machineState) {
 	// 1		if Z, RET
-	panic("Unimplemented")
+	RET("0xc8_RZ", ms, "Z", ms.flagZ)
 }
 
 func instr_0xc9_RET(ms *machineState) {
@@ -1159,7 +1159,7 @@ func instr_0xcf_RST_1(ms *machineState) {
 
 func instr_0xd0_RNC(ms *machineState) {
 	// 1		if NCY, RET
-	panic("Unimplemented")
+	RET("0xd0_RNC", ms, "CY", !ms.flagCY)
 }
 
 func instr_0xd1_POP_D(ms *machineState) {
@@ -1219,7 +1219,7 @@ func instr_0xd7_RST_2(ms *machineState) {
 
 func instr_0xd8_RC(ms *machineState) {
 	// 1		if CY, RET
-	panic("Unimplemented")
+	RET("0xd8_RC", ms, "CY", ms.flagCY)
 }
 
 func instr_0xda_JC_adr(ms *machineState) {
@@ -1273,7 +1273,7 @@ func instr_0xdf_RST_3(ms *machineState) {
 
 func instr_0xe0_RPO(ms *machineState) {
 	// 1		if PO, RET
-	panic("Unimplemented")
+	RET("0xe0_RPO", ms, "P", !ms.flagP)
 }
 
 func instr_0xe1_POP_H(ms *machineState) {
@@ -1395,7 +1395,7 @@ func instr_0xef_RST_5(ms *machineState) {
 
 func instr_0xf0_RP(ms *machineState) {
 	// 1		if P, RET
-	panic("Unimplemented")
+	RET("0xf0_RP", ms, "S", !ms.flagS)
 }
 
 func instr_0xf1_POP(ms *machineState) {
@@ -1453,7 +1453,7 @@ func instr_0xf7_RST_6(ms *machineState) {
 
 func instr_0xf8_RM(ms *machineState) {
 	// 1		if M, RET
-	panic("Unimplemented")
+	RET("0xf8_RM", ms, "S", ms.flagS)
 }
 
 func instr_0xf9_SPHL(ms *machineState) {
