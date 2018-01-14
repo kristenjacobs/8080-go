@@ -709,34 +709,34 @@ func instr_0x7f_MOV_A_A(ms *machineState) {
 	MOV_REG_REG("0x7f_MOV_A_A", ms, &ms.regA, &ms.regA)
 }
 
-func instr_0x80_ADD(ms *machineState) {
-	// B	1	Z, S, P, CY, AC	A <- A + B
-	panic("Unimplemented")
+func instr_0x80_ADD_B(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + B
+	ADD("0x80_ADD_B", ms, "B", &ms.regB)
 }
 
-func instr_0x81_ADD(ms *machineState) {
-	// C	1	Z, S, P, CY, AC	A <- A + C
-	panic("Unimplemented")
+func instr_0x81_ADD_C(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + C
+	ADD("0x81_ADD_C", ms, "C", &ms.regC)
 }
 
-func instr_0x82_ADD(ms *machineState) {
-	// D	1	Z, S, P, CY, AC	A <- A + D
-	panic("Unimplemented")
+func instr_0x82_ADD_D(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + D
+	ADD("0x82_ADD_D", ms, "D", &ms.regD)
 }
 
-func instr_0x83_ADD(ms *machineState) {
-	// E	1	Z, S, P, CY, AC	A <- A + E
-	panic("Unimplemented")
+func instr_0x83_ADD_E(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + E
+	ADD("0x83_ADD_E", ms, "E", &ms.regE)
 }
 
-func instr_0x84_ADD(ms *machineState) {
-	// H	1	Z, S, P, CY, AC	A <- A + H
-	panic("Unimplemented")
+func instr_0x84_ADD_H(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + H
+	ADD("0x84_ADD_H", ms, "H", &ms.regH)
 }
 
-func instr_0x85_ADD(ms *machineState) {
-	// L	1	Z, S, P, CY, AC	A <- A + L
-	panic("Unimplemented")
+func instr_0x85_ADD_L(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + L
+	ADD("0x85_ADD_L", ms, "L", &ms.regL)
 }
 
 func instr_0x86_ADD(ms *machineState) {
@@ -744,9 +744,9 @@ func instr_0x86_ADD(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x87_ADD(ms *machineState) {
-	// A	1	Z, S, P, CY, AC	A <- A + A
-	panic("Unimplemented")
+func instr_0x87_ADD_A(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + A
+	ADD("0x87_ADD_A", ms, "A", &ms.regA)
 }
 
 func instr_0x88_ADC(ms *machineState) {

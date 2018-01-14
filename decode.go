@@ -273,21 +273,21 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x7f:
 		instr_0x7f_MOV_A_A(ms)
 	case 0x80:
-		instr_0x80_ADD(ms)
+		instr_0x80_ADD_B(ms)
 	case 0x81:
-		instr_0x81_ADD(ms)
+		instr_0x81_ADD_C(ms)
 	case 0x82:
-		instr_0x82_ADD(ms)
+		instr_0x82_ADD_D(ms)
 	case 0x83:
-		instr_0x83_ADD(ms)
+		instr_0x83_ADD_E(ms)
 	case 0x84:
-		instr_0x84_ADD(ms)
+		instr_0x84_ADD_H(ms)
 	case 0x85:
-		instr_0x85_ADD(ms)
+		instr_0x85_ADD_L(ms)
 	case 0x86:
 		instr_0x86_ADD(ms)
 	case 0x87:
-		instr_0x87_ADD(ms)
+		instr_0x87_ADD_A(ms)
 	case 0x88:
 		instr_0x88_ADC(ms)
 	case 0x89:
