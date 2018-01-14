@@ -25,7 +25,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x03:
 		instr_0x03_INX_B(ms)
 	case 0x04:
-		instr_0x04_INR(ms)
+		instr_0x04_INR_B(ms)
 	case 0x05:
 		instr_0x05_DCR_B(ms)
 	case 0x06:
@@ -41,7 +41,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x0b:
 		instr_0x0b_DCX(ms)
 	case 0x0c:
-		instr_0x0c_INR(ms)
+		instr_0x0c_INR_C(ms)
 	case 0x0d:
 		instr_0x0d_DCR_C(ms)
 	case 0x0e:
@@ -57,7 +57,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x13:
 		instr_0x13_INX_D(ms)
 	case 0x14:
-		instr_0x14_INR(ms)
+		instr_0x14_INR_D(ms)
 	case 0x15:
 		instr_0x15_DCR_D(ms)
 	case 0x16:
@@ -73,7 +73,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x1b:
 		instr_0x1b_DCX(ms)
 	case 0x1c:
-		instr_0x1c_INR(ms)
+		instr_0x1c_INR_E(ms)
 	case 0x1d:
 		instr_0x1d_DCR_E(ms)
 	case 0x1e:
@@ -89,7 +89,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x23:
 		instr_0x23_INX_H(ms)
 	case 0x24:
-		instr_0x24_INR(ms)
+		instr_0x24_INR_H(ms)
 	case 0x25:
 		instr_0x25_DCR_H(ms)
 	case 0x26:
@@ -105,7 +105,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x2b:
 		instr_0x2b_DCX(ms)
 	case 0x2c:
-		instr_0x2c_INR(ms)
+		instr_0x2c_INR_L(ms)
 	case 0x2d:
 		instr_0x2d_DCR_L(ms)
 	case 0x2e:
@@ -137,7 +137,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x3b:
 		instr_0x3b_DCX(ms)
 	case 0x3c:
-		instr_0x3c_INR(ms)
+		instr_0x3c_INR_A(ms)
 	case 0x3d:
 		instr_0x3d_DCR_A(ms)
 	case 0x3e:

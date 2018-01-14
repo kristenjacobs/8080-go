@@ -1,6 +1,8 @@
 package main
 
-import "math"
+import (
+	"math"
+)
 
 func instr_0x00_NOP(ms *machineState) {
 	// 1
@@ -28,9 +30,9 @@ func instr_0x03_INX_B(ms *machineState) {
 	INX("0x03_INX_B", ms, &ms.regB, &ms.regC)
 }
 
-func instr_0x04_INR(ms *machineState) {
-	// B	1	Z, S, P, AC	B <- B+1
-	panic("Unimplemented")
+func instr_0x04_INR_B(ms *machineState) {
+	// 1	Z, S, P, AC	B <- B+1
+	INR("0x04_INR_B", ms, &ms.regB)
 }
 
 func instr_0x05_DCR_B(ms *machineState) {
@@ -71,9 +73,9 @@ func instr_0x0b_DCX(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x0c_INR(ms *machineState) {
-	// C	1	Z, S, P, AC	C <- C+1
-	panic("Unimplemented")
+func instr_0x0c_INR_C(ms *machineState) {
+	// 1	Z, S, P, AC	C <- C+1
+	INR("0x0c_INR_C", ms, &ms.regC)
 }
 
 func instr_0x0d_DCR_C(ms *machineState) {
@@ -119,9 +121,9 @@ func instr_0x13_INX_D(ms *machineState) {
 	INX("0x13_INX_D", ms, &ms.regD, &ms.regE)
 }
 
-func instr_0x14_INR(ms *machineState) {
-	// D	1	Z, S, P, AC	D <- D+1
-	panic("Unimplemented")
+func instr_0x14_INR_D(ms *machineState) {
+	// 1	Z, S, P, AC	D <- D+1
+	INR("0x14_INR_D", ms, &ms.regD)
 }
 
 func instr_0x15_DCR_D(ms *machineState) {
@@ -162,9 +164,9 @@ func instr_0x1b_DCX(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x1c_INR(ms *machineState) {
-	// E	1	Z, S, P, AC	E <-E+1
-	panic("Unimplemented")
+func instr_0x1c_INR_E(ms *machineState) {
+	// 1	Z, S, P, AC	E <-E+1
+	INR("0x1c_INR_E", ms, &ms.regE)
 }
 
 func instr_0x1d_DCR_E(ms *machineState) {
@@ -216,9 +218,9 @@ func instr_0x23_INX_H(ms *machineState) {
 	INX("0x23_INX_H", ms, &ms.regH, &ms.regL)
 }
 
-func instr_0x24_INR(ms *machineState) {
-	// H	1	Z, S, P, AC	H <- H+1
-	panic("Unimplemented")
+func instr_0x24_INR_H(ms *machineState) {
+	// 1	Z, S, P, AC	H <- H+1
+	INR("0x24_INR_H", ms, &ms.regH)
 }
 
 func instr_0x25_DCR_H(ms *machineState) {
@@ -259,9 +261,9 @@ func instr_0x2b_DCX(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x2c_INR(ms *machineState) {
-	// L	1	Z, S, P, AC	L <- L+1
-	panic("Unimplemented")
+func instr_0x2c_INR_L(ms *machineState) {
+	// 1	Z, S, P, AC	L <- L+1
+	INR("0x2c_INR_L", ms, &ms.regL)
 }
 
 func instr_0x2d_DCR_L(ms *machineState) {
@@ -358,9 +360,9 @@ func instr_0x3b_DCX(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x3c_INR(ms *machineState) {
-	// A	1	Z, S, P, AC	A <- A+1
-	panic("Unimplemented")
+func instr_0x3c_INR_A(ms *machineState) {
+	// 1	Z, S, P, AC	A <- A+1
+	INR("0x3c_INR_A", ms, &ms.regA)
 }
 
 func instr_0x3d_DCR_A(ms *machineState) {

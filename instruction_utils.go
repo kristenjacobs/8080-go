@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func MVI(instrName string, ms *machineState, reg *uint8) {
 	*reg = ms.readMem(ms.pc+1, 1)[0]
@@ -147,6 +150,19 @@ func RET(instrName string, ms *machineState, condFlagName string, condFlagVal bo
 	} else {
 		Trace.Printf("0x%04x: %s 0x%04x\n", currentPc, instrName, pc)
 	}
+}
+
+func INR(instrName string, ms *machineState, reg *uint8) {
+	r := *reg
+	*reg = *reg + 1
+	ms.setZ(*reg)
+	ms.setS(*reg)
+	ms.setP(*reg)
+	ms.setCY(uint(*reg)+uint(*reg) > math.MaxUint8)
+	ms.setAC(*reg)
+	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]+1, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, instrName, *reg, r, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
 }
 
 func isSyscallAddress(adr uint16) bool {
