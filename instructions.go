@@ -749,14 +749,14 @@ func instr_0x87_ADD_A(ms *machineState) {
 	ADD("0x87_ADD_A", ms, "A", &ms.regA)
 }
 
-func instr_0x88_ADC(ms *machineState) {
-	// B	1	Z, S, P, CY, AC	A <- A + B + CY
-	panic("Unimplemented")
+func instr_0x88_ADC_B(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + B + CY
+	ADC("0x88_ADC_B", ms, "B", &ms.regB)
 }
 
-func instr_0x89_ADC(ms *machineState) {
-	// C	1	Z, S, P, CY, AC	A <- A + C + CY
-	panic("Unimplemented")
+func instr_0x89_ADC_C(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + C + CY
+	ADC("0x89_ADC_C", ms, "C", &ms.regC)
 }
 
 func instr_0x8a_ADC(ms *machineState) {
