@@ -337,21 +337,21 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x9f:
 		instr_0x9f_SBB_A(ms)
 	case 0xa0:
-		instr_0xa0_ANA(ms)
+		instr_0xa0_ANA_B(ms)
 	case 0xa1:
-		instr_0xa1_ANA(ms)
+		instr_0xa1_ANA_C(ms)
 	case 0xa2:
-		instr_0xa2_ANA(ms)
+		instr_0xa2_ANA_D(ms)
 	case 0xa3:
-		instr_0xa3_ANA(ms)
+		instr_0xa3_ANA_E(ms)
 	case 0xa4:
-		instr_0xa4_ANA(ms)
+		instr_0xa4_ANA_H(ms)
 	case 0xa5:
-		instr_0xa5_ANA(ms)
+		instr_0xa5_ANA_L(ms)
 	case 0xa6:
 		instr_0xa6_ANA(ms)
 	case 0xa7:
-		instr_0xa7_ANA(ms)
+		instr_0xa7_ANA_A(ms)
 	case 0xa8:
 		instr_0xa8_XRA(ms)
 	case 0xa9:

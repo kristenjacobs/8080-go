@@ -869,34 +869,34 @@ func instr_0x9f_SBB_A(ms *machineState) {
 	SBB("0x9f_SBB_A", ms, "A", &ms.regA)
 }
 
-func instr_0xa0_ANA(ms *machineState) {
-	// B	1	Z, S, P, CY, AC	A <- A & B
-	panic("Unimplemented")
+func instr_0xa0_ANA_B(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A & B
+	ANA("0xa0_ANA_B", ms, "B", &ms.regB)
 }
 
-func instr_0xa1_ANA(ms *machineState) {
-	// C	1	Z, S, P, CY, AC	A <- A & C
-	panic("Unimplemented")
+func instr_0xa1_ANA_C(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A & C
+	ANA("0xa1_ANA_C", ms, "C", &ms.regC)
 }
 
-func instr_0xa2_ANA(ms *machineState) {
-	// D	1	Z, S, P, CY, AC	A <- A & D
-	panic("Unimplemented")
+func instr_0xa2_ANA_D(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A & D
+	ANA("0xa2_ANA_D", ms, "D", &ms.regD)
 }
 
-func instr_0xa3_ANA(ms *machineState) {
-	// E	1	Z, S, P, CY, AC	A <- A & E
-	panic("Unimplemented")
+func instr_0xa3_ANA_E(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A & E
+	ANA("0xa3_ANA_E", ms, "E", &ms.regE)
 }
 
-func instr_0xa4_ANA(ms *machineState) {
-	// H	1	Z, S, P, CY, AC	A <- A & H
-	panic("Unimplemented")
+func instr_0xa4_ANA_H(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A & H
+	ANA("0xa4_ANA_H", ms, "H", &ms.regH)
 }
 
-func instr_0xa5_ANA(ms *machineState) {
-	// L	1	Z, S, P, CY, AC	A <- A & L
-	panic("Unimplemented")
+func instr_0xa5_ANA_L(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A & L
+	ANA("0xa5_ANA_L", ms, "L", &ms.regL)
 }
 
 func instr_0xa6_ANA(ms *machineState) {
@@ -904,9 +904,9 @@ func instr_0xa6_ANA(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xa7_ANA(ms *machineState) {
-	// A	1	Z, S, P, CY, AC	A <- A & A
-	panic("Unimplemented")
+func instr_0xa7_ANA_A(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A & A
+	ANA("0xa7_ANA_A", ms, "A", &ms.regA)
 }
 
 func instr_0xa8_XRA(ms *machineState) {
