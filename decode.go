@@ -293,17 +293,17 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x89:
 		instr_0x89_ADC_C(ms)
 	case 0x8a:
-		instr_0x8a_ADC(ms)
+		instr_0x8a_ADC_D(ms)
 	case 0x8b:
-		instr_0x8b_ADC(ms)
+		instr_0x8b_ADC_E(ms)
 	case 0x8c:
-		instr_0x8c_ADC(ms)
+		instr_0x8c_ADC_H(ms)
 	case 0x8d:
-		instr_0x8d_ADC(ms)
+		instr_0x8d_ADC_L(ms)
 	case 0x8e:
 		instr_0x8e_ADC(ms)
 	case 0x8f:
-		instr_0x8f_ADC(ms)
+		instr_0x8f_ADC_A(ms)
 	case 0x90:
 		instr_0x90_SUB_B(ms)
 	case 0x91:

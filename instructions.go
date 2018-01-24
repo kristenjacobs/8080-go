@@ -759,24 +759,24 @@ func instr_0x89_ADC_C(ms *machineState) {
 	ADC("0x89_ADC_C", ms, "C", &ms.regC)
 }
 
-func instr_0x8a_ADC(ms *machineState) {
-	// D	1	Z, S, P, CY, AC	A <- A + D + CY
-	panic("Unimplemented")
+func instr_0x8a_ADC_D(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + D + CY
+	ADC("0x8a_ADC_D", ms, "D", &ms.regD)
 }
 
-func instr_0x8b_ADC(ms *machineState) {
-	// E	1	Z, S, P, CY, AC	A <- A + E + CY
-	panic("Unimplemented")
+func instr_0x8b_ADC_E(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + E + CY
+	ADC("0x8b_ADC_E", ms, "E", &ms.regE)
 }
 
-func instr_0x8c_ADC(ms *machineState) {
-	// H	1	Z, S, P, CY, AC	A <- A + H + CY
-	panic("Unimplemented")
+func instr_0x8c_ADC_H(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + H + CY
+	ADC("0x8c_ADC_H", ms, "H", &ms.regH)
 }
 
-func instr_0x8d_ADC(ms *machineState) {
-	// L	1	Z, S, P, CY, AC	A <- A + L + CY
-	panic("Unimplemented")
+func instr_0x8d_ADC_L(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + L + CY
+	ADC("0x8d_ADC_L", ms, "L", &ms.regL)
 }
 
 func instr_0x8e_ADC(ms *machineState) {
@@ -784,9 +784,9 @@ func instr_0x8e_ADC(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x8f_ADC(ms *machineState) {
-	// A	1	Z, S, P, CY, AC	A <- A + A + CY
-	panic("Unimplemented")
+func instr_0x8f_ADC_A(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + A + CY
+	ADC("0x8f_ADC_A", ms, "A", &ms.regA)
 }
 
 func instr_0x90_SUB_B(ms *machineState) {
