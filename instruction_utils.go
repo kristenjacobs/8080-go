@@ -197,16 +197,37 @@ func ADC(instrName string, ms *machineState, srcReg string, reg *uint8) {
 	regA := ms.regA
 	r := *reg
 	ms.regA = regA + r
+	var carry uint8 = 0
 	if ms.flagCY {
-		ms.regA += 1
+		carry = 1
 	}
+	ms.regA += carry
 	ms.setZ(ms.regA)
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
-	ms.setCY(uint(regA)+uint(r) > math.MaxUint8)
+	ms.setCY(uint(regA)+uint(r)+uint(carry) > math.MaxUint8)
 	ms.setAC(ms.regA)
-	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]+reg%s[0x%02x], Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
-		ms.pc, instrName, ms.regA, regA, srcReg, r, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]+reg%s[0x%02x]+%d, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, instrName, ms.regA, regA, srcReg, r, carry, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
+}
+
+func SBB(instrName string, ms *machineState, srcReg string, reg *uint8) {
+	regA := ms.regA
+	r := *reg
+	ms.regA = regA - r
+	var carry uint8 = 0
+	if ms.flagCY {
+		carry = 1
+	}
+	ms.regA -= carry
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)-uint(r)-uint(carry) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]-reg%s[0x%02x]-%d, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, instrName, ms.regA, regA, srcReg, r, carry, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 1
 }
 

@@ -829,34 +829,34 @@ func instr_0x97_SUB_A(ms *machineState) {
 	SUB("0x97_SUB_A", ms, "A", &ms.regA)
 }
 
-func instr_0x98_SBB(ms *machineState) {
-	// B	1	Z, S, P, CY, AC	A <- A - B - CY
-	panic("Unimplemented")
+func instr_0x98_SBB_B(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A - B - CY
+	SBB("0x98_SBB_B", ms, "B", &ms.regB)
 }
 
-func instr_0x99_SBB(ms *machineState) {
-	// C	1	Z, S, P, CY, AC	A <- A - C - CY
-	panic("Unimplemented")
+func instr_0x99_SBB_C(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A - C - CY
+	SBB("0x99_SBB_C", ms, "C", &ms.regC)
 }
 
-func instr_0x9a_SBB(ms *machineState) {
-	// D	1	Z, S, P, CY, AC	A <- A - D - CY
-	panic("Unimplemented")
+func instr_0x9a_SBB_D(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A - D - CY
+	SBB("0x9a_SBB_D", ms, "D", &ms.regD)
 }
 
-func instr_0x9b_SBB(ms *machineState) {
-	// E	1	Z, S, P, CY, AC	A <- A - E - CY
-	panic("Unimplemented")
+func instr_0x9b_SBB_E(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A - E - CY
+	SBB("0x9b_SBB_E", ms, "E", &ms.regE)
 }
 
-func instr_0x9c_SBB(ms *machineState) {
-	// H	1	Z, S, P, CY, AC	A <- A - H - CY
-	panic("Unimplemented")
+func instr_0x9c_SBB_H(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A - H - CY
+	SBB("0x9c_SBB_H", ms, "H", &ms.regH)
 }
 
-func instr_0x9d_SBB(ms *machineState) {
-	// L	1	Z, S, P, CY, AC	A <- A - L - CY
-	panic("Unimplemented")
+func instr_0x9d_SBB_L(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A - L - CY
+	SBB("0x9d_SBB_L", ms, "L", &ms.regL)
 }
 
 func instr_0x9e_SBB(ms *machineState) {
@@ -864,9 +864,9 @@ func instr_0x9e_SBB(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x9f_SBB(ms *machineState) {
-	// A	1	Z, S, P, CY, AC	A <- A - A - CY
-	panic("Unimplemented")
+func instr_0x9f_SBB_A(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A - A - CY
+	SBB("0x9f_SBB_A", ms, "A", &ms.regA)
 }
 
 func instr_0xa0_ANA(ms *machineState) {
