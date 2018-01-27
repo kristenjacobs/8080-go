@@ -958,34 +958,34 @@ func instr_0xaf_XRA_A(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0xb0_ORA(ms *machineState) {
-	// B	1	Z, S, P, CY, AC	A <- A | B
-	panic("Unimplemented")
+func instr_0xb0_ORA_B(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A | B
+	ORA("0xb0_ORA_B", ms, "B", &ms.regB)
 }
 
-func instr_0xb1_ORA(ms *machineState) {
-	// C	1	Z, S, P, CY, AC	A <- A | C
-	panic("Unimplemented")
+func instr_0xb1_ORA_C(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A | C
+	ORA("0xb1_ORA_C", ms, "C", &ms.regC)
 }
 
-func instr_0xb2_ORA(ms *machineState) {
-	// D	1	Z, S, P, CY, AC	A <- A | D
-	panic("Unimplemented")
+func instr_0xb2_ORA_D(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A | D
+	ORA("0xb2_ORA_D", ms, "D", &ms.regD)
 }
 
-func instr_0xb3_ORA(ms *machineState) {
-	// E	1	Z, S, P, CY, AC	A <- A | E
-	panic("Unimplemented")
+func instr_0xb3_ORA_E(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A | E
+	ORA("0xb3_ORA_E", ms, "E", &ms.regE)
 }
 
-func instr_0xb4_ORA(ms *machineState) {
-	// H	1	Z, S, P, CY, AC	A <- A | H
-	panic("Unimplemented")
+func instr_0xb4_ORA_H(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A | H
+	ORA("0xb4_ORA_H", ms, "H", &ms.regH)
 }
 
-func instr_0xb5_ORA(ms *machineState) {
-	// L	1	Z, S, P, CY, AC	A <- A | L
-	panic("Unimplemented")
+func instr_0xb5_ORA_L(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A | L
+	ORA("0xb5_ORA_L", ms, "L", &ms.regL)
 }
 
 func instr_0xb6_ORA(ms *machineState) {
@@ -993,9 +993,9 @@ func instr_0xb6_ORA(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xb7_ORA(ms *machineState) {
-	// A	1	Z, S, P, CY, AC	A <- A | A
-	panic("Unimplemented")
+func instr_0xb7_ORA_A(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A | A
+	ORA("0xb7_ORA_A", ms, "A", &ms.regA)
 }
 
 func instr_0xb8_CMP(ms *machineState) {
