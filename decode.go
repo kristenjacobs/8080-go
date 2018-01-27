@@ -333,7 +333,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x9d:
 		instr_0x9d_SBB_L(ms)
 	case 0x9e:
-		instr_0x9e_SBB(ms)
+		instr_0x9e_SBB_M(ms)
 	case 0x9f:
 		instr_0x9f_SBB_A(ms)
 	case 0xa0:
@@ -349,7 +349,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xa5:
 		instr_0xa5_ANA_L(ms)
 	case 0xa6:
-		instr_0xa6_ANA(ms)
+		instr_0xa6_ANA_M(ms)
 	case 0xa7:
 		instr_0xa7_ANA_A(ms)
 	case 0xa8:
@@ -365,7 +365,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xad:
 		instr_0xad_XRA_L(ms)
 	case 0xae:
-		instr_0xae_XRA(ms)
+		instr_0xae_XRA_M(ms)
 	case 0xaf:
 		instr_0xaf_XRA_A(ms)
 	case 0xb0:
@@ -381,7 +381,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xb5:
 		instr_0xb5_ORA_L(ms)
 	case 0xb6:
-		instr_0xb6_ORA(ms)
+		instr_0xb6_ORA_M(ms)
 	case 0xb7:
 		instr_0xb7_ORA_A(ms)
 	case 0xb8:

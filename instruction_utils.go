@@ -222,10 +222,9 @@ func ADC(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func SBB(instrName string, ms *machineState, srcReg string, reg *uint8) {
+func SBB(instrName string, ms *machineState, srcReg string, reg uint8) {
 	regA := ms.regA
-	r := *reg
-	ms.regA = regA - r
+	ms.regA = regA - reg
 	var carry uint8 = 0
 	if ms.flagCY {
 		carry = 1
@@ -234,52 +233,49 @@ func SBB(instrName string, ms *machineState, srcReg string, reg *uint8) {
 	ms.setZ(ms.regA)
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
-	ms.setCY(uint(regA)-uint(r)-uint(carry) > math.MaxUint8)
+	ms.setCY(uint(regA)-uint(reg)-uint(carry) > math.MaxUint8)
 	ms.setAC(ms.regA)
 	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]-reg%s[0x%02x]-%d, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
-		ms.pc, instrName, ms.regA, regA, srcReg, r, carry, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+		ms.pc, instrName, ms.regA, regA, srcReg, reg, carry, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 1
 }
 
-func ANA(instrName string, ms *machineState, srcReg string, reg *uint8) {
+func ANA(instrName string, ms *machineState, srcReg string, reg uint8) {
 	regA := ms.regA
-	r := *reg
-	ms.regA = regA & r
+	ms.regA = regA & reg
 	ms.setZ(ms.regA)
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
-	ms.setCY(uint(regA)&uint(r) > math.MaxUint8)
+	ms.setCY(uint(regA)&uint(reg) > math.MaxUint8)
 	ms.setAC(ms.regA)
 	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]&reg%s[0x%02x], Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
-		ms.pc, instrName, ms.regA, regA, srcReg, r, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+		ms.pc, instrName, ms.regA, regA, srcReg, reg, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 1
 }
 
-func ORA(instrName string, ms *machineState, srcReg string, reg *uint8) {
+func ORA(instrName string, ms *machineState, srcReg string, reg uint8) {
 	regA := ms.regA
-	r := *reg
-	ms.regA = regA | r
+	ms.regA = regA | reg
 	ms.setZ(ms.regA)
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
-	ms.setCY(uint(regA)|uint(r) > math.MaxUint8)
+	ms.setCY(uint(regA)|uint(reg) > math.MaxUint8)
 	ms.setAC(ms.regA)
 	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]|reg%s[0x%02x], Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
-		ms.pc, instrName, ms.regA, regA, srcReg, r, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+		ms.pc, instrName, ms.regA, regA, srcReg, reg, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 1
 }
 
-func XRA(instrName string, ms *machineState, srcReg string, reg *uint8) {
+func XRA(instrName string, ms *machineState, srcReg string, reg uint8) {
 	regA := ms.regA
-	r := *reg
-	ms.regA = regA ^ r
+	ms.regA = regA ^ reg
 	ms.setZ(ms.regA)
 	ms.setS(ms.regA)
 	ms.setP(ms.regA)
-	ms.setCY(uint(regA)^uint(r) > math.MaxUint8)
+	ms.setCY(uint(regA)^uint(reg) > math.MaxUint8)
 	ms.setAC(ms.regA)
 	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]^reg%s[0x%02x], Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
-		ms.pc, instrName, ms.regA, regA, srcReg, r, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+		ms.pc, instrName, ms.regA, regA, srcReg, reg, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 1
 }
 
@@ -293,6 +289,10 @@ func CMP(instrName string, ms *machineState, srcReg string, reg uint8) {
 	Trace.Printf("0x%04x: %s regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
 		ms.pc, instrName, ms.regA, reg, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 1
+}
+
+func m(ms *machineState) uint8 {
+	return ms.readMem(getPair(ms.regH, ms.regL), 1)[0]
 }
 
 func isSyscallAddress(adr uint16) bool {
