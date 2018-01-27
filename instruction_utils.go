@@ -286,6 +286,18 @@ func XRA(instrName string, ms *machineState, srcReg string, reg *uint8) {
 	ms.pc += 1
 }
 
+func CMP(instrName string, ms *machineState, srcReg string, reg *uint8) {
+	result := ms.regA - *reg
+	ms.setZ(result)
+	ms.setS(result)
+	ms.setP(result)
+	ms.setCY(ms.regA < *reg)
+	ms.setAC(result)
+	Trace.Printf("0x%04x: %s regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, instrName, ms.regA, *reg, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
+}
+
 func isSyscallAddress(adr uint16) bool {
 	return adr == 0x5
 }

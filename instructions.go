@@ -933,34 +933,34 @@ func instr_0xb7_ORA_A(ms *machineState) {
 	ORA("0xb7_ORA_A", ms, "A", &ms.regA)
 }
 
-func instr_0xb8_CMP(ms *machineState) {
-	// B	1	Z, S, P, CY, AC	A - B
-	panic("Unimplemented")
+func instr_0xb8_CMP_B(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A - B
+	CMP("0xb8_CMP_B", ms, "B", &ms.regB)
 }
 
-func instr_0xb9_CMP(ms *machineState) {
-	// C	1	Z, S, P, CY, AC	A - C
-	panic("Unimplemented")
+func instr_0xb9_CMP_C(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A - C
+	CMP("0xb9_CMP_C", ms, "C", &ms.regC)
 }
 
-func instr_0xba_CMP(ms *machineState) {
-	// D	1	Z, S, P, CY, AC	A - D
-	panic("Unimplemented")
+func instr_0xba_CMP_D(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A - D
+	CMP("0xba_CMP_D", ms, "D", &ms.regD)
 }
 
-func instr_0xbb_CMP(ms *machineState) {
+func instr_0xbb_CMP_E(ms *machineState) {
 	// E	1	Z, S, P, CY, AC	A - E
-	panic("Unimplemented")
+	CMP("0xbb_CMP_E", ms, "E", &ms.regE)
 }
 
-func instr_0xbc_CMP(ms *machineState) {
-	// H	1	Z, S, P, CY, AC	A - H
-	panic("Unimplemented")
+func instr_0xbc_CMP_H(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A - H
+	CMP("0xbc_CMP_H", ms, "H", &ms.regH)
 }
 
-func instr_0xbd_CMP(ms *machineState) {
-	// L	1	Z, S, P, CY, AC	A - L
-	panic("Unimplemented")
+func instr_0xbd_CMP_L(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A - L
+	CMP("0xbd_CMP_L", ms, "L", &ms.regL)
 }
 
 func instr_0xbe_CMP(ms *machineState) {
@@ -968,9 +968,9 @@ func instr_0xbe_CMP(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0xbf_CMP(ms *machineState) {
-	// A	1	Z, S, P, CY, AC	A - A
-	panic("Unimplemented")
+func instr_0xbf_CMP_A(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A - A
+	CMP("0xbf_CMP_A", ms, "A", &ms.regA)
 }
 
 func instr_0xc0_RNZ(ms *machineState) {
@@ -1424,15 +1424,14 @@ func instr_0xfc_CM_adr(ms *machineState) {
 func instr_0xfe_CPI_D8(ms *machineState) {
 	// 2	Z, S, P, CY, AC	A - data
 	data := ms.readMem(ms.pc+1, 1)[0]
-	regA := ms.regA
-	result := regA - data
+	result := ms.regA - data
 	ms.setZ(result)
 	ms.setS(result)
 	ms.setP(result)
-	ms.setCY(regA < data)
+	ms.setCY(ms.regA < data)
 	ms.setAC(result)
-	Trace.Printf("0x%04x: 0xfe_CPI_D8 regA[0x%02x]=regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
-		ms.pc, ms.regA, regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	Trace.Printf("0x%04x: 0xfe_CPI_D8 regA[0x%02x]-0x%02x, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, ms.regA, data, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
 	ms.pc += 2
 }
 

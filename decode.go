@@ -385,21 +385,21 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xb7:
 		instr_0xb7_ORA_A(ms)
 	case 0xb8:
-		instr_0xb8_CMP(ms)
+		instr_0xb8_CMP_B(ms)
 	case 0xb9:
-		instr_0xb9_CMP(ms)
+		instr_0xb9_CMP_C(ms)
 	case 0xba:
-		instr_0xba_CMP(ms)
+		instr_0xba_CMP_D(ms)
 	case 0xbb:
-		instr_0xbb_CMP(ms)
+		instr_0xbb_CMP_E(ms)
 	case 0xbc:
-		instr_0xbc_CMP(ms)
+		instr_0xbc_CMP_H(ms)
 	case 0xbd:
-		instr_0xbd_CMP(ms)
+		instr_0xbd_CMP_L(ms)
 	case 0xbe:
 		instr_0xbe_CMP(ms)
 	case 0xbf:
-		instr_0xbf_CMP(ms)
+		instr_0xbf_CMP_A(ms)
 	case 0xc0:
 		instr_0xc0_RNZ(ms)
 	case 0xc1:
