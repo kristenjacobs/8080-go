@@ -655,122 +655,122 @@ func instr_0x7f_MOV_A_A(ms *machineState) {
 
 func instr_0x80_ADD_B(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + B
-	ADD("0x80_ADD_B", ms, "B", &ms.regB)
+	ADD("0x80_ADD_B", ms, "B", ms.regB)
 }
 
 func instr_0x81_ADD_C(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + C
-	ADD("0x81_ADD_C", ms, "C", &ms.regC)
+	ADD("0x81_ADD_C", ms, "C", ms.regC)
 }
 
 func instr_0x82_ADD_D(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + D
-	ADD("0x82_ADD_D", ms, "D", &ms.regD)
+	ADD("0x82_ADD_D", ms, "D", ms.regD)
 }
 
 func instr_0x83_ADD_E(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + E
-	ADD("0x83_ADD_E", ms, "E", &ms.regE)
+	ADD("0x83_ADD_E", ms, "E", ms.regE)
 }
 
 func instr_0x84_ADD_H(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + H
-	ADD("0x84_ADD_H", ms, "H", &ms.regH)
+	ADD("0x84_ADD_H", ms, "H", ms.regH)
 }
 
 func instr_0x85_ADD_L(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + L
-	ADD("0x85_ADD_L", ms, "L", &ms.regL)
+	ADD("0x85_ADD_L", ms, "L", ms.regL)
 }
 
-func instr_0x86_ADD(ms *machineState) {
-	// M	1	Z, S, P, CY, AC	A <- A + (HL)
-	panic("Unimplemented")
+func instr_0x86_ADD_M(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + (HL)
+	ADD("0x86_ADD_M", ms, "M", ms.readMem(getPair(ms.regH, ms.regL), 1)[0])
 }
 
 func instr_0x87_ADD_A(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + A
-	ADD("0x87_ADD_A", ms, "A", &ms.regA)
+	ADD("0x87_ADD_A", ms, "A", ms.regA)
 }
 
 func instr_0x88_ADC_B(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + B + CY
-	ADC("0x88_ADC_B", ms, "B", &ms.regB)
+	ADC("0x88_ADC_B", ms, "B", ms.regB)
 }
 
 func instr_0x89_ADC_C(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + C + CY
-	ADC("0x89_ADC_C", ms, "C", &ms.regC)
+	ADC("0x89_ADC_C", ms, "C", ms.regC)
 }
 
 func instr_0x8a_ADC_D(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + D + CY
-	ADC("0x8a_ADC_D", ms, "D", &ms.regD)
+	ADC("0x8a_ADC_D", ms, "D", ms.regD)
 }
 
 func instr_0x8b_ADC_E(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + E + CY
-	ADC("0x8b_ADC_E", ms, "E", &ms.regE)
+	ADC("0x8b_ADC_E", ms, "E", ms.regE)
 }
 
 func instr_0x8c_ADC_H(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + H + CY
-	ADC("0x8c_ADC_H", ms, "H", &ms.regH)
+	ADC("0x8c_ADC_H", ms, "H", ms.regH)
 }
 
 func instr_0x8d_ADC_L(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + L + CY
-	ADC("0x8d_ADC_L", ms, "L", &ms.regL)
+	ADC("0x8d_ADC_L", ms, "L", ms.regL)
 }
 
-func instr_0x8e_ADC(ms *machineState) {
-	// M	1	Z, S, P, CY, AC	A <- A + (HL) + CY
-	panic("Unimplemented")
+func instr_0x8e_ADC_M(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + (HL) + CY
+	ADC("0x8e_ADC_M", ms, "M", ms.readMem(getPair(ms.regH, ms.regL), 1)[0])
 }
 
 func instr_0x8f_ADC_A(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + A + CY
-	ADC("0x8f_ADC_A", ms, "A", &ms.regA)
+	ADC("0x8f_ADC_A", ms, "A", ms.regA)
 }
 
 func instr_0x90_SUB_B(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A - B
-	SUB("0x90_SUB_B", ms, "B", &ms.regB)
+	SUB("0x90_SUB_B", ms, "B", ms.regB)
 }
 
 func instr_0x91_SUB_C(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A - C
-	SUB("0x91_SUB_C", ms, "C", &ms.regC)
+	SUB("0x91_SUB_C", ms, "C", ms.regC)
 }
 
 func instr_0x92_SUB_D(ms *machineState) {
 	// 1       Z, S, P, CY, AC A <- A + D
-	SUB("0x92_SUB_D", ms, "D", &ms.regD)
+	SUB("0x92_SUB_D", ms, "D", ms.regD)
 }
 
 func instr_0x93_SUB_E(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A - E
-	SUB("0x93_SUB_E", ms, "E", &ms.regE)
+	SUB("0x93_SUB_E", ms, "E", ms.regE)
 }
 
 func instr_0x94_SUB_H(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + H
-	SUB("0x94_SUB_H", ms, "H", &ms.regH)
+	SUB("0x94_SUB_H", ms, "H", ms.regH)
 }
 
 func instr_0x95_SUB_L(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A - L
-	SUB("0x95_SUB_L", ms, "L", &ms.regL)
+	SUB("0x95_SUB_L", ms, "L", ms.regL)
 }
 
-func instr_0x96_SUB(ms *machineState) {
-	// M	1	Z, S, P, CY, AC	A <- A + (HL)
-	panic("Unimplemented")
+func instr_0x96_SUB_M(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A + (HL)
+	SUB("0x96_SUB_L", ms, "M", ms.readMem(getPair(ms.regH, ms.regL), 1)[0])
 }
 
 func instr_0x97_SUB_A(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A - A
-	SUB("0x97_SUB_A", ms, "A", &ms.regA)
+	SUB("0x97_SUB_A", ms, "A", ms.regA)
 }
 
 func instr_0x98_SBB_B(ms *machineState) {
@@ -935,42 +935,42 @@ func instr_0xb7_ORA_A(ms *machineState) {
 
 func instr_0xb8_CMP_B(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A - B
-	CMP("0xb8_CMP_B", ms, "B", &ms.regB)
+	CMP("0xb8_CMP_B", ms, "B", ms.regB)
 }
 
 func instr_0xb9_CMP_C(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A - C
-	CMP("0xb9_CMP_C", ms, "C", &ms.regC)
+	CMP("0xb9_CMP_C", ms, "C", ms.regC)
 }
 
 func instr_0xba_CMP_D(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A - D
-	CMP("0xba_CMP_D", ms, "D", &ms.regD)
+	CMP("0xba_CMP_D", ms, "D", ms.regD)
 }
 
 func instr_0xbb_CMP_E(ms *machineState) {
 	// E	1	Z, S, P, CY, AC	A - E
-	CMP("0xbb_CMP_E", ms, "E", &ms.regE)
+	CMP("0xbb_CMP_E", ms, "E", ms.regE)
 }
 
 func instr_0xbc_CMP_H(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A - H
-	CMP("0xbc_CMP_H", ms, "H", &ms.regH)
+	CMP("0xbc_CMP_H", ms, "H", ms.regH)
 }
 
 func instr_0xbd_CMP_L(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A - L
-	CMP("0xbd_CMP_L", ms, "L", &ms.regL)
+	CMP("0xbd_CMP_L", ms, "L", ms.regL)
 }
 
-func instr_0xbe_CMP(ms *machineState) {
-	// M	1	Z, S, P, CY, AC	A - (HL)
-	panic("Unimplemented")
+func instr_0xbe_CMP_M(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A - (HL)
+	CMP("0xbe_CMP_M", ms, "M", ms.readMem(getPair(ms.regH, ms.regL), 1)[0])
 }
 
 func instr_0xbf_CMP_A(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A - A
-	CMP("0xbf_CMP_A", ms, "A", &ms.regA)
+	CMP("0xbf_CMP_A", ms, "A", ms.regA)
 }
 
 func instr_0xc0_RNZ(ms *machineState) {
