@@ -853,34 +853,34 @@ func instr_0xa7_ANA_A(ms *machineState) {
 	ANA("0xa7_ANA_A", ms, "A", &ms.regA)
 }
 
-func instr_0xa8_XRA(ms *machineState) {
-	// B	1	Z, S, P, CY, AC	A <- A ^ B
-	panic("Unimplemented")
+func instr_0xa8_XRA_B(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A ^ B
+	XRA("0xa8_XRA_B", ms, "B", &ms.regB)
 }
 
-func instr_0xa9_XRA(ms *machineState) {
-	// C	1	Z, S, P, CY, AC	A <- A ^ C
-	panic("Unimplemented")
+func instr_0xa9_XRA_C(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A ^ C
+	XRA("0xa9_XRA_C", ms, "C", &ms.regC)
 }
 
-func instr_0xaa_XRA(ms *machineState) {
-	// D	1	Z, S, P, CY, AC	A <- A ^ D
-	panic("Unimplemented")
+func instr_0xaa_XRA_D(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A ^ D
+	XRA("0xaa_XRA_D", ms, "D", &ms.regD)
 }
 
-func instr_0xab_XRA(ms *machineState) {
-	// E	1	Z, S, P, CY, AC	A <- A ^ E
-	panic("Unimplemented")
+func instr_0xab_XRA_E(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A ^ E
+	XRA("0xab_XRA_E", ms, "E", &ms.regE)
 }
 
-func instr_0xac_XRA(ms *machineState) {
-	// H	1	Z, S, P, CY, AC	A <- A ^ H
-	panic("Unimplemented")
+func instr_0xac_XRA_H(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A ^ H
+	XRA("0xac_XRA_H", ms, "H", &ms.regH)
 }
 
-func instr_0xad_XRA(ms *machineState) {
-	// L	1	Z, S, P, CY, AC	A <- A ^ L
-	panic("Unimplemented")
+func instr_0xad_XRA_L(ms *machineState) {
+	// 1	Z, S, P, CY, AC	A <- A ^ L
+	XRA("0xad_XRA_L", ms, "L", &ms.regL)
 }
 
 func instr_0xae_XRA(ms *machineState) {
@@ -890,16 +890,7 @@ func instr_0xae_XRA(ms *machineState) {
 
 func instr_0xaf_XRA_A(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A ^ A
-	regA := ms.regA
-	ms.regA = regA ^ regA
-	ms.setZ(ms.regA)
-	ms.setS(ms.regA)
-	ms.setP(ms.regA)
-	ms.setCY(uint(regA)^uint(regA) > math.MaxUint8)
-	ms.setAC(ms.regA)
-	Trace.Printf("0x%04x: 0xaf_XRA_A regA[0x%02x]=regA[0x%02x]^regA[0x%02x], Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
-		ms.pc, ms.regA, regA, regA, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
-	ms.pc += 1
+	XRA("0xaf_XRA_A", ms, "A", &ms.regA)
 }
 
 func instr_0xb0_ORA_B(ms *machineState) {

@@ -353,17 +353,17 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xa7:
 		instr_0xa7_ANA_A(ms)
 	case 0xa8:
-		instr_0xa8_XRA(ms)
+		instr_0xa8_XRA_B(ms)
 	case 0xa9:
-		instr_0xa9_XRA(ms)
+		instr_0xa9_XRA_C(ms)
 	case 0xaa:
-		instr_0xaa_XRA(ms)
+		instr_0xaa_XRA_D(ms)
 	case 0xab:
-		instr_0xab_XRA(ms)
+		instr_0xab_XRA_E(ms)
 	case 0xac:
-		instr_0xac_XRA(ms)
+		instr_0xac_XRA_H(ms)
 	case 0xad:
-		instr_0xad_XRA(ms)
+		instr_0xad_XRA_L(ms)
 	case 0xae:
 		instr_0xae_XRA(ms)
 	case 0xaf:

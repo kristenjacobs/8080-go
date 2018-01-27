@@ -272,6 +272,20 @@ func ORA(instrName string, ms *machineState, srcReg string, reg *uint8) {
 	ms.pc += 1
 }
 
+func XRA(instrName string, ms *machineState, srcReg string, reg *uint8) {
+	regA := ms.regA
+	r := *reg
+	ms.regA = regA ^ r
+	ms.setZ(ms.regA)
+	ms.setS(ms.regA)
+	ms.setP(ms.regA)
+	ms.setCY(uint(regA)^uint(r) > math.MaxUint8)
+	ms.setAC(ms.regA)
+	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]^reg%s[0x%02x], Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, instrName, ms.regA, regA, srcReg, r, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
+}
+
 func isSyscallAddress(adr uint16) bool {
 	return adr == 0x5
 }
