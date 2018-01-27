@@ -37,15 +37,7 @@ func instr_0x04_INR_B(ms *machineState) {
 
 func instr_0x05_DCR_B(ms *machineState) {
 	// 1	Z, S, P, AC	B <- B-1
-	regB := ms.regB
-	ms.regB = regB - 1
-	ms.setZ(ms.regB)
-	ms.setS(ms.regB)
-	ms.setP(ms.regB)
-	ms.setAC(ms.regB)
-	Trace.Printf("0x%04x: 0x05_DCR_B regB[0x%02x]=regB[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
-		ms.pc, ms.regB, regB, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
-	ms.pc += 1
+	DCR("0x05_DCR_B", ms, &ms.regB)
 }
 
 func instr_0x06_MVI_B_D8(ms *machineState) {
@@ -80,15 +72,7 @@ func instr_0x0c_INR_C(ms *machineState) {
 
 func instr_0x0d_DCR_C(ms *machineState) {
 	// 1	Z, S, P, AC	C <-C-1
-	regC := ms.regC
-	ms.regC = regC - 1
-	ms.setZ(ms.regC)
-	ms.setS(ms.regC)
-	ms.setP(ms.regC)
-	ms.setAC(ms.regC)
-	Trace.Printf("0x%04x: 0x0d_DCR_C regC[0x%02x]=regC[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
-		ms.pc, ms.regC, regC, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
-	ms.pc += 1
+	DCR("0x0d_DCR_C", ms, &ms.regC)
 }
 
 func instr_0x0e_MVI_C_D8(ms *machineState) {
@@ -128,15 +112,7 @@ func instr_0x14_INR_D(ms *machineState) {
 
 func instr_0x15_DCR_D(ms *machineState) {
 	// 1	Z, S, P, AC	D <- D-1
-	regD := ms.regD
-	ms.regD = regD - 1
-	ms.setZ(ms.regD)
-	ms.setS(ms.regD)
-	ms.setP(ms.regD)
-	ms.setAC(ms.regD)
-	Trace.Printf("0x%04x: 0x15_DCR_D regD[0x%02x]=regD[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
-		ms.pc, ms.regD, regD, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
-	ms.pc += 1
+	DCR("0x15_DCR_D", ms, &ms.regD)
 }
 
 func instr_0x16_MVI_D_D8(ms *machineState) {
@@ -171,15 +147,7 @@ func instr_0x1c_INR_E(ms *machineState) {
 
 func instr_0x1d_DCR_E(ms *machineState) {
 	// 1	Z, S, P, AC	E <- E-1
-	regE := ms.regE
-	ms.regE = regE - 1
-	ms.setZ(ms.regE)
-	ms.setS(ms.regE)
-	ms.setP(ms.regE)
-	ms.setAC(ms.regE)
-	Trace.Printf("0x%04x: 0x1d_DCR_E regE[0x%02x]=regE[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
-		ms.pc, ms.regE, regE, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
-	ms.pc += 1
+	DCR("0x1d_DCR_E", ms, &ms.regE)
 }
 
 func instr_0x1e_MVI_E_D8(ms *machineState) {
@@ -225,15 +193,7 @@ func instr_0x24_INR_H(ms *machineState) {
 
 func instr_0x25_DCR_H(ms *machineState) {
 	// 1	Z, S, P, AC	H <- H-1
-	regH := ms.regH
-	ms.regH = regH - 1
-	ms.setZ(ms.regH)
-	ms.setS(ms.regH)
-	ms.setP(ms.regH)
-	ms.setAC(ms.regH)
-	Trace.Printf("0x%04x: 0x25_DCR_H regH[0x%02x]=regH[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
-		ms.pc, ms.regH, regH, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
-	ms.pc += 1
+	DCR("0x25_DCR_H", ms, &ms.regH)
 }
 
 func instr_0x26_MVI_H_D8(ms *machineState) {
@@ -268,15 +228,7 @@ func instr_0x2c_INR_L(ms *machineState) {
 
 func instr_0x2d_DCR_L(ms *machineState) {
 	// 1	Z, S, P, AC	L <- L-1
-	regL := ms.regL
-	ms.regL = regL - 1
-	ms.setZ(ms.regL)
-	ms.setS(ms.regL)
-	ms.setP(ms.regL)
-	ms.setAC(ms.regL)
-	Trace.Printf("0x%04x: 0x2d_DCR_L regL[0x%02x]=regL[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
-		ms.pc, ms.regL, regL, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
-	ms.pc += 1
+	DCR("0x2d_DCR_L", ms, &ms.regL)
 }
 
 func instr_0x2e_MVI_L_D8(ms *machineState) {
@@ -367,15 +319,7 @@ func instr_0x3c_INR_A(ms *machineState) {
 
 func instr_0x3d_DCR_A(ms *machineState) {
 	// 1	Z, S, P, AC	A <- A-1
-	regA := ms.regA
-	ms.regA = regA - 1
-	ms.setZ(ms.regA)
-	ms.setS(ms.regA)
-	ms.setP(ms.regA)
-	ms.setAC(ms.regA)
-	Trace.Printf("0x%04x: 0x3d_DCR_A regA[0x%02x]=regA[0x%02x]-1, Z=%t, S=%t, P=%t, AC=%t\n",
-		ms.pc, ms.regA, regA, ms.flagZ, ms.flagS, ms.flagP, ms.flagAC)
-	ms.pc += 1
+	DCR("0x3d_DCR_A", ms, &ms.regA)
 }
 
 func instr_0x3e_MVI_A_D8(ms *machineState) {

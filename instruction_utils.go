@@ -165,6 +165,19 @@ func INR(instrName string, ms *machineState, reg *uint8) {
 	ms.pc += 1
 }
 
+func DCR(instrName string, ms *machineState, reg *uint8) {
+	r := *reg
+	*reg = *reg - 1
+	ms.setZ(*reg)
+	ms.setS(*reg)
+	ms.setP(*reg)
+	ms.setCY(uint(*reg)-uint(*reg) > math.MaxUint8)
+	ms.setAC(*reg)
+	Trace.Printf("0x%04x: %s regA[0x%02x]=regA[0x%02x]-1, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, instrName, *reg, r, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
+}
+
 func ADD(instrName string, ms *machineState, srcReg string, reg *uint8) {
 	regA := ms.regA
 	r := *reg
