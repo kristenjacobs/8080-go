@@ -20,9 +20,9 @@ func instr_0x01_LXI_B_D16(ms *machineState) {
 	ms.pc += 3
 }
 
-func instr_0x02_STAX(ms *machineState) {
-	// B	1		(BC) <- A
-	panic("Unimplemented")
+func instr_0x02_STAX_B(ms *machineState) {
+	// 1		(BC) <- A
+	STAX("0x02_STAX_B", ms, &ms.regB, &ms.regC)
 }
 
 func instr_0x03_INX_B(ms *machineState) {
@@ -95,9 +95,9 @@ func instr_0x11_LXI_D_D16(ms *machineState) {
 	ms.pc += 3
 }
 
-func instr_0x12_STAX(ms *machineState) {
-	// D	1		(DE) <- A
-	panic("Unimplemented")
+func instr_0x12_STAX_D(ms *machineState) {
+	// 1		(DE) <- A
+	STAX("0x12_STAX_D", ms, &ms.regD, &ms.regE)
 }
 
 func instr_0x13_INX_D(ms *machineState) {

@@ -38,6 +38,13 @@ func LDAX(instrName string, ms *machineState, adrRegHi *uint8, adrRegLo *uint8) 
 	ms.pc += 1
 }
 
+func STAX(instrName string, ms *machineState, adrRegHi *uint8, adrRegLo *uint8) {
+	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
+	ms.writeMem(adr, []uint8{ms.regA}, 1)
+	Trace.Printf("0x%04x: %s (0x%04x) = regA[0x%02x]\n", ms.pc, instrName, adr, ms.regA)
+	ms.pc += 1
+}
+
 func INX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	result := getPair(*regHi, *regLo) + 1
 	*regHi = uint8(result >> 8)

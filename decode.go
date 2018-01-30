@@ -21,7 +21,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x01:
 		instr_0x01_LXI_B_D16(ms)
 	case 0x02:
-		instr_0x02_STAX(ms)
+		instr_0x02_STAX_B(ms)
 	case 0x03:
 		instr_0x03_INX_B(ms)
 	case 0x04:
@@ -53,7 +53,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x11:
 		instr_0x11_LXI_D_D16(ms)
 	case 0x12:
-		instr_0x12_STAX(ms)
+		instr_0x12_STAX_D(ms)
 	case 0x13:
 		instr_0x13_INX_D(ms)
 	case 0x14:
