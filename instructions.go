@@ -60,9 +60,9 @@ func instr_0x0a_LDAX_B(ms *machineState) {
 	LDAX("0x0a_LDAX_B", ms, &ms.regB, &ms.regC)
 }
 
-func instr_0x0b_DCX(ms *machineState) {
-	// B	1		BC = BC-1
-	panic("Unimplemented")
+func instr_0x0b_DCX_B(ms *machineState) {
+	// 1		BC = BC-1
+	DCX("0x0b_DCX_B", ms, &ms.regB, &ms.regC)
 }
 
 func instr_0x0c_INR_C(ms *machineState) {
@@ -135,9 +135,9 @@ func instr_0x1a_LDAX_D(ms *machineState) {
 	LDAX("0x1a_LDAX_D", ms, &ms.regD, &ms.regE)
 }
 
-func instr_0x1b_DCX(ms *machineState) {
-	// D	1		DE = DE-1
-	panic("Unimplemented")
+func instr_0x1b_DCX_D(ms *machineState) {
+	// 1		DE = DE-1
+	DCX("0x1b_DCX_D", ms, &ms.regD, &ms.regE)
 }
 
 func instr_0x1c_INR_E(ms *machineState) {
@@ -216,9 +216,9 @@ func instr_0x2a_LHLD(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x2b_DCX(ms *machineState) {
-	// H	1		HL = HL-1
-	panic("Unimplemented")
+func instr_0x2b_DCX_H(ms *machineState) {
+	// 1		HL = HL-1
+	DCX("0x2b_DCX_H", ms, &ms.regH, &ms.regL)
 }
 
 func instr_0x2c_INR_L(ms *machineState) {
@@ -327,9 +327,11 @@ func instr_0x3a_LDA(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x3b_DCX(ms *machineState) {
+func instr_0x3b_DCX_SP(ms *machineState) {
 	// SP	1		SP = SP-1
-	panic("Unimplemented")
+	ms.sp = ms.sp - 1
+	Trace.Printf("0x%04x: 0x3b_DCX_SP 0x%04x\n", ms.pc, ms.sp)
+	ms.pc += 1
 }
 
 func instr_0x3c_INR_A(ms *machineState) {

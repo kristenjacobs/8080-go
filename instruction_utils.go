@@ -46,6 +46,14 @@ func INX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.pc += 1
 }
 
+func DCX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+	result := getPair(*regHi, *regLo) - 1
+	*regHi = uint8(result >> 8)
+	*regLo = uint8(result & 0xFF)
+	Trace.Printf("0x%04x: %s 0x%04x\n", ms.pc, instrName, result)
+	ms.pc += 1
+}
+
 func PUSH(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.writeMem(ms.sp-2, []uint8{*regHi}, 1)
 	ms.writeMem(ms.sp-1, []uint8{*regLo}, 1)

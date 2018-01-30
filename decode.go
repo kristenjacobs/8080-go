@@ -39,7 +39,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x0a:
 		instr_0x0a_LDAX_B(ms)
 	case 0x0b:
-		instr_0x0b_DCX(ms)
+		instr_0x0b_DCX_B(ms)
 	case 0x0c:
 		instr_0x0c_INR_C(ms)
 	case 0x0d:
@@ -71,7 +71,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x1a:
 		instr_0x1a_LDAX_D(ms)
 	case 0x1b:
-		instr_0x1b_DCX(ms)
+		instr_0x1b_DCX_D(ms)
 	case 0x1c:
 		instr_0x1c_INR_E(ms)
 	case 0x1d:
@@ -103,7 +103,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x2a:
 		instr_0x2a_LHLD(ms)
 	case 0x2b:
-		instr_0x2b_DCX(ms)
+		instr_0x2b_DCX_H(ms)
 	case 0x2c:
 		instr_0x2c_INR_L(ms)
 	case 0x2d:
@@ -135,7 +135,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x3a:
 		instr_0x3a_LDA(ms)
 	case 0x3b:
-		instr_0x3b_DCX(ms)
+		instr_0x3b_DCX_SP(ms)
 	case 0x3c:
 		instr_0x3c_INR_A(ms)
 	case 0x3d:
