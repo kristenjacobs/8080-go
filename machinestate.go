@@ -170,6 +170,14 @@ func (ms *machineState) setAC(result uint8) {
 	// Not yet implemented.
 }
 
+func (ms *machineState) getM() uint8 {
+	return ms.readMem(getPair(ms.regH, ms.regL), 1)[0]
+}
+
+func (ms *machineState) setM(val uint8) {
+	ms.writeMem(getPair(ms.regH, ms.regL), []uint8{val}, 1)
+}
+
 func getPair(regHi uint8, regLo uint8) uint16 {
 	return (uint16(regHi) << 8) | uint16(regLo&0xFF)
 }

@@ -273,14 +273,34 @@ func instr_0x33_INX_SP(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x34_INR(ms *machineState) {
-	// M	1	Z, S, P, AC	(HL) <- (HL)+1
-	panic("Unimplemented")
+func instr_0x34_INR_M(ms *machineState) {
+	// 1	Z, S, P, AC	(HL) <- (HL)+1
+	op := ms.getM()
+	res := op + 1
+	ms.setM(res)
+	ms.setZ(res)
+	ms.setS(res)
+	ms.setP(res)
+	ms.setCY(uint(res)+uint(1) > math.MaxUint8)
+	ms.setAC(res)
+	Trace.Printf("0x%04x: 0x34_INR_M M[0x%02x]=M[0x%02x]+1, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, res, op, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x35_DCR_M(ms *machineState) {
 	// 1	Z, S, P, AC	(HL) <- (HL)-1
-	panic("Unimplemented")
+	op := ms.getM()
+	res := op - 1
+	ms.setM(res)
+	ms.setZ(res)
+	ms.setS(res)
+	ms.setP(res)
+	ms.setCY(uint(res)-uint(1) > math.MaxUint8)
+	ms.setAC(res)
+	Trace.Printf("0x%04x: 0x34_DCR_M M[0x%02x]=M[0x%02x]-1, Z=%t, S=%t, P=%t, CY=%t, AC=%t\n",
+		ms.pc, res, op, ms.flagZ, ms.flagS, ms.flagP, ms.flagCY, ms.flagAC)
+	ms.pc += 1
 }
 
 func instr_0x36_MVI_M_D8(ms *machineState) {
@@ -685,7 +705,7 @@ func instr_0x85_ADD_L(ms *machineState) {
 
 func instr_0x86_ADD_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + (HL)
-	ADD("0x86_ADD_M", ms, "M", m(ms))
+	ADD("0x86_ADD_M", ms, "M", ms.getM())
 }
 
 func instr_0x87_ADD_A(ms *machineState) {
@@ -725,7 +745,7 @@ func instr_0x8d_ADC_L(ms *machineState) {
 
 func instr_0x8e_ADC_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + (HL) + CY
-	ADC("0x8e_ADC_M", ms, "M", m(ms))
+	ADC("0x8e_ADC_M", ms, "M", ms.getM())
 }
 
 func instr_0x8f_ADC_A(ms *machineState) {
@@ -765,7 +785,7 @@ func instr_0x95_SUB_L(ms *machineState) {
 
 func instr_0x96_SUB_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A + (HL)
-	SUB("0x96_SUB_L", ms, "M", m(ms))
+	SUB("0x96_SUB_L", ms, "M", ms.getM())
 }
 
 func instr_0x97_SUB_A(ms *machineState) {
@@ -805,7 +825,7 @@ func instr_0x9d_SBB_L(ms *machineState) {
 
 func instr_0x9e_SBB_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A - (HL) - CY
-	SBB("0x9e_SBB_M", ms, "M", m(ms))
+	SBB("0x9e_SBB_M", ms, "M", ms.getM())
 }
 
 func instr_0x9f_SBB_A(ms *machineState) {
@@ -845,7 +865,7 @@ func instr_0xa5_ANA_L(ms *machineState) {
 
 func instr_0xa6_ANA_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A & (HL)
-	ANA("0xa6_ANA_M", ms, "M", m(ms))
+	ANA("0xa6_ANA_M", ms, "M", ms.getM())
 }
 
 func instr_0xa7_ANA_A(ms *machineState) {
@@ -885,7 +905,7 @@ func instr_0xad_XRA_L(ms *machineState) {
 
 func instr_0xae_XRA_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A ^ (HL)
-	XRA("0xae_XRA_M", ms, "M", m(ms))
+	XRA("0xae_XRA_M", ms, "M", ms.getM())
 }
 
 func instr_0xaf_XRA_A(ms *machineState) {
@@ -925,7 +945,7 @@ func instr_0xb5_ORA_L(ms *machineState) {
 
 func instr_0xb6_ORA_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A <- A | (HL)
-	ORA("0xb6_ORA_M", ms, "M", m(ms))
+	ORA("0xb6_ORA_M", ms, "M", ms.getM())
 }
 
 func instr_0xb7_ORA_A(ms *machineState) {
@@ -965,7 +985,7 @@ func instr_0xbd_CMP_L(ms *machineState) {
 
 func instr_0xbe_CMP_M(ms *machineState) {
 	// 1	Z, S, P, CY, AC	A - (HL)
-	CMP("0xbe_CMP_M", ms, "M", m(ms))
+	CMP("0xbe_CMP_M", ms, "M", ms.getM())
 }
 
 func instr_0xbf_CMP_A(ms *machineState) {

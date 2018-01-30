@@ -291,10 +291,6 @@ func CMP(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func m(ms *machineState) uint8 {
-	return ms.readMem(getPair(ms.regH, ms.regL), 1)[0]
-}
-
 func isSyscallAddress(adr uint16) bool {
 	return adr == 0x5
 }
