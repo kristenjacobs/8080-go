@@ -176,9 +176,16 @@ func instr_0x21_LXI_H_D16(ms *machineState) {
 	ms.pc += 3
 }
 
-func instr_0x22_SHLD(ms *machineState) {
-	// adr	3		(adr) <-L; (adr+1)<-H
-	panic("Unimplemented")
+func instr_0x22_SHLD_adr(ms *machineState) {
+	// 3		(adr) <-L; (adr+1)<-H
+	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte3) << 8) | uint16(byte2)
+	ms.writeMem(adr, []uint8{ms.regL}, 1)
+	ms.writeMem(adr+1, []uint8{ms.regH}, 1)
+	Trace.Printf("0x%04x: 0x22_SHLD_adr (0x%04x) = regL[0x%02x], (0x%04x) = regH[0x%02x]\n",
+		ms.pc, adr, ms.regL, adr+1, ms.regH)
+	ms.pc += 3
 }
 
 func instr_0x23_INX_H(ms *machineState) {
@@ -211,9 +218,16 @@ func instr_0x29_DAD_H(ms *machineState) {
 	DAD("0x29_DAD_H", ms, &ms.regH, &ms.regL)
 }
 
-func instr_0x2a_LHLD(ms *machineState) {
-	// adr	3		L <- (adr); H<-(adr+1)
-	panic("Unimplemented")
+func instr_0x2a_LHLD_adr(ms *machineState) {
+	// 3		L <- (adr); H<-(adr+1)
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	ms.regL = ms.readMem(adr, 1)[0]
+	ms.regH = ms.readMem(adr+1, 1)[0]
+	Trace.Printf("0x%04x: 0x2a_LHLD_adr regL[0x%02x] = (0x%04x), regH[0x%02x] = (0x%04x)\n",
+		ms.pc, ms.regL, adr, ms.regH, adr+1)
+	ms.pc += 3
 }
 
 func instr_0x2b_DCX_H(ms *machineState) {
@@ -322,9 +336,14 @@ func instr_0x39_DAD(ms *machineState) {
 	panic("Unimplemented")
 }
 
-func instr_0x3a_LDA(ms *machineState) {
-	// adr	3		A <- (adr)
-	panic("Unimplemented")
+func instr_0x3a_LDA_adr(ms *machineState) {
+	// 3		A <- (adr)
+	byte1 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
+	ms.regA = ms.readMem(adr, 1)[0]
+	Trace.Printf("0x%04x: 0x3a_LDA_adr regA[0x%02x] (0x%04x)\n", ms.pc, ms.regA, adr)
+	ms.pc += 3
 }
 
 func instr_0x3b_DCX_SP(ms *machineState) {
