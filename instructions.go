@@ -328,7 +328,9 @@ func instr_0x36_MVI_M_D8(ms *machineState) {
 
 func instr_0x37_STC(ms *machineState) {
 	// 1	CY	CY = 1
-	panic("Unimplemented")
+	ms.setCY(true)
+	Trace.Printf("0x%04x: 0x37_STC\n", ms.pc)
+	ms.pc += 1
 }
 
 func instr_0x39_DAD(ms *machineState) {
@@ -370,7 +372,9 @@ func instr_0x3e_MVI_A_D8(ms *machineState) {
 
 func instr_0x3f_CMC(ms *machineState) {
 	// 1	CY	CY=!CY
-	panic("Unimplemented")
+	ms.setCY(!ms.flagCY)
+	Trace.Printf("0x%04x: 0x3f_CMC\n", ms.pc)
+	ms.pc += 1
 }
 
 func instr_0x40_MOV_B_B(ms *machineState) {
