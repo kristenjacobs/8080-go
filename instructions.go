@@ -1411,9 +1411,15 @@ func instr_0xf4_CP_adr(ms *machineState) {
 	CALL("0xf4_CP_adr", ms, "S", !ms.flagS)
 }
 
-func instr_0xf5_PUSH(ms *machineState) {
-	// PSW        1               (sp-2)<-flags; (sp-1)<-A; sp <- sp - 2
-	panic("Unimplemented")
+func instr_0xf5_PUSH_PSW(ms *machineState) {
+	// 1               (sp-2)<-flags; (sp-1)<-A; sp <- sp - 2
+	ms.writeMem(ms.sp-2, []uint8{ms.flags()}, 1)
+	ms.writeMem(ms.sp-1, []uint8{ms.regA}, 1)
+	newSp := ms.sp - 2
+	Trace.Printf("0x%04x: 0xf5_PUSH_PSW (0x%04x) <- 0x%02x, (0x%04x) <- 0x%02x, sp <- 0x%04x\n",
+		ms.pc, ms.sp-2, ms.flags(), ms.sp-1, ms.regA, newSp)
+	ms.pc += 1
+	ms.sp = newSp
 }
 
 func instr_0xf6_ORI_D8(ms *machineState) {

@@ -183,6 +183,27 @@ func (ms *machineState) setM(val uint8) {
 	ms.writeMem(getPair(ms.regH, ms.regL), []uint8{val}, 1)
 }
 
+func (ms *machineState) flags() uint8 {
+	var f uint8 = 0
+	if ms.flagS {
+		f |= 1 << 7
+	}
+	if ms.flagZ {
+		f |= 1 << 6
+	}
+	if ms.flagAC {
+		f |= 1 << 4
+	}
+	if ms.flagP {
+		f |= 1 << 2
+	}
+	f |= 1 << 1
+	if ms.flagCY {
+		f |= 1
+	}
+	return f
+}
+
 func getPair(regHi uint8, regLo uint8) uint16 {
 	return (uint16(regHi) << 8) | uint16(regLo&0xFF)
 }

@@ -507,7 +507,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xf4:
 		instr_0xf4_CP_adr(ms)
 	case 0xf5:
-		instr_0xf5_PUSH(ms)
+		instr_0xf5_PUSH_PSW(ms)
 	case 0xf6:
 		instr_0xf6_ORI_D8(ms)
 	case 0xf7:
