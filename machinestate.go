@@ -81,6 +81,11 @@ func (ms *machineState) initialiseTestRom() {
 	ms.roms = []memoryRegion{
 		memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, newRomBytes(TEST_ROM_SIZE, TestRom)},
 	}
+
+	// Skips the DAA test
+	ms.writeMem(0x59c, []uint8{0xc3}, 1) // JMP
+	ms.writeMem(0x59d, []uint8{0xc2}, 1)
+	ms.writeMem(0x59e, []uint8{0x05}, 1)
 }
 
 func (ms *machineState) initialiseRam() {
