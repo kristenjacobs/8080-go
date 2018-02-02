@@ -252,7 +252,10 @@ func instr_0x2e_MVI_L_D8(ms *machineState) {
 
 func instr_0x2f_CMA(ms *machineState) {
 	// 1		A <- !A
-	panic("Unimplemented")
+	regA := ms.regA
+	ms.regA = ^regA
+	Trace.Printf("0x%04x: 0x2f_CMA regA[0x%02x]=^regA[0x%02x]\n", ms.pc, ms.regA, regA)
+	ms.pc += 1
 }
 
 func instr_0x30_SIM(ms *machineState) {
