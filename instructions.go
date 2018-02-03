@@ -47,7 +47,13 @@ func instr_0x06_MVI_B_D8(ms *machineState) {
 
 func instr_0x07_RLC(ms *machineState) {
 	// 1       CY      A = A << 1; bit 0 = prev bit 7; CY = prev bit 7
-	panic("Unimplemented")
+	regA := ms.regA
+	ms.regA = regA << 1
+	ms.regA = (ms.regA & 0xFE) | ((regA >> 7) & 0x1)
+	ms.setCY(((regA >> 7) & 0x1) == 0x1)
+	Trace.Printf("0x%04x: 0x07_RLC regA[0x%02x]=regA[0x%02x]<<1, CY=%t\n",
+		ms.pc, ms.regA, regA, ms.flagCY)
+	ms.pc += 1
 }
 
 func instr_0x09_DAD_B(ms *machineState) {
@@ -82,7 +88,13 @@ func instr_0x0e_MVI_C_D8(ms *machineState) {
 
 func instr_0x0f_RRC(ms *machineState) {
 	// 1	CY	A = A >> 1; bit 7 = prev bit 0; CY = prev bit 0
-	panic("Unimplemented")
+	regA := ms.regA
+	ms.regA = regA >> 1
+	ms.regA = (ms.regA & 0x7F) | ((regA & 0x1) << 7)
+	ms.setCY((regA & 0x1) == 0x1)
+	Trace.Printf("0x%04x: 0x0f_RRC regA[0x%02x]=regA[0x%02x]>>1, CY=%t\n",
+		ms.pc, ms.regA, regA, ms.flagCY)
+	ms.pc += 1
 }
 
 func instr_0x11_LXI_D_D16(ms *machineState) {
@@ -122,7 +134,17 @@ func instr_0x16_MVI_D_D8(ms *machineState) {
 
 func instr_0x17_RAL(ms *machineState) {
 	// 1	CY	A = A << 1; bit 0 = prev CY; CY = prev bit 7
-	panic("Unimplemented")
+	regA := ms.regA
+	var cy uint8 = 0
+	if ms.flagCY {
+		cy = 1
+	}
+	ms.regA = regA << 1
+	ms.regA = (ms.regA & 0xFE) | cy
+	ms.setCY(((regA >> 7) & 0x1) == 0x1)
+	Trace.Printf("0x%04x: 0x17_RAL regA[0x%02x]=regA[0x%02x]<<1, CY=%t\n",
+		ms.pc, ms.regA, regA, ms.flagCY)
+	ms.pc += 1
 }
 
 func instr_0x19_DAD_D(ms *machineState) {
@@ -156,8 +178,18 @@ func instr_0x1e_MVI_E_D8(ms *machineState) {
 }
 
 func instr_0x1f_RAR(ms *machineState) {
-	// 1	CY	A = A >> 1; bit 7 = prev bit 7; CY = prev bit 0
-	panic("Unimplemented")
+	// 1	CY	A = A >> 1; bit 7 = prev CY; 7; CY = prev bit 0
+	regA := ms.regA
+	var cy uint8 = 0
+	if ms.flagCY {
+		cy = 1
+	}
+	ms.regA = regA >> 1
+	ms.regA = (ms.regA & 0x7F) | ((cy << 7) & 0x7F)
+	ms.setCY((regA & 0x1) == 0x1)
+	Trace.Printf("0x%04x: 0x1f_RAR regA[0x%02x]=regA[0x%02x]>>1, CY=%t\n",
+		ms.pc, ms.regA, regA, ms.flagCY)
+	ms.pc += 1
 }
 
 func instr_0x20_RIM(ms *machineState) {
