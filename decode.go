@@ -131,7 +131,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0x38:
 		invalid(0x30)
 	case 0x39:
-		instr_0x39_DAD(ms)
+		instr_0x39_DAD_SP(ms)
 	case 0x3a:
 		instr_0x3a_LDA_adr(ms)
 	case 0x3b:

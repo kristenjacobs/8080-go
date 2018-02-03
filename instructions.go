@@ -368,9 +368,20 @@ func instr_0x37_STC(ms *machineState) {
 	ms.pc += 1
 }
 
-func instr_0x39_DAD(ms *machineState) {
-	// SP	1	CY	HL = HL + SP
-	panic("Unimplemented")
+func instr_0x39_DAD_SP(ms *machineState) {
+	// 1	CY	HL = HL + SP
+	lhs := getPair(ms.regH, ms.regL)
+	rhs := ms.sp
+	if (uint32(lhs) + uint32(rhs)) > 0xffff {
+		ms.setCY(true)
+	} else {
+		ms.setCY(false)
+	}
+	result := lhs + rhs
+	setPair(&ms.regH, &ms.regL, result)
+	Trace.Printf("0x%04x: 0x39_DAD_SP 0x%04x = 0x%04x + 0x%04x, CY=%t\n", ms.pc,
+		result, lhs, rhs, ms.flagCY)
+	ms.pc += 1
 }
 
 func instr_0x3a_LDA_adr(ms *machineState) {
@@ -1487,7 +1498,10 @@ func instr_0xf8_RM(ms *machineState) {
 
 func instr_0xf9_SPHL(ms *machineState) {
 	// 1		SP=HL
-	panic("Unimplemented")
+	hl := getPair(ms.regH, ms.regL)
+	ms.sp = hl
+	Trace.Printf("0x%04x: 0xf9_SPHL 0x%04x = 0x%04x\n", ms.pc, ms.sp, hl)
+	ms.pc += 1
 }
 
 func instr_0xfa_JM_adr(ms *machineState) {
