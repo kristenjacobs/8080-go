@@ -499,7 +499,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xf0:
 		instr_0xf0_RP(ms)
 	case 0xf1:
-		instr_0xf1_POP(ms)
+		instr_0xf1_POP_PSW(ms)
 	case 0xf2:
 		instr_0xf2_JP_adr(ms)
 	case 0xf3:

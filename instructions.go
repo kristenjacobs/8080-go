@@ -1415,9 +1415,15 @@ func instr_0xf0_RP(ms *machineState) {
 	RET("0xf0_RP", ms, "S", !ms.flagS)
 }
 
-func instr_0xf1_POP(ms *machineState) {
-	// PSW	1		flags <- (sp); A <- (sp+1); sp <- sp+2
-	panic("Unimplemented")
+func instr_0xf1_POP_PSW(ms *machineState) {
+	// 1		flags <- (sp); A <- (sp+1); sp <- sp+2
+	ms.setFlags(ms.readMem(ms.sp, 1)[0])
+	ms.regA = ms.readMem(ms.sp+1, 1)[0]
+	newSp := ms.sp + 2
+	Trace.Printf("0x%04x: 0xf1_POP_PSW 0x%02x <- (0x%04x), 0x%02x <- (0x%04x), sp <- 0x%04x\n",
+		ms.pc, ms.getFlags(), ms.sp, ms.regA, ms.sp+1, newSp)
+	ms.pc += 1
+	ms.sp = newSp
 }
 
 func instr_0xf2_JP_adr(ms *machineState) {
@@ -1445,11 +1451,11 @@ func instr_0xf4_CP_adr(ms *machineState) {
 
 func instr_0xf5_PUSH_PSW(ms *machineState) {
 	// 1               (sp-2)<-flags; (sp-1)<-A; sp <- sp - 2
-	ms.writeMem(ms.sp-2, []uint8{ms.flags()}, 1)
+	ms.writeMem(ms.sp-2, []uint8{ms.getFlags()}, 1)
 	ms.writeMem(ms.sp-1, []uint8{ms.regA}, 1)
 	newSp := ms.sp - 2
 	Trace.Printf("0x%04x: 0xf5_PUSH_PSW (0x%04x) <- 0x%02x, (0x%04x) <- 0x%02x, sp <- 0x%04x\n",
-		ms.pc, ms.sp-2, ms.flags(), ms.sp-1, ms.regA, newSp)
+		ms.pc, ms.sp-2, ms.getFlags(), ms.sp-1, ms.regA, newSp)
 	ms.pc += 1
 	ms.sp = newSp
 }
