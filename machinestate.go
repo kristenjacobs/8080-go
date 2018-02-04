@@ -43,7 +43,8 @@ type machineState struct {
 	pc uint16
 	sp uint16
 
-	halt bool
+	halt              bool
+	interruptsEnabled bool
 }
 
 func newMachineState() *machineState {

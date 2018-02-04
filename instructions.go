@@ -1463,7 +1463,9 @@ func instr_0xf2_JP_adr(ms *machineState) {
 
 func instr_0xf3_DI(ms *machineState) {
 	// 1		special
-	panic("Unimplemented")
+	ms.interruptsEnabled = false
+	Trace.Printf("0x%04x: 0xf3_DI\n", ms.pc)
+	ms.pc += 1
 }
 
 func instr_0xf4_CP_adr(ms *machineState) {
@@ -1530,7 +1532,9 @@ func instr_0xfa_JM_adr(ms *machineState) {
 
 func instr_0xfb_EI(ms *machineState) {
 	// 1		special
-	panic("Unimplemented")
+	ms.interruptsEnabled = true
+	Trace.Printf("0x%04x: 0xfb_EI\n", ms.pc)
+	ms.pc += 1
 }
 
 func instr_0xfc_CM_adr(ms *machineState) {
