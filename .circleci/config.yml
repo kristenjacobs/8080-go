@@ -9,4 +9,5 @@ jobs:
       - checkout
       - run: make
       - run: make test
+      - run: make run-test
 
