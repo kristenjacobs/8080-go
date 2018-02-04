@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"strings"
 )
 
 func MVI(instrName string, ms *machineState, reg *uint8) {
@@ -112,22 +113,21 @@ func CALL(instrName string, ms *machineState, condFlagName string, condFlagVal b
 	PC := ms.pc
 	nextPC := ms.pc + 3
 	var syscall string
+	var message string
 	if !condFlagVal {
 		ms.pc = nextPC
 		syscall = ""
+		message = ""
 
 	} else if isSyscallAddress(adr) {
 		offset := getPair(ms.regD, ms.regE)
 		for i := 0; ; i++ {
 			char := ms.readMem(offset+3+uint16(i), 1)[0]
 			if char == '$' {
+				message += "\n"
 				break
 			}
-			fmt.Printf("%c", char)
-			if char == '$' {
-				fmt.Print("\n")
-				break
-			}
+			message += fmt.Sprintf("%c", char)
 		}
 		ms.pc = nextPC
 		syscall = "[SYSCALL]"
@@ -139,11 +139,18 @@ func CALL(instrName string, ms *machineState, condFlagName string, condFlagVal b
 		ms.sp = ms.sp - 2
 		ms.pc = adr
 		syscall = ""
+		message = ""
 	}
 	if condFlagName != "" {
 		Trace.Printf("0x%04x: %s 0x%04x, Taken=%t %s\n", PC, instrName, adr, condFlagVal, syscall)
 	} else {
 		Trace.Printf("0x%04x: %s 0x%04x %s\n", PC, instrName, adr, syscall)
+	}
+	if message != "" {
+		fmt.Printf("%s", message)
+		if strings.Contains(message, "CPU IS OPERATIONAL") {
+			ms.halt = true
+		}
 	}
 }
 

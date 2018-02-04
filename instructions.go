@@ -379,7 +379,7 @@ func instr_0x39_DAD_SP(ms *machineState) {
 	}
 	result := lhs + rhs
 	setPair(&ms.regH, &ms.regL, result)
-	Trace.Printf("0x%04x: 0x39_DAD_SP 0x%04x = 0x%04x + 0x%04x, CY=%t\n", ms.pc,
+	Trace.Printf("0x%04x: 0x39_DAD_SP 0x%04x = 0x%04x+0x%04x, CY=%t\n", ms.pc,
 		result, lhs, rhs, ms.flagCY)
 	ms.pc += 1
 }
@@ -1324,7 +1324,16 @@ func instr_0xe2_JPO_adr(ms *machineState) {
 
 func instr_0xe3_XTHL(ms *machineState) {
 	// 1		L <-> (SP); H <-> (SP+1)
-	panic("Unimplemented")
+	sp := ms.readMem(ms.sp, 2)
+	regL := ms.regL
+	regH := ms.regH
+	ms.regL = sp[0]
+	ms.regH = sp[1]
+	ms.writeMem(ms.sp, []uint8{regL}, 1)
+	ms.writeMem(ms.sp+1, []uint8{regH}, 1)
+	Trace.Printf("0x%04x: 0xe3_XTHL regL[0x%02x], regH[0x%02x], (0x%04x)=0x%02x, (0x%04x)=0x%02x\n",
+		ms.pc, ms.regL, ms.regH, ms.sp, regL, ms.sp+1, regH)
+	ms.pc += 1
 }
 
 func instr_0xe4_CPO_adr(ms *machineState) {
@@ -1365,7 +1374,9 @@ func instr_0xe8_RPE(ms *machineState) {
 
 func instr_0xe9_PCHL(ms *machineState) {
 	// 1		PC.hi <- H; PC.lo <- L
-	panic("Unimplemented")
+	var adr uint16 = getPair(ms.regH, ms.regL)
+	Trace.Printf("0x%04x: 0xe9_PCHL 0x%04x\n", ms.pc, adr)
+	ms.pc = adr
 }
 
 func instr_0xea_JPE_adr(ms *machineState) {
