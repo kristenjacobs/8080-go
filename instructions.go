@@ -1211,6 +1211,7 @@ func instr_0xd2_JNC_adr(ms *machineState) {
 func instr_0xd3_OUT_D8(ms *machineState) {
 	// 2		special
 	port := ms.readMem(ms.pc+1, 1)[0]
+	ms.ioHandler.Write(port)
 	Trace.Printf("0x%04x: 0xd3_OUT_D8 %d\n", ms.pc, port)
 	ms.pc += 2
 }
@@ -1263,9 +1264,12 @@ func instr_0xda_JC_adr(ms *machineState) {
 	}
 }
 
-func instr_0xdb_IN(ms *machineState) {
-	// D8	2		special
-	panic("Unimplemented")
+func instr_0xdb_IN_D8(ms *machineState) {
+	// 2		special
+	port := ms.readMem(ms.pc+1, 1)[0]
+	ms.ioHandler.Read(port)
+	Trace.Printf("0x%04x: 0xdb_IN_D8 %d\n", ms.pc, port)
+	ms.pc += 2
 }
 
 func instr_0xdc_CC_adr(ms *machineState) {

@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestSetZ(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	ms.setZ(0x1)
 	if ms.flagZ {
 		t.Errorf("expected z=false, got z=true")
@@ -15,7 +15,7 @@ func TestSetZ(t *testing.T) {
 }
 
 func TestSetS(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	ms.setS(0x1)
 	if ms.flagS {
 		t.Errorf("expected s=false, got s=true")
@@ -27,7 +27,7 @@ func TestSetS(t *testing.T) {
 }
 
 func TestSetP(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	ms.setP(0xF)
 	if !ms.flagP {
 		t.Errorf("expected p=true, got p=false")

@@ -45,9 +45,10 @@ type machineState struct {
 
 	halt              bool
 	interruptsEnabled bool
+	ioHandler         *IOHandler
 }
 
-func newMachineState() *machineState {
+func newMachineState(ioHandler *IOHandler) *machineState {
 	ms := machineState{}
 	ms.initialiseRam()
 	ms.initialiseSpaceInvadersRoms()
@@ -55,6 +56,7 @@ func newMachineState() *machineState {
 	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
 	ms.halt = false
+	ms.ioHandler = ioHandler
 	return &ms
 }
 
@@ -66,6 +68,7 @@ func newTestMachineState() *machineState {
 	ms.pc = TEST_ROM_BASE
 	ms.sp = RAM_BASE
 	ms.halt = false
+	ms.ioHandler = nil
 	return &ms
 }
 

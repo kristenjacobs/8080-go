@@ -10,7 +10,7 @@ func init() {
 }
 
 func Test_LXI(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_LXI_pair("Test_0x01_LXI_B_D16", t, instr_0x01_LXI_B_D16, ms, &ms.regB, &ms.regC)
 	check_LXI_pair("Test_0x11_LXI_D_D16", t, instr_0x11_LXI_D_D16, ms, &ms.regD, &ms.regE)
 	check_LXI_pair("Test_0x21_LXI_H_D16", t, instr_0x21_LXI_H_D16, ms, &ms.regH, &ms.regL)
@@ -39,7 +39,7 @@ func check_LXI_single(testName string, t *testing.T, instrFunc func(*machineStat
 }
 
 func Test_MVI(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_MVI("Test_0x06_MVI_B_D8(ms)", t, instr_0x06_MVI_B_D8, ms, &ms.regB)
 	check_MVI("Test_0x0e_MVI_C_D8(ms)", t, instr_0x0e_MVI_C_D8, ms, &ms.regC)
 	check_MVI("Test_0x16_MVI_D_D8(ms)", t, instr_0x16_MVI_D_D8, ms, &ms.regD)
@@ -75,7 +75,7 @@ func check_MVI(testName string, t *testing.T, instrFunc func(*machineState), ms 
 }
 
 func Test_DCR(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_DCR("Test_0x05_DCR_B", t, instr_0x05_DCR_B, ms, &ms.regB)
 	check_DCR("Test_0x0d_DCR_C", t, instr_0x0d_DCR_C, ms, &ms.regC)
 	check_DCR("Test_0x15_DCR_D", t, instr_0x15_DCR_D, ms, &ms.regD)
@@ -103,7 +103,7 @@ func check_DCR(testName string, t *testing.T, instrFunc func(*machineState), ms 
 }
 
 func Test_MOV_REG_REG(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_MOV_REG_REG("Test_0x40_MOV_B_B", t, instr_0x40_MOV_B_B, ms, &ms.regB, &ms.regB)
 	check_MOV_REG_REG("Test_0x41_MOV_B_C", t, instr_0x41_MOV_B_C, ms, &ms.regB, &ms.regC)
 	check_MOV_REG_REG("Test_0x42_MOV_B_D", t, instr_0x42_MOV_B_D, ms, &ms.regB, &ms.regD)
@@ -165,7 +165,7 @@ func check_MOV_REG_REG(testName string, t *testing.T, instrFunc func(*machineSta
 }
 
 func Test_MOV_REG_MEM(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_MOV_REG_MEM("Test_0x46_MOV_B_M", t, instr_0x46_MOV_B_M, ms, &ms.regB)
 	check_MOV_REG_MEM("Test_0x4e_MOV_C_M", t, instr_0x4e_MOV_C_M, ms, &ms.regC)
 	check_MOV_REG_MEM("Test_0x56_MOV_D_M", t, instr_0x56_MOV_D_M, ms, &ms.regD)
@@ -188,7 +188,7 @@ func check_MOV_REG_MEM(testName string, t *testing.T, instrFunc func(*machineSta
 }
 
 func Test_MOV_MEM_REG(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_MOV_MEM_REG("Test_0x70_MOV_M_B", t, instr_0x70_MOV_M_B, ms, &ms.regB)
 	check_MOV_MEM_REG("Test_0x71_MOV_M_C", t, instr_0x71_MOV_M_C, ms, &ms.regC)
 	check_MOV_MEM_REG("Test_0x72_MOV_M_D", t, instr_0x72_MOV_M_D, ms, &ms.regD)
@@ -212,7 +212,7 @@ func check_MOV_MEM_REG(testName string, t *testing.T, instrFunc func(*machineSta
 }
 
 func Test_0xc9_RET(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	ms.sp = RAM_BASE
 	ms.writeMem(ms.sp, []uint8{0x1, 0x2}, 2)
 	instr_0xc9_RET(ms)
@@ -225,7 +225,7 @@ func Test_0xc9_RET(t *testing.T) {
 }
 
 func Test_0xcd_CALL_adr(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	ms.sp = RAM_BASE + 2
 	ms.writeMem(ms.sp-2, []uint8{0x00, 0x00}, 2)
 	ms.pc = RAM_BASE + 10
@@ -245,7 +245,7 @@ func Test_0xcd_CALL_adr(t *testing.T) {
 }
 
 func Test_LDAX(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_LDAX("instr_0x0a_LDAX_B", t, instr_0x0a_LDAX_B, ms, &ms.regB, &ms.regC)
 	check_LDAX("instr_0x1a_LDAX_D", t, instr_0x1a_LDAX_D, ms, &ms.regD, &ms.regE)
 }
@@ -261,7 +261,7 @@ func check_LDAX(testName string, t *testing.T, instrFunc func(*machineState), ms
 }
 
 func Test_INX(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_INX("Test_0x03_INX_B", t, instr_0x03_INX_B, ms, &ms.regB, &ms.regC)
 	check_INX("Test_0x13_INX_D", t, instr_0x13_INX_D, ms, &ms.regD, &ms.regE)
 	check_INX("Test_0x23_INX_H", t, instr_0x23_INX_H, ms, &ms.regH, &ms.regL)
@@ -286,7 +286,7 @@ func check_INX(testName string, t *testing.T, instrFunc func(*machineState), ms 
 }
 
 func Test_conditional_jump(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_conditional_jump("0xc2_JNZ_adr", t, instr_0xc2_JNZ_adr, ms, &ms.flagZ, false)
 	check_conditional_jump("0xca_JZ_adr", t, instr_0xca_JZ_adr, ms, &ms.flagZ, true)
 	check_conditional_jump("0xd2_JNC_adr", t, instr_0xd2_JNC_adr, ms, &ms.flagCY, false)
@@ -315,7 +315,7 @@ func check_conditional_jump(testName string, t *testing.T, instrFunc func(*machi
 }
 
 func Test_0xc3_JMP_adr(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	ms.pc = RAM_BASE
 	ms.writeMem(ms.pc+1, []uint8{0xBE, 0xBA}, 2)
 	instr_0xc2_JNZ_adr(ms)
@@ -325,7 +325,7 @@ func Test_0xc3_JMP_adr(t *testing.T) {
 }
 
 func Test_PUSH(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_PUSH("Test_0xc5_PUSH_B", t, instr_0xc5_PUSH_B, ms, &ms.regC, &ms.regB)
 	check_PUSH("Test_0xd5_PUSH_D", t, instr_0xd5_PUSH_D, ms, &ms.regE, &ms.regD)
 	check_PUSH("Test_0xe5_PUSH_H", t, instr_0xe5_PUSH_H, ms, &ms.regL, &ms.regH)
@@ -350,7 +350,7 @@ func check_PUSH(testName string, t *testing.T, instrFunc func(*machineState), ms
 }
 
 func Test_POP(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_POP("Test_0xc1_POP_B", t, instr_0xc1_POP_B, ms, &ms.regC, &ms.regB)
 	check_POP("Test_0xd1_POP_D", t, instr_0xd1_POP_D, ms, &ms.regE, &ms.regD)
 	check_POP("Test_0xe1_POP_H", t, instr_0xe1_POP_H, ms, &ms.regL, &ms.regH)
@@ -372,7 +372,7 @@ func check_POP(testName string, t *testing.T, instrFunc func(*machineState), ms 
 }
 
 func Test_DAD(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_DAD("Test_0x09_DAD_B", t, instr_0x09_DAD_B, ms, &ms.regB, &ms.regC)
 	check_DAD("Test_0x19_DAD_D", t, instr_0x19_DAD_D, ms, &ms.regD, &ms.regE)
 	check_DAD("Test_0x29_DAD_H", t, instr_0x29_DAD_H, ms, &ms.regH, &ms.regL)
@@ -406,7 +406,7 @@ func check_DAD(testName string, t *testing.T, instrFunc func(*machineState), ms 
 }
 
 func Test_0xeb_XCHG(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	ms.regD = 1
 	ms.regE = 2
 	ms.regH = 3
@@ -427,7 +427,7 @@ func Test_0xeb_XCHG(t *testing.T) {
 }
 
 func Test_RST(t *testing.T) {
-	ms := newMachineState()
+	ms := newMachineState(nil)
 	check_RST("Test_0xc7_RST_0", t, instr_0xc7_RST_0, ms, 0x0)
 	check_RST("Test_0xcf_RST_1", t, instr_0xcf_RST_1, ms, 0x8)
 	check_RST("Test_0xd7_RST_2", t, instr_0xd7_RST_2, ms, 0x10)

@@ -36,14 +36,20 @@ func main() {
 	}
 	InitLogging(traceStream, debugStream)
 
+	ioHandler := newIOHandler()
+
 	var ms *machineState
 	if *test {
 		ms = newTestMachineState()
 	} else {
-		ms = newMachineState()
+		ms = newMachineState(ioHandler)
 	}
 
-	for ms.halt == false {
-		step(ms)
-	}
+	go func() {
+		for ms.halt == false {
+			step(ms)
+		}
+	}()
+
+	ioHandler.run(ms)
 }

@@ -455,7 +455,7 @@ func decodeAndExecute(ms *machineState, opcode uint8) {
 	case 0xda:
 		instr_0xda_JC_adr(ms)
 	case 0xdb:
-		instr_0xdb_IN(ms)
+		instr_0xdb_IN_D8(ms)
 	case 0xdc:
 		instr_0xdc_CC_adr(ms)
 	case 0xdd:
