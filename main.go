@@ -51,5 +51,11 @@ func main() {
 		}
 	}()
 
+	go func() {
+		for ms.halt == false {
+			generateInterrupts(ms)
+		}
+	}()
+
 	ioHandler.run(ms)
 }

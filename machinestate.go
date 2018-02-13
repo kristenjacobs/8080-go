@@ -22,6 +22,11 @@ type memoryRegion struct {
 	bytes []uint8
 }
 
+type IO interface {
+	Read(port uint8) uint8
+	Write(port uint8, value uint8)
+}
+
 type machineState struct {
 	roms []memoryRegion
 	ram  memoryRegion
@@ -45,10 +50,12 @@ type machineState struct {
 
 	halt              bool
 	interruptsEnabled bool
-	ioHandler         *IOHandler
+	interrupt         bool
+	interruptAddr     uint16
+	io                IO
 }
 
-func newMachineState(ioHandler *IOHandler) *machineState {
+func newMachineState(io IO) *machineState {
 	ms := machineState{}
 	ms.initialiseRam()
 	ms.initialiseSpaceInvadersRoms()
@@ -56,7 +63,7 @@ func newMachineState(ioHandler *IOHandler) *machineState {
 	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
 	ms.halt = false
-	ms.ioHandler = ioHandler
+	ms.io = io
 	return &ms
 }
 
@@ -68,7 +75,7 @@ func newTestMachineState() *machineState {
 	ms.pc = TEST_ROM_BASE
 	ms.sp = RAM_BASE
 	ms.halt = false
-	ms.ioHandler = nil
+	ms.io = nil
 	return &ms
 }
 
@@ -214,6 +221,27 @@ func (ms *machineState) setFlags(val uint8) {
 	ms.flagAC = ((val >> 4) & 0x1) == 0x1
 	ms.flagP = ((val >> 2) & 0x1) == 0x1
 	ms.flagCY = (val & 0x1) == 0x1
+}
+
+func (ms *machineState) setInterrupt(addr uint16) {
+	ms.interrupt = true
+	ms.interruptAddr = addr
+}
+
+func (ms *machineState) handleInterrupt() bool {
+	if ms.interrupt {
+		nextPC := ms.pc + 1
+		pcHi := uint8(nextPC >> 8)
+		pcLo := uint8(nextPC & 0xFF)
+		ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
+		ms.sp = ms.sp - 2
+		ms.pc = ms.interruptAddr
+		Trace.Printf("********** INTERRUPT: addr: 0x%04x **********\n", ms.interruptAddr)
+		ms.interrupt = false
+		ms.interruptAddr = 0
+		return true
+	}
+	return false
 }
 
 func getPair(regHi uint8, regLo uint8) uint16 {

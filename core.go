@@ -5,8 +5,10 @@ import (
 )
 
 func step(ms *machineState) {
-	opcode := fetch(ms)
-	decodeAndExecute(ms, opcode)
+	if !ms.handleInterrupt() {
+		opcode := fetch(ms)
+		decodeAndExecute(ms, opcode)
+	}
 }
 
 func fetch(ms *machineState) uint8 {

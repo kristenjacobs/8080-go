@@ -1123,7 +1123,7 @@ func instr_0xc6_ADI_D8(ms *machineState) {
 
 func instr_0xc7_RST_0(ms *machineState) {
 	// 1		CALL $0
-	RST("instr_0xc7_RST_0", ms, 0)
+	RST("0xc7_RST_0", ms, 0)
 }
 
 func instr_0xc8_RZ(ms *machineState) {
@@ -1182,7 +1182,7 @@ func instr_0xce_ACI_D8(ms *machineState) {
 
 func instr_0xcf_RST_1(ms *machineState) {
 	// 1		CALL $8
-	RST("instr_0xcf_RST_1", ms, 0x8)
+	RST("0xcf_RST_1", ms, 0x8)
 }
 
 func instr_0xd0_RNC(ms *machineState) {
@@ -1211,7 +1211,7 @@ func instr_0xd2_JNC_adr(ms *machineState) {
 func instr_0xd3_OUT_D8(ms *machineState) {
 	// 2		special
 	port := ms.readMem(ms.pc+1, 1)[0]
-	ms.ioHandler.Write(port)
+	ms.io.Write(port, ms.regA)
 	Trace.Printf("0x%04x: 0xd3_OUT_D8 %d\n", ms.pc, port)
 	ms.pc += 2
 }
@@ -1243,7 +1243,7 @@ func instr_0xd6_SUI_D8(ms *machineState) {
 
 func instr_0xd7_RST_2(ms *machineState) {
 	// 1		CALL $10
-	RST("instr_0xd7_RST_2", ms, 0x10)
+	RST("0xd7_RST_2", ms, 0x10)
 }
 
 func instr_0xd8_RC(ms *machineState) {
@@ -1267,7 +1267,7 @@ func instr_0xda_JC_adr(ms *machineState) {
 func instr_0xdb_IN_D8(ms *machineState) {
 	// 2		special
 	port := ms.readMem(ms.pc+1, 1)[0]
-	ms.ioHandler.Read(port)
+	ms.io.Read(port)
 	Trace.Printf("0x%04x: 0xdb_IN_D8 %d\n", ms.pc, port)
 	ms.pc += 2
 }
@@ -1300,7 +1300,7 @@ func instr_0xde_SBI_D8(ms *machineState) {
 
 func instr_0xdf_RST_3(ms *machineState) {
 	// 1		CALL $18
-	RST("instr_0xdf_RST_3", ms, 0x18)
+	RST("0xdf_RST_3", ms, 0x18)
 }
 
 func instr_0xe0_RPO(ms *machineState) {
@@ -1368,7 +1368,7 @@ func instr_0xe6_ANI_D8(ms *machineState) {
 
 func instr_0xe7_RST_4(ms *machineState) {
 	// 1		CALL $20
-	RST("instr_0xe7_RST_4", ms, 0x20)
+	RST("0xe7_RST_4", ms, 0x20)
 }
 
 func instr_0xe8_RPE(ms *machineState) {
@@ -1433,7 +1433,7 @@ func instr_0xee_XRI_D8(ms *machineState) {
 
 func instr_0xef_RST_5(ms *machineState) {
 	// 1		CALL $28
-	RST("instr_0xef_RST_5", ms, 0x28)
+	RST("0xef_RST_5", ms, 0x28)
 }
 
 func instr_0xf0_RP(ms *machineState) {
@@ -1505,7 +1505,7 @@ func instr_0xf6_ORI_D8(ms *machineState) {
 
 func instr_0xf7_RST_6(ms *machineState) {
 	// 1		CALL $30
-	RST("instr_0xf7_RST_6", ms, 0x30)
+	RST("0xf7_RST_6", ms, 0x30)
 }
 
 func instr_0xf8_RM(ms *machineState) {
@@ -1562,5 +1562,5 @@ func instr_0xfe_CPI_D8(ms *machineState) {
 
 func instr_0xff_RST_7(ms *machineState) {
 	// 1		CALL $38
-	RST("instr_0xff_RST_7", ms, 0x38)
+	RST("0xff_RST_7", ms, 0x38)
 }
