@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	InitLogging(ioutil.Discard, ioutil.Discard)
+	initLogging(ioutil.Discard, ioutil.Discard)
 }
 
 func Test_LXI(t *testing.T) {

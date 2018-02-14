@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 const (
@@ -53,6 +54,10 @@ type machineState struct {
 	interrupt         bool
 	interruptAddr     uint16
 	io                IO
+
+	startTime               time.Time
+	endTime                 time.Time
+	numInstructionsExecuted int64
 }
 
 func newMachineState(io IO) *machineState {
@@ -81,10 +86,10 @@ func newTestMachineState() *machineState {
 
 func (ms *machineState) initialiseSpaceInvadersRoms() {
 	ms.roms = []memoryRegion{
-		memoryRegion{ROM_SIZE, ROM_E_BASE, newRomBytes(ROM_SIZE, InvadersE)},
-		memoryRegion{ROM_SIZE, ROM_F_BASE, newRomBytes(ROM_SIZE, InvadersF)},
 		memoryRegion{ROM_SIZE, ROM_G_BASE, newRomBytes(ROM_SIZE, InvadersG)},
 		memoryRegion{ROM_SIZE, ROM_H_BASE, newRomBytes(ROM_SIZE, InvadersH)},
+		memoryRegion{ROM_SIZE, ROM_E_BASE, newRomBytes(ROM_SIZE, InvadersE)},
+		memoryRegion{ROM_SIZE, ROM_F_BASE, newRomBytes(ROM_SIZE, InvadersF)},
 	}
 }
 
@@ -141,14 +146,14 @@ func (ms *machineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
 
 func inRegion(addr uint16, numBytes uint16, mr *memoryRegion) bool {
 	result := (addr >= mr.base) && (addr+numBytes) <= (mr.base+mr.size)
-	Debug.Printf("In region: 0x%04x, %d, region: 0x%04x->0x%04x, result: %t\n", addr, numBytes, mr.base, mr.base+mr.size, result)
+	//Debug.Printf("In region: 0x%04x, %d, region: 0x%04x->0x%04x, result: %t\n", addr, numBytes, mr.base, mr.base+mr.size, result)
 	return result
 }
 
 func read(addr uint16, numBytes uint16, mr *memoryRegion) []uint8 {
 	i := addr - mr.base
 	bytes := mr.bytes[i : i+numBytes]
-	Debug.Printf("read %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
+	//Debug.Printf("read %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
 	return bytes
 }
 
@@ -157,7 +162,7 @@ func write(addr uint16, bytes []uint8, numBytes uint16, mr *memoryRegion) {
 	for i, b := range bytes {
 		mr.bytes[a+uint16(i)] = b
 	}
-	Debug.Printf("wrote %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
+	//Debug.Printf("wrote %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
 }
 
 func (ms *machineState) setZ(result uint8) {

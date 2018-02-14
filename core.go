@@ -2,12 +2,26 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
+
+func start(ms *machineState, max int64) {
+	ms.startTime = time.Now()
+	for ms.halt == false {
+		step(ms)
+		ms.numInstructionsExecuted++
+		if max != 0 && ms.numInstructionsExecuted == max {
+			break
+		}
+	}
+	ms.endTime = time.Now()
+}
 
 func step(ms *machineState) {
 	if !ms.handleInterrupt() {
 		opcode := fetch(ms)
 		decodeAndExecute(ms, opcode)
+
 	}
 }
 
