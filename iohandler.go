@@ -53,16 +53,18 @@ func (io *IOHandler) Write(port uint8, value uint8) {
 //}
 
 func (io *IOHandler) draw(win *pixelgl.Window, imd *imdraw.IMDraw, x int, y int, ms *machineState) {
-
 	// Read pixel value from memory...
-	imd.Color = colornames.White
+	// TODO
+	value := 0
 
-	x1 := 0.0 // float64(x * spriteSizePixels)
-	y1 := 0.0 //float64(y * spriteSizePixels)
-	x2 := x1 + spriteSizePixels
-	y2 := y1 + spriteSizePixels
-	imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
-	//imd.Rectangle(0)
+	if value == 1 {
+		x1 := 0.0 // float64(x * spriteSizePixels)
+		y1 := 0.0 //float64(y * spriteSizePixels)
+		x2 := x1 + spriteSizePixels
+		y2 := y1 + spriteSizePixels
+		imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
+		imd.Rectangle(0)
+	}
 }
 
 func (io *IOHandler) handleKeys(win *pixelgl.Window) {
@@ -102,8 +104,13 @@ func (io *IOHandler) run(ms *machineState) {
 
 	// Graphics handling loop.
 	imd := imdraw.New(nil)
+	imd.Color = colornames.White
+
 	for !win.Closed() {
 		start := time.Now()
+
+		win.Clear(colornames.Black)
+		imd.Clear()
 
 		if ms.halt == true {
 			return
@@ -111,13 +118,12 @@ func (io *IOHandler) run(ms *machineState) {
 
 		// Draw the left half of the screen, starting at bottom left.
 		// (Note: First row ends at top left).
-		fmt.Printf("DRAWNING LEFT HALF\n")
+		//fmt.Printf("DRAWNING LEFT HALF\n")
 		for x := 0; x < midpointX; x++ {
 			for y := 0; y < numY; y++ {
 				io.draw(win, imd, x, y, ms)
 			}
 		}
-		imd.Draw(win)
 
 		if ms.interruptsEnabled {
 			// Middle of frame interrupt (RST_1).
@@ -126,29 +132,30 @@ func (io *IOHandler) run(ms *machineState) {
 
 		// Draw the right half of the screen, starting at bottom middle.
 		// (Note: Last row ends at top right).
-		fmt.Printf("DRAWNING RIGHT HALF\n")
+		//fmt.Printf("DRAWNING RIGHT HALF\n")
 		for x := midpointX; x < numX; x++ {
 			for y := 0; y < numY; y++ {
 				io.draw(win, imd, x, y, ms)
 			}
 		}
-		imd.Draw(win)
 
 		if ms.interruptsEnabled {
 			// End of frame interrupt (RST_2).
 			ms.setInterrupt(0x10)
 		}
 
+		imd.Draw(win)
 		win.Update()
 
 		t := time.Now()
 		elapsed := t.Sub(start)
-		period := 16 * time.Millisecond
-		if elapsed > period {
-			panic(fmt.Errorf("Overshot the refresh period: %v, elapsed: %v", period, elapsed))
-		}
 
-		fmt.Printf("TAKEN: %v\n", elapsed)
-		time.Sleep(period - elapsed)
+		io.numScreenRefreshes++
+		io.screenRefreshNS += int64(elapsed)
+
+		// TODO: Remove this!
+		//if io.numScreenRefreshes == 2000 {
+		//	ms.halt = true
+		//}
 	}
 }

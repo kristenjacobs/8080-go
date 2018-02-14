@@ -11,7 +11,7 @@ func start(ms *machineState, max int64) {
 		step(ms)
 		ms.numInstructionsExecuted++
 		if max != 0 && ms.numInstructionsExecuted == max {
-			break
+			ms.halt = true
 		}
 	}
 	ms.endTime = time.Now()

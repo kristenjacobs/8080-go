@@ -25,20 +25,32 @@ func initLogging(
 	Debug = log.New(debugHandle, "DEBUG: ", log.Lshortfile)
 }
 
-func dumpStats(ms *machineState) {
+func dumpStats(ms *machineState, ioHandler *IOHandler) {
+	fmt.Printf("***** CORE STATS *****\n")
 	simulationTime := ms.endTime.Sub(ms.startTime)
 	fmt.Printf("Simulation time: %v\n", simulationTime)
 	fmt.Printf("Instructions executed: %d\n", ms.numInstructionsExecuted)
-	fmt.Printf("Average time per instruction: %.3fus\n", float64(int64(simulationTime)/ms.numInstructionsExecuted)/1000.0)
+	if ms.numInstructionsExecuted > 0 {
+		fmt.Printf("Average time per instruction: %.3fus\n", float64(int64(simulationTime)/ms.numInstructionsExecuted)/1000.0)
+	}
+	if ioHandler != nil {
+		fmt.Printf("***** SYSTEM STATS *****\n")
+		fmt.Printf("Total screen refresh time: %dns\n", ioHandler.screenRefreshNS)
+		fmt.Printf("Number of screen refreshes: %d\n", ioHandler.numScreenRefreshes)
+		if ioHandler.numScreenRefreshes > 0 {
+			fmt.Printf("Average time per refresh: %.3fus\n", float64(ioHandler.screenRefreshNS/ioHandler.numScreenRefreshes)/100.0)
+		}
+	}
 }
 
 func run(stats bool, test bool, max int64) {
 	var ms *machineState
+	var ioHandler *IOHandler
 	if test {
 		ms = newTestMachineState()
 		start(ms, max)
 	} else {
-		ioHandler := newIOHandler()
+		ioHandler = newIOHandler()
 		ms = newMachineState(ioHandler)
 		go func() {
 			start(ms, max)
@@ -46,7 +58,7 @@ func run(stats bool, test bool, max int64) {
 		ioHandler.run(ms)
 	}
 	if stats {
-		dumpStats(ms)
+		dumpStats(ms, ioHandler)
 	}
 }
 
