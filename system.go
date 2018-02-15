@@ -137,21 +137,6 @@ func (system *System) Write(port uint8, value uint8) {
 	}
 }
 
-//func (system *System) handleKeys(win *pixelgl.Window) {
-//	if win.Pressed(pixelgl.KeyLeft) {
-//		fmt.Println("LEFT")
-//	}
-//	if win.Pressed(pixelgl.KeyRight) {
-//		fmt.Println("RIGHT")
-//	}
-//	if win.Pressed(pixelgl.KeyUp) {
-//		fmt.Println("UP")
-//	}
-//	if win.Pressed(pixelgl.KeyDown) {
-//		fmt.Println("DOWN")
-//	}
-//}
-
 //func playSound() {
 //	go func() {
 //		cmd := exec.Command("paplay", "./resources/sample.wav")

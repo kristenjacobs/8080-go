@@ -234,8 +234,8 @@ func (ms *machineState) setInterrupt(addr uint16) {
 }
 
 func (ms *machineState) handleInterrupt() bool {
-	if ms.interrupt {
-		nextPC := ms.pc + 1
+	if ms.interruptsEnabled && ms.interrupt {
+		nextPC := ms.pc
 		pcHi := uint8(nextPC >> 8)
 		pcLo := uint8(nextPC & 0xFF)
 		ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
@@ -244,6 +244,7 @@ func (ms *machineState) handleInterrupt() bool {
 		Trace.Printf("********** INTERRUPT: addr: 0x%04x **********\n", ms.interruptAddr)
 		ms.interrupt = false
 		ms.interruptAddr = 0
+		ms.interruptsEnabled = false
 		return true
 	}
 	return false

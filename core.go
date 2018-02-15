@@ -18,11 +18,9 @@ func start(ms *machineState, max int64) {
 }
 
 func step(ms *machineState) {
-	if !ms.handleInterrupt() {
-		opcode := fetch(ms)
-		decodeAndExecute(ms, opcode)
-
-	}
+	ms.handleInterrupt()
+	opcode := fetch(ms)
+	decodeAndExecute(ms, opcode)
 }
 
 func fetch(ms *machineState) uint8 {
