@@ -25,7 +25,7 @@ func initLogging(
 	Debug = log.New(debugHandle, "DEBUG: ", log.Lshortfile)
 }
 
-func dumpStats(ms *machineState, ioHandler *IOHandler) {
+func dumpStats(ms *machineState, system *System) {
 	fmt.Printf("========== CORE STATS ==========\n")
 	simulationTimeNS := int64(ms.endTime.Sub(ms.startTime))
 	fmt.Printf("Simulation time: %.3fms\n", float64(simulationTimeNS/1000000.0))
@@ -34,15 +34,15 @@ func dumpStats(ms *machineState, ioHandler *IOHandler) {
 		fmt.Printf("Average time per instruction: %.3fms\n", float64(simulationTimeNS/ms.numInstructionsExecuted)/1000000.0)
 	}
 	fmt.Printf("\n")
-	if ioHandler != nil {
+	if system != nil {
 		fmt.Printf("========== SYSTEM STATS ==========\n")
-		fmt.Printf("Total screen refresh time: %.3fms\n", float64(ioHandler.screenRefreshNS/1000000.0))
-		fmt.Printf("Number of screen refreshes: %d\n", ioHandler.numScreenRefreshes)
-		if ioHandler.numScreenRefreshes > 0 {
-			fmt.Printf("Average time per refresh: %.3fms\n", float64(ioHandler.screenRefreshNS/ioHandler.numScreenRefreshes)/1000000.0)
-			fmt.Printf("Screen refresh rate: %.3f per sec\n", 1000000000.0/float64(ioHandler.screenRefreshNS/ioHandler.numScreenRefreshes))
-			fmt.Printf("Total num pixels rendered: %d\n", ioHandler.pixelsRendered)
-			fmt.Printf("Average num pixels rendered per frame: %.3f\n", float64(ioHandler.pixelsRendered/ioHandler.numScreenRefreshes))
+		fmt.Printf("Total screen refresh time: %.3fms\n", float64(system.screenRefreshNS/1000000.0))
+		fmt.Printf("Number of screen refreshes: %d\n", system.numScreenRefreshes)
+		if system.numScreenRefreshes > 0 {
+			fmt.Printf("Average time per refresh: %.3fms\n", float64(system.screenRefreshNS/system.numScreenRefreshes)/1000000.0)
+			fmt.Printf("Screen refresh rate: %.3f per sec\n", 1000000000.0/float64(system.screenRefreshNS/system.numScreenRefreshes))
+			fmt.Printf("Total num pixels rendered: %d\n", system.pixelsRendered)
+			fmt.Printf("Average num pixels rendered per frame: %.3f\n", float64(system.pixelsRendered/system.numScreenRefreshes))
 		}
 		fmt.Printf("\n")
 	}
@@ -80,20 +80,20 @@ func main() {
 
 	pixelgl.Run(func() {
 		var ms *machineState
-		var ioHandler *IOHandler
+		var system *System
 		if *test {
 			ms = newTestMachineState()
 			start(ms, *max)
 		} else {
-			ioHandler = newIOHandler()
-			ms = newMachineState(ioHandler)
+			system = newSystem()
+			ms = newMachineState(system)
 			go func() {
 				start(ms, *max)
 			}()
-			ioHandler.run(ms)
+			system.run(ms)
 		}
 		if *stats {
-			dumpStats(ms, ioHandler)
+			dumpStats(ms, system)
 		}
 	})
 

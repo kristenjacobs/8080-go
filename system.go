@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"fmt"
+	"fmt"
 	//"image/color"
 	//"os/exec"
 	"time"
@@ -23,30 +23,30 @@ const (
 	midpointX                 = numX / 2
 )
 
-type IOHandler struct {
+type System struct {
 	numScreenRefreshes int64
 	screenRefreshNS    int64
 	pixelsRendered     int64
 }
 
-func newIOHandler() *IOHandler {
-	return &IOHandler{
+func newSystem() *System {
+	return &System{
 		numScreenRefreshes: 0,
 		screenRefreshNS:    0,
 	}
 }
 
-func (io *IOHandler) Read(port uint8) uint8 {
+func (system *System) Read(port uint8) uint8 {
 	var value uint8 = 0
-	//fmt.Printf("IOHandler Read: %d, value: 0x%02x\n", port, value)
+	fmt.Printf("System Read: %d, value: 0x%02x\n", port, value)
 	return value
 }
 
-func (io *IOHandler) Write(port uint8, value uint8) {
-	//fmt.Printf("IOHandler Write: port: %d, value: 0x%02x\n", port, value)
+func (system *System) Write(port uint8, value uint8) {
+	fmt.Printf("System Write: port: %d, value: 0x%02x\n", port, value)
 }
 
-//func (io *IOHandler) handleKeys(win *pixelgl.Window) {
+//func (system *System) handleKeys(win *pixelgl.Window) {
 //	if win.Pressed(pixelgl.KeyLeft) {
 //		fmt.Println("LEFT")
 //	}
@@ -71,17 +71,17 @@ func (io *IOHandler) Write(port uint8, value uint8) {
 //	}()
 //}
 
-func (io *IOHandler) draw(imd *imdraw.IMDraw, x int, y int) {
+func (system *System) draw(imd *imdraw.IMDraw, x int, y int) {
 	x1 := float64(x * spriteSizePixels)
 	y1 := float64(y * spriteSizePixels)
 	x2 := x1 + spriteSizePixels
 	y2 := y1 + spriteSizePixels
 	imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
 	imd.Rectangle(0)
-	io.pixelsRendered++
+	system.pixelsRendered++
 }
 
-func (io *IOHandler) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX int, toX int, byteIndex uint16) uint16 {
+func (system *System) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX int, toX int, byteIndex uint16) uint16 {
 	var bitIndex uint = 0
 	var byteValue uint8
 	for x := fromX; x < toX; x++ {
@@ -91,7 +91,7 @@ func (io *IOHandler) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX in
 				byteIndex++
 			}
 			if ((byteValue << bitIndex) & 0x1) == 0x1 {
-				io.draw(imd, x, y)
+				system.draw(imd, x, y)
 			}
 			bitIndex++
 			if bitIndex == 8 {
@@ -102,7 +102,7 @@ func (io *IOHandler) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX in
 	return byteIndex
 }
 
-func (io *IOHandler) run(ms *machineState) {
+func (system *System) run(ms *machineState) {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Go Pixel Example",
 		Bounds: pixel.R(0, 0, windowWidthPixels, windowHeightPixels),
@@ -127,14 +127,14 @@ func (io *IOHandler) run(ms *machineState) {
 
 			// Draw the left half of the screen, starting at bottom left.
 			// (Note: First row ends at top left).
-			byteIndex = io.renderScreen(imd, ms, 0, midpointX, byteIndex)
+			byteIndex = system.renderScreen(imd, ms, 0, midpointX, byteIndex)
 
 			// Middle of frame interrupt (RST_1).
 			ms.setInterrupt(0x08)
 
 			// Draw the right half of the screen, starting at bottom middle.
 			// (Note: Last row ends at top right).
-			byteIndex = io.renderScreen(imd, ms, midpointX, numX, byteIndex)
+			byteIndex = system.renderScreen(imd, ms, midpointX, numX, byteIndex)
 
 			// End of frame interrupt (RST_2).
 			ms.setInterrupt(0x10)
@@ -142,8 +142,8 @@ func (io *IOHandler) run(ms *machineState) {
 			imd.Draw(win)
 			win.Update()
 
-			io.numScreenRefreshes++
-			io.screenRefreshNS += int64(time.Now().Sub(start))
+			system.numScreenRefreshes++
+			system.screenRefreshNS += int64(time.Now().Sub(start))
 		}
 	}
 }
