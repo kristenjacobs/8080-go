@@ -20,7 +20,7 @@ const (
 	windowWidthPixels         = numX * spriteSizePixels
 	windowHeightPixels        = numY * spriteSizePixels
 	videoRamAddr       uint16 = 0x2400
-	midpointX                 = numX / 2
+	midpointY                 = numY / 2
 )
 
 type System struct {
@@ -157,11 +157,11 @@ func (system *System) draw(imd *imdraw.IMDraw, x int, y int) {
 	system.pixelsRendered++
 }
 
-func (system *System) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX int, toX int, byteIndex uint16) uint16 {
+func (system *System) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromY int, toY int, byteIndex uint16) uint16 {
 	var bitIndex uint = 0
 	var byteValue uint8
-	for x := fromX; x < toX; x++ {
-		for y := 0; y < numY; y++ {
+	for y := fromY; y >= toY; y-- {
+		for x := 0; x < numX; x++ {
 			if bitIndex == 0 {
 				byteValue = ms.readMem(byteIndex, 1)[0]
 				byteIndex++
@@ -202,16 +202,14 @@ func (system *System) run(ms *machineState) {
 		if ms.interruptsEnabled {
 			var byteIndex uint16 = videoRamAddr
 
-			// Draw the left half of the screen, starting at bottom left.
-			// (Note: First row ends at top left).
-			byteIndex = system.renderScreen(imd, ms, 0, midpointX, byteIndex)
+			// Draw the top half of the screen, starting at top left.
+			byteIndex = system.renderScreen(imd, ms, numY-1, midpointY, byteIndex)
 
 			// Middle of frame interrupt (RST_1).
 			ms.setInterrupt(0x08)
 
-			// Draw the right half of the screen, starting at bottom middle.
-			// (Note: Last row ends at top right).
-			byteIndex = system.renderScreen(imd, ms, midpointX, numX, byteIndex)
+			// Draw the bottom half of the screen, starting at the middle left.
+			byteIndex = system.renderScreen(imd, ms, midpointY-1, 0, byteIndex)
 
 			// End of frame interrupt (RST_2).
 			ms.setInterrupt(0x10)
