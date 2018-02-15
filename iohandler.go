@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	//"image/color"
 	//"os/exec"
 	"time"
@@ -14,22 +14,26 @@ import (
 )
 
 const (
-	spriteSizePixels   = 4
-	numX               = 256
-	numY               = 224
-	windowWidthPixels  = numX * spriteSizePixels
-	windowHeightPixels = numY * spriteSizePixels
-	videoRamAddr       = 0x2400
-	midpointX          = numX / 2
+	spriteSizePixels          = 4
+	numX                      = 256
+	numY                      = 224
+	windowWidthPixels         = numX * spriteSizePixels
+	windowHeightPixels        = numY * spriteSizePixels
+	videoRamAddr       uint16 = 0x2400
+	midpointX                 = numX / 2
 )
 
 type IOHandler struct {
 	numScreenRefreshes int64
 	screenRefreshNS    int64
+	pixelsRendered     int64
 }
 
 func newIOHandler() *IOHandler {
-	return &IOHandler{}
+	return &IOHandler{
+		numScreenRefreshes: 0,
+		screenRefreshNS:    0,
+	}
 }
 
 func (io *IOHandler) Read(port uint8) uint8 {
@@ -42,6 +46,21 @@ func (io *IOHandler) Write(port uint8, value uint8) {
 	//fmt.Printf("IOHandler Write: port: %d, value: 0x%02x\n", port, value)
 }
 
+//func (io *IOHandler) handleKeys(win *pixelgl.Window) {
+//	if win.Pressed(pixelgl.KeyLeft) {
+//		fmt.Println("LEFT")
+//	}
+//	if win.Pressed(pixelgl.KeyRight) {
+//		fmt.Println("RIGHT")
+//	}
+//	if win.Pressed(pixelgl.KeyUp) {
+//		fmt.Println("UP")
+//	}
+//	if win.Pressed(pixelgl.KeyDown) {
+//		fmt.Println("DOWN")
+//	}
+//}
+
 //func playSound() {
 //	go func() {
 //		cmd := exec.Command("paplay", "./resources/sample.wav")
@@ -52,34 +71,35 @@ func (io *IOHandler) Write(port uint8, value uint8) {
 //	}()
 //}
 
-func (io *IOHandler) draw(win *pixelgl.Window, imd *imdraw.IMDraw, x int, y int, ms *machineState) {
-	// Read pixel value from memory...
-	// TODO
-	value := 0
-
-	if value == 1 {
-		x1 := 0.0 // float64(x * spriteSizePixels)
-		y1 := 0.0 //float64(y * spriteSizePixels)
-		x2 := x1 + spriteSizePixels
-		y2 := y1 + spriteSizePixels
-		imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
-		imd.Rectangle(0)
-	}
+func (io *IOHandler) draw(imd *imdraw.IMDraw, x int, y int) {
+	x1 := float64(x * spriteSizePixels)
+	y1 := float64(y * spriteSizePixels)
+	x2 := x1 + spriteSizePixels
+	y2 := y1 + spriteSizePixels
+	imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
+	imd.Rectangle(0)
+	io.pixelsRendered++
 }
 
-func (io *IOHandler) handleKeys(win *pixelgl.Window) {
-	if win.Pressed(pixelgl.KeyLeft) {
-		fmt.Println("LEFT")
+func (io *IOHandler) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX int, toX int, byteIndex uint16) uint16 {
+	var bitIndex uint = 0
+	var byteValue uint8
+	for x := fromX; x < toX; x++ {
+		for y := 0; y < numY; y++ {
+			if bitIndex == 0 {
+				byteValue = ms.readMem(byteIndex, 1)[0]
+				byteIndex++
+			}
+			if ((byteValue << bitIndex) & 0x1) == 0x1 {
+				io.draw(imd, x, y)
+			}
+			bitIndex++
+			if bitIndex == 8 {
+				bitIndex = 0
+			}
+		}
 	}
-	if win.Pressed(pixelgl.KeyRight) {
-		fmt.Println("RIGHT")
-	}
-	if win.Pressed(pixelgl.KeyUp) {
-		fmt.Println("UP")
-	}
-	if win.Pressed(pixelgl.KeyDown) {
-		fmt.Println("DOWN")
-	}
+	return byteIndex
 }
 
 func (io *IOHandler) run(ms *machineState) {
@@ -92,70 +112,38 @@ func (io *IOHandler) run(ms *machineState) {
 		panic(err)
 	}
 
-	// Starts the keyboard handling goroutine.
-	go func() {
-		for ms.halt == false {
-			io.handleKeys(win)
-		}
-	}()
-
-	// Starts the sound handling goroutine.
-	// TODO
-
 	// Graphics handling loop.
 	imd := imdraw.New(nil)
 	imd.Color = colornames.White
 
-	for !win.Closed() {
+	for !win.Closed() && ms.halt == false {
 		start := time.Now()
 
 		win.Clear(colornames.Black)
 		imd.Clear()
 
-		if ms.halt == true {
-			return
-		}
-
-		// Draw the left half of the screen, starting at bottom left.
-		// (Note: First row ends at top left).
-		//fmt.Printf("DRAWNING LEFT HALF\n")
-		for x := 0; x < midpointX; x++ {
-			for y := 0; y < numY; y++ {
-				io.draw(win, imd, x, y, ms)
-			}
-		}
-
 		if ms.interruptsEnabled {
+			var byteIndex uint16 = videoRamAddr
+
+			// Draw the left half of the screen, starting at bottom left.
+			// (Note: First row ends at top left).
+			byteIndex = io.renderScreen(imd, ms, 0, midpointX, byteIndex)
+
 			// Middle of frame interrupt (RST_1).
 			ms.setInterrupt(0x08)
-		}
 
-		// Draw the right half of the screen, starting at bottom middle.
-		// (Note: Last row ends at top right).
-		//fmt.Printf("DRAWNING RIGHT HALF\n")
-		for x := midpointX; x < numX; x++ {
-			for y := 0; y < numY; y++ {
-				io.draw(win, imd, x, y, ms)
-			}
-		}
+			// Draw the right half of the screen, starting at bottom middle.
+			// (Note: Last row ends at top right).
+			byteIndex = io.renderScreen(imd, ms, midpointX, numX, byteIndex)
 
-		if ms.interruptsEnabled {
 			// End of frame interrupt (RST_2).
 			ms.setInterrupt(0x10)
+
+			imd.Draw(win)
+			win.Update()
+
+			io.numScreenRefreshes++
+			io.screenRefreshNS += int64(time.Now().Sub(start))
 		}
-
-		imd.Draw(win)
-		win.Update()
-
-		t := time.Now()
-		elapsed := t.Sub(start)
-
-		io.numScreenRefreshes++
-		io.screenRefreshNS += int64(elapsed)
-
-		// TODO: Remove this!
-		//if io.numScreenRefreshes == 2000 {
-		//	ms.halt = true
-		//}
 	}
 }
