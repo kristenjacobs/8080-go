@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	//"image/color"
 	//"os/exec"
 	"time"
@@ -43,7 +43,7 @@ func (system *System) Read(port uint8) uint8 {
 	var value uint8 = 0
 	switch port {
 	case 0:
-		fmt.Printf("Unimplemented read from port: %d\n", port)
+		//fmt.Printf("Unimplemented read from port: %d\n", port)
 
 	case 1:
 		//0   coin (0 when active)
@@ -54,7 +54,7 @@ func (system *System) Read(port uint8) uint8 {
 		//5   P1 joystick left  (key 'q')
 		//6   P1 joystick right (key 'w')
 		//7   ?
-		fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
+		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 2:
 		// 0,1 dipswitch number of lives (0:3,1:4,2:5,3:6)
@@ -83,19 +83,20 @@ func (system *System) Read(port uint8) uint8 {
 	case 3:
 		// shift register result
 		value = uint8((system.shiftRegister >> (8 - system.shiftRegisterOffset)) & 0xFF)
-		fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
+		//fmt.Printf("Read port: %d, value: 0x%02x, shiftRegister: 0x%04x, offset: %d\n",
+		//	port, value, system.shiftRegister, system.shiftRegisterOffset)
 
 	case 4:
-		fmt.Printf("Unimplemented read from port: %d\n", port)
+		//fmt.Printf("Unimplemented read from port: %d\n", port)
 
 	case 5:
-		fmt.Printf("Unimplemented read from port: %d\n", port)
+		//fmt.Printf("Unimplemented read from port: %d\n", port)
 
 	case 6:
-		fmt.Printf("Unimplemented read from port: %d\n", port)
+		//fmt.Printf("Unimplemented read from port: %d\n", port)
 
 	case 7:
-		fmt.Printf("Unimplemented read from port: %d\n", port)
+		//fmt.Printf("Unimplemented read from port: %d\n", port)
 	}
 	return value
 }
@@ -103,37 +104,39 @@ func (system *System) Read(port uint8) uint8 {
 func (system *System) Write(port uint8, value uint8) {
 	switch port {
 	case 0:
-		fmt.Printf("Unimplemented write to port: %d\n", port)
+		//fmt.Printf("Unimplemented write to port: %d\n", port)
 
 	case 1:
-		fmt.Printf("Unimplemented write to port: %d\n", port)
+		//fmt.Printf("Unimplemented write to port: %d\n", port)
 
 	case 2:
 		// shift register result offset (bits 0,1,2)
-		fmt.Printf("Write: port: %d, value: 0x%02x\n", port, value)
+		//fmt.Printf("Write: port: %d, value: 0x%02x\n", port, value)
 		system.shiftRegisterOffset = uint16(value) & 0x7
 
 	case 3:
 		// sound related
-		fmt.Printf("Unimplemented write to port: %d\n", port)
+		//fmt.Printf("Unimplemented write to port: %d\n", port)
 
 	case 4:
 		// fill shift register
-		fmt.Printf("Write: port: %d, value: 0x%02x\n", port, value)
+		//before := system.shiftRegister
 		system.shiftRegister = (system.shiftRegister) >> 8
 		system.shiftRegister = system.shiftRegister | ((uint16(value) << 8) & 0xFF00)
+		//fmt.Printf("Write: port: %d, value: 0x%02x, befofe: 0x%04x, after: 0x%04x, offset: %d\n",
+		//	port, value, before, system.shiftRegister, system.shiftRegisterOffset)
 
 	case 5:
 		// sound related
-		fmt.Printf("Unimplemented write to port: %d\n", port)
+		//fmt.Printf("Unimplemented write to port: %d\n", port)
 
 	case 6:
 		// 'debug' port? eg. it writes to this port when it
 		// writes text to the screen (0=a,1=b,2=c, etc)
-		fmt.Printf("Unimplemented write to port: %d\n", port)
+		//fmt.Printf("Unimplemented write to port: %d\n", port)
 
 	case 7:
-		fmt.Printf("Unimplemented write to port: %d\n", port)
+		//fmt.Printf("Unimplemented write to port: %d\n", port)
 	}
 }
 
@@ -166,7 +169,7 @@ func (system *System) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromY i
 				byteValue = ms.readMem(byteIndex, 1)[0]
 				byteIndex++
 			}
-			if ((byteValue << bitIndex) & 0x1) == 0x1 {
+			if ((byteValue >> bitIndex) & 0x1) == 0x1 {
 				system.draw(imd, x, y)
 			}
 			bitIndex++
