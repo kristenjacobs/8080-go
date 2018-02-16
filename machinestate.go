@@ -13,6 +13,7 @@ const (
 	ROM_H_BASE    uint16 = 0x0000
 	RAM_SIZE      uint16 = 0x2000
 	RAM_BASE      uint16 = 0x2000
+	RAM_MIRROR    uint16 = 0x2000
 	TEST_ROM_BASE uint16 = 0x100
 	TEST_ROM_SIZE uint16 = 0x1000
 )
@@ -29,8 +30,9 @@ type IO interface {
 }
 
 type machineState struct {
-	roms []memoryRegion
-	ram  memoryRegion
+	roms      []memoryRegion
+	ram       memoryRegion
+	rammirror memoryRegion
 
 	regA uint8
 	regB uint8
@@ -108,6 +110,10 @@ func (ms *machineState) initialiseRam() {
 	ms.ram.size = RAM_SIZE
 	ms.ram.base = RAM_BASE
 	ms.ram.bytes = make([]uint8, RAM_SIZE)
+
+	ms.rammirror.size = RAM_SIZE
+	ms.rammirror.base = RAM_MIRROR
+	ms.rammirror.bytes = ms.ram.bytes
 }
 
 func (ms *machineState) initialiseFlags() {
@@ -127,6 +133,9 @@ func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
 	if inRegion(addr, numBytes, &ms.ram) {
 		return read(addr, numBytes, &ms.ram)
 	}
+	if inRegion(addr, numBytes, &ms.rammirror) {
+		return read(addr, numBytes, &ms.rammirror)
+	}
 	panic(fmt.Sprintf("Cannot read memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
 }
 
@@ -139,6 +148,10 @@ func (ms *machineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
 	}
 	if inRegion(addr, numBytes, &ms.ram) {
 		write(addr, bytes, numBytes, &ms.ram)
+		return
+	}
+	if inRegion(addr, numBytes, &ms.rammirror) {
+		write(addr, bytes, numBytes, &ms.rammirror)
 		return
 	}
 	panic(fmt.Sprintf("Cannot write memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
