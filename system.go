@@ -233,4 +233,5 @@ func (system *System) run(ms *machineState) {
 			time.Sleep(sleep)
 		}
 	}
+	ms.halt = true
 }
