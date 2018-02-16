@@ -37,10 +37,13 @@ func dumpStats(ms *machineState, system *System) {
 	if system != nil {
 		fmt.Printf("========== SYSTEM STATS ==========\n")
 		fmt.Printf("Total screen refresh time: %.3fms\n", float64(system.screenRefreshNS/1000000.0))
+		fmt.Printf("Total screen refresh sleep time: %.3fms\n", float64(system.screenRefreshSleepNS/1000000.0))
 		fmt.Printf("Number of screen refreshes: %d\n", system.numScreenRefreshes)
 		if system.numScreenRefreshes > 0 {
 			fmt.Printf("Average time per refresh: %.3fms\n", float64(system.screenRefreshNS/system.numScreenRefreshes)/1000000.0)
-			fmt.Printf("Screen refresh rate: %.3f per sec\n", 1000000000.0/float64(system.screenRefreshNS/system.numScreenRefreshes))
+			fmt.Printf("Average time per refresh sleep: %.3fms\n", float64(system.screenRefreshSleepNS/system.numScreenRefreshes)/1000000.0)
+			fmt.Printf("Max screen refresh rate: %.3f per sec\n", 1000000000.0/float64(system.screenRefreshNS/system.numScreenRefreshes))
+			fmt.Printf("Actual screen refresh rate: %.3f per sec\n", 1000000000.0/float64((system.screenRefreshNS+system.screenRefreshSleepNS)/system.numScreenRefreshes))
 			fmt.Printf("Total num pixels rendered: %d\n", system.pixelsRendered)
 			fmt.Printf("Average num pixels rendered per frame: %.3f\n", float64(system.pixelsRendered/system.numScreenRefreshes))
 		}

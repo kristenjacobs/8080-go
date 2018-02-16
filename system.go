@@ -23,12 +23,13 @@ const (
 )
 
 type System struct {
-	window              *pixelgl.Window
-	shiftRegister       uint16
-	shiftRegisterOffset uint16
-	numScreenRefreshes  int64
-	screenRefreshNS     int64
-	pixelsRendered      int64
+	window               *pixelgl.Window
+	shiftRegister        uint16
+	shiftRegisterOffset  uint16
+	numScreenRefreshes   int64
+	screenRefreshNS      int64
+	screenRefreshSleepNS int64
+	pixelsRendered       int64
 }
 
 func newSystem() *System {
@@ -201,26 +202,35 @@ func (system *System) run(ms *machineState) {
 		system.window.Clear(colornames.Black)
 		imd.Clear()
 
-		if ms.interruptsEnabled {
-			var byteIndex uint16 = videoRamAddr
+		var byteIndex uint16 = videoRamAddr
 
-			// Draw the top half of the screen, starting at top left.
-			byteIndex = system.renderScreen(imd, ms, 0, numX/2, byteIndex)
+		// Draw the top half of the screen, starting at top left.
+		byteIndex = system.renderScreen(imd, ms, 0, numX/2, byteIndex)
 
-			// Middle of frame interrupt (RST_1).
-			ms.setInterrupt(0x08)
+		// Middle of frame interrupt (RST_1).
+		ms.setInterrupt(0x08)
 
-			// Draw the bottom half of the screen, starting at the middle left.
-			byteIndex = system.renderScreen(imd, ms, numX/2, numX, byteIndex)
+		// Draw the bottom half of the screen, starting at the middle left.
+		byteIndex = system.renderScreen(imd, ms, numX/2, numX, byteIndex)
 
-			// End of frame interrupt (RST_2).
-			ms.setInterrupt(0x10)
+		// End of frame interrupt (RST_2).
+		ms.setInterrupt(0x10)
 
-			imd.Draw(system.window)
-			system.window.Update()
+		imd.Draw(system.window)
+		system.window.Update()
 
-			system.numScreenRefreshes++
-			system.screenRefreshNS += int64(time.Now().Sub(start))
+		elapsed := time.Now().Sub(start)
+
+		// Updates screen refresh stats.
+		system.numScreenRefreshes++
+		system.screenRefreshNS += int64(elapsed)
+
+		// Sleep until the next screen refresh is required.
+		period := 16 * time.Millisecond
+		if elapsed < period {
+			sleep := period - elapsed
+			system.screenRefreshSleepNS += int64(sleep)
+			time.Sleep(sleep)
 		}
 	}
 }
