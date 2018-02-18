@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	spriteSizePixels          = 4
+	spriteSizePixels          = 3
 	numX                      = 224
 	numY                      = 256
 	windowWidthPixels         = numX * spriteSizePixels
@@ -29,7 +29,6 @@ type System struct {
 	numScreenRefreshes   int64
 	screenRefreshNS      int64
 	screenRefreshSleepNS int64
-	pixelsRendered       int64
 }
 
 func newSystem() *System {
@@ -43,42 +42,85 @@ func (system *System) Read(port uint8) uint8 {
 	var value uint8 = 0
 	switch port {
 	case 0:
+		// bit 0 DIP4 (Seems to be self-test-request read at power up)
+		value |= 0x1
+		// bit 1 Always 1
+		value |= 0x1
+		// bit 2 Always 1
+		value |= 0x1
+		// bit 3 Always 1
+		value |= 0x1
+		// bit 4 Fire
+		if system.window.Pressed(pixelgl.KeySpace) {
+			value |= (0x1 << 4)
+		}
+		// bit 5 Left
+		if system.window.Pressed(pixelgl.KeyLeft) {
+			value |= (0x1 << 5)
+		}
+		// bit 6 Right
+		if system.window.Pressed(pixelgl.KeyRight) {
+			value |= (0x1 << 6)
+		}
+		// bit 7 ? tied to demux port 7 ?
 		//fmt.Printf("Unimplemented read from port: %d\n", port)
 
 	case 1:
-		//0   coin (0 when active)
-		//1   P2 start button   (key '2')
-		//2   P1 start button   (key '1')
-		//3   ?
-		//4   P1 shoot button   (key 'e')
-		//5   P1 joystick left  (key 'q')
-		//6   P1 joystick right (key 'w')
-		//7   ?
+		// bit 0 = CREDIT (1 if deposit)
+		if system.window.Pressed(pixelgl.KeyEnter) {
+			value |= 0x1
+		}
+		// bit 1 = 2P start (1 if pressed)
+		if system.window.Pressed(pixelgl.Key2) {
+			value |= 0x1 << 1
+		}
+		// bit 2 = 1P start (1 if pressed)
+		if system.window.Pressed(pixelgl.Key1) {
+			value |= 0x1 << 2
+		}
+		// bit 3 = Always 1
+		value |= 0x1 << 3
+		// bit 4 = 1P shot (1 if pressed)
+		if system.window.Pressed(pixelgl.KeyE) {
+			value |= 0x1 << 4
+		}
+		// bit 5 = 1P left (1 if pressed)
+		if system.window.Pressed(pixelgl.KeyQ) {
+			value |= 0x1 << 5
+		}
+		// bit 6 = 1P right (1 if pressed)
+		if system.window.Pressed(pixelgl.KeyW) {
+			value |= 0x1 << 6
+		}
+		// bit 7 = Not connected
 		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 2:
-		// 0,1 dipswitch number of lives (0:3,1:4,2:5,3:6)
-		value = (value & ^uint8(0x3<<0)) | ((0 & 0x3) << 0)
-		// 2   tilt 'button'     (key 'space')
-		if system.window.Pressed(pixelgl.KeySpace) {
-			value = (value & ^uint8(0x1<<2)) | ((1 & 0x1) << 2)
+
+		// bit 0 = DIP3 00 = 3 ships  10 = 5 ships
+		// bit 1 = DIP5 01 = 4 ships  11 = 6 ships
+		value |= 0x0 << 0
+		// bit 2 = Tilt
+		if system.window.Pressed(pixelgl.KeyT) {
+			value |= 0x1 << 2
 		}
-		// 3   dipswitch bonus life at 1:1000,0:1500
-		value = (value & ^uint8(0x1<<3)) | ((1 & 0x1) << 3)
-		// 4   P2 shoot button   ('i')
+		// bit 3 = DIP6 0 = extra ship at 1500, 1 = extra ship at 1000
+		value |= 0x0 << 3
+		// bit 4 = P2 shot (1 if pressed)
 		if system.window.Pressed(pixelgl.KeyI) {
-			value = (value & ^uint8(0x1<<4)) | ((1 & 0x1) << 4)
+			value |= 0x1 << 4
 		}
-		// 5   P2 joystick left  ('o')
+		// bit 5 = P2 left (1 if pressed)
 		if system.window.Pressed(pixelgl.KeyO) {
-			value = (value & ^uint8(0x1<<5)) | ((1 & 0x1) << 5)
+			value |= 0x1 << 5
 		}
-		// 6   P2 joystick right ('p')
+		// bit 6 = P2 right (1 if pressed)
 		if system.window.Pressed(pixelgl.KeyP) {
-			value = (value & ^uint8(0x1<<6)) | ((1 & 0x1) << 6)
+			value |= 0x1 << 6
 		}
-		// 7   dipswitch coin info 1:off,0:on
-		value = (value & ^uint8(0x1<<7)) | ((0 & 0x1) << 7)
+		// bit 7 = DIP7 Coin info displayed in demo screen 0=ON
+		value |= 0x0 << 7
+		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 3:
 		// shift register result
@@ -150,17 +192,16 @@ func (system *System) Write(port uint8, value uint8) {
 //	}()
 //}
 
-func (system *System) draw(imd *imdraw.IMDraw, x int, y int) {
+func (system *System) drawPixel(imd *imdraw.IMDraw, x int, y int) {
 	x1 := float64(x * spriteSizePixels)
 	y1 := float64(y * spriteSizePixels)
 	x2 := x1 + spriteSizePixels
 	y2 := y1 + spriteSizePixels
 	imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
 	imd.Rectangle(0)
-	system.pixelsRendered++
 }
 
-func (system *System) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX int, toX int, byteIndex uint16) uint16 {
+func (system *System) drawScreen(imd *imdraw.IMDraw, ms *machineState, fromX int, toX int, byteIndex uint16) uint16 {
 	var bitIndex uint = 0
 	var byteValue uint8
 	for x := fromX; x < toX; x++ {
@@ -170,7 +211,7 @@ func (system *System) renderScreen(imd *imdraw.IMDraw, ms *machineState, fromX i
 				byteIndex++
 			}
 			if ((byteValue >> bitIndex) & 0x1) == 0x1 {
-				system.draw(imd, x, y)
+				system.drawPixel(imd, x, y)
 			}
 			bitIndex++
 			if bitIndex == 8 {
@@ -196,6 +237,8 @@ func (system *System) run(ms *machineState) {
 	imd := imdraw.New(nil)
 	imd.Color = colornames.White
 
+	period := 8 * time.Millisecond
+
 	for !system.window.Closed() && ms.halt == false {
 		start := time.Now()
 
@@ -204,14 +247,24 @@ func (system *System) run(ms *machineState) {
 
 		var byteIndex uint16 = videoRamAddr
 
-		// Draw the top half of the screen, starting at top left.
-		byteIndex = system.renderScreen(imd, ms, 0, numX/2, byteIndex)
+		// Draw the left half of the screen.
+		byteIndex = system.drawScreen(imd, ms, 0, numX/2, byteIndex)
 
 		// Middle of frame interrupt (RST_1).
 		ms.setInterrupt(0x08)
 
-		// Draw the bottom half of the screen, starting at the middle left.
-		byteIndex = system.renderScreen(imd, ms, numX/2, numX, byteIndex)
+		elapsed := time.Now().Sub(start)
+		if elapsed < period {
+			sleep := period - elapsed
+			system.screenRefreshSleepNS += int64(sleep)
+			time.Sleep(sleep)
+		}
+		system.screenRefreshNS += int64(elapsed)
+
+		start = time.Now()
+
+		// Draw the right half of the screen.
+		byteIndex = system.drawScreen(imd, ms, numX/2, numX, byteIndex)
 
 		// End of frame interrupt (RST_2).
 		ms.setInterrupt(0x10)
@@ -219,19 +272,15 @@ func (system *System) run(ms *machineState) {
 		imd.Draw(system.window)
 		system.window.Update()
 
-		elapsed := time.Now().Sub(start)
-
-		// Updates screen refresh stats.
-		system.numScreenRefreshes++
-		system.screenRefreshNS += int64(elapsed)
-
-		// Sleep until the next screen refresh is required.
-		period := 16 * time.Millisecond
+		elapsed = time.Now().Sub(start)
 		if elapsed < period {
 			sleep := period - elapsed
 			system.screenRefreshSleepNS += int64(sleep)
 			time.Sleep(sleep)
 		}
+		system.screenRefreshNS += int64(elapsed)
+
+		system.numScreenRefreshes++
 	}
 	ms.halt = true
 }

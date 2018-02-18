@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+var instructionTime = 4 * time.Microsecond
+
 func start(ms *machineState, max int64) {
 	ms.startTime = time.Now()
 	for ms.halt == false {
@@ -18,9 +20,17 @@ func start(ms *machineState, max int64) {
 }
 
 func step(ms *machineState) {
+	start := time.Now()
+
 	ms.handleInterrupt()
 	opcode := fetch(ms)
 	decodeAndExecute(ms, opcode)
+
+	elapsed := time.Now().Sub(start)
+	if elapsed < instructionTime {
+		sleep := instructionTime - elapsed
+		time.Sleep(sleep)
+	}
 }
 
 func fetch(ms *machineState) uint8 {

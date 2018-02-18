@@ -185,7 +185,7 @@ func instr_0x1f_RAR(ms *machineState) {
 		cy = 1
 	}
 	ms.regA = regA >> 1
-	ms.regA = (ms.regA & 0x7F) | ((cy << 7) & 0x7F)
+	ms.regA = (ms.regA & 0x7F) | (cy << 7)
 	ms.setCY((regA & 0x1) == 0x1)
 	Trace.Printf("0x%04x: 0x1f_RAR regA[0x%02x]=regA[0x%02x]>>1, CY=%t\n",
 		ms.pc, ms.regA, regA, ms.flagCY)
@@ -242,7 +242,8 @@ func instr_0x26_MVI_H_D8(ms *machineState) {
 
 func instr_0x27_DAA(ms *machineState) {
 	// 1		special
-	panic("Unimplemented")
+	//panic("Unimplemented")
+	ms.pc += 1
 }
 
 func instr_0x29_DAD_H(ms *machineState) {
@@ -1212,7 +1213,7 @@ func instr_0xd3_OUT_D8(ms *machineState) {
 	// 2		special
 	port := ms.readMem(ms.pc+1, 1)[0]
 	ms.io.Write(port, ms.regA)
-	Trace.Printf("0x%04x: 0xd3_OUT_D8 %d\n", ms.pc, port)
+	Trace.Printf("0x%04x: 0xd3_OUT_D8 %d regA[0x%02x]\n", ms.pc, port, ms.regA)
 	ms.pc += 2
 }
 
@@ -1267,8 +1268,8 @@ func instr_0xda_JC_adr(ms *machineState) {
 func instr_0xdb_IN_D8(ms *machineState) {
 	// 2		special
 	port := ms.readMem(ms.pc+1, 1)[0]
-	ms.io.Read(port)
-	Trace.Printf("0x%04x: 0xdb_IN_D8 %d\n", ms.pc, port)
+	ms.regA = ms.io.Read(port)
+	Trace.Printf("0x%04x: 0xdb_IN_D8 %d regA[0x%02x]\n", ms.pc, port, ms.regA)
 	ms.pc += 2
 }
 

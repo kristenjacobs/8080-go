@@ -13,7 +13,7 @@ const (
 	ROM_H_BASE    uint16 = 0x0000
 	RAM_SIZE      uint16 = 0x2000
 	RAM_BASE      uint16 = 0x2000
-	RAM_MIRROR    uint16 = 0x2000
+	RAM_MIRROR    uint16 = 0x4000
 	TEST_ROM_BASE uint16 = 0x100
 	TEST_ROM_SIZE uint16 = 0x1000
 )
@@ -260,6 +260,8 @@ func (ms *machineState) handleInterrupt() bool {
 		ms.interruptsEnabled = false
 		return true
 	}
+	//ms.interrupt = false
+	//ms.interruptAddr = 0
 	return false
 }
 
