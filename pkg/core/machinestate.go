@@ -1,26 +1,13 @@
-package main
+package core
 
 import (
 	"fmt"
 	"time"
 )
 
-const (
-	ROM_SIZE      uint16 = 0x800
-	ROM_E_BASE    uint16 = 0x1800
-	ROM_F_BASE    uint16 = 0x1000
-	ROM_G_BASE    uint16 = 0x0800
-	ROM_H_BASE    uint16 = 0x0000
-	RAM_SIZE      uint16 = 0x2000
-	RAM_BASE      uint16 = 0x2000
-	RAM_MIRROR    uint16 = 0x4000
-	TEST_ROM_BASE uint16 = 0x100
-	TEST_ROM_SIZE uint16 = 0x1000
-)
-
 type memoryRegion struct {
-	size  uint16
 	base  uint16
+	size  uint16
 	bytes []uint8
 }
 
@@ -29,7 +16,7 @@ type IO interface {
 	Write(port uint8, value uint8)
 }
 
-type machineState struct {
+type MachineState struct {
 	roms      []memoryRegion
 	ram       memoryRegion
 	rammirror memoryRegion
@@ -63,10 +50,10 @@ type machineState struct {
 	coreSleepNS             int64
 }
 
-func newMachineState(io IO) *machineState {
-	ms := machineState{}
+func NewMachineState(io IO) *MachineState {
+	ms := MachineState{}
 	ms.initialiseRam()
-	ms.initialiseSpaceInvadersRoms()
+	ms.initialiseRoms()
 	ms.initialiseFlags()
 	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
@@ -75,8 +62,8 @@ func newMachineState(io IO) *machineState {
 	return &ms
 }
 
-func newTestMachineState() *machineState {
-	ms := machineState{}
+func newTestMachineState() *MachineState {
+	ms := MachineState{}
 	ms.initialiseRam()
 	ms.initialiseTestRom()
 	ms.initialiseFlags()
@@ -87,27 +74,22 @@ func newTestMachineState() *machineState {
 	return &ms
 }
 
-func (ms *machineState) initialiseSpaceInvadersRoms() {
-	ms.roms = []memoryRegion{
-		memoryRegion{ROM_SIZE, ROM_G_BASE, newRomBytes(ROM_SIZE, InvadersG)},
-		memoryRegion{ROM_SIZE, ROM_H_BASE, newRomBytes(ROM_SIZE, InvadersH)},
-		memoryRegion{ROM_SIZE, ROM_E_BASE, newRomBytes(ROM_SIZE, InvadersE)},
-		memoryRegion{ROM_SIZE, ROM_F_BASE, newRomBytes(ROM_SIZE, InvadersF)},
-	}
+func (ms *MachineState) initialiseRoms() {
+	ms.roms = []memoryRegion{}
 }
 
-func (ms *machineState) initialiseTestRom() {
+func (ms *MachineState) initialiseTestRom() {
 	ms.roms = []memoryRegion{
-		memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, newRomBytes(TEST_ROM_SIZE, TestRom)},
+	//	memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, newRomBytes(TEST_ROM_SIZE, TestRom)},
 	}
 
 	// Skips the DAA test
-	ms.writeMem(0x59c, []uint8{0xc3}, 1) // JMP
-	ms.writeMem(0x59d, []uint8{0xc2}, 1)
-	ms.writeMem(0x59e, []uint8{0x05}, 1)
+	//	ms.writeMem(0x59c, []uint8{0xc3}, 1) // JMP
+	//	ms.writeMem(0x59d, []uint8{0xc2}, 1)
+	//	ms.writeMem(0x59e, []uint8{0x05}, 1)
 }
 
-func (ms *machineState) initialiseRam() {
+func (ms *MachineState) initialiseRam() {
 	ms.ram.size = RAM_SIZE
 	ms.ram.base = RAM_BASE
 	ms.ram.bytes = make([]uint8, RAM_SIZE)
@@ -117,7 +99,7 @@ func (ms *machineState) initialiseRam() {
 	ms.rammirror.bytes = ms.ram.bytes
 }
 
-func (ms *machineState) initialiseFlags() {
+func (ms *MachineState) initialiseFlags() {
 	ms.flagZ = false
 	ms.flagS = false
 	ms.flagP = false
@@ -125,7 +107,11 @@ func (ms *machineState) initialiseFlags() {
 	ms.flagAC = false
 }
 
-func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
+func (ms *MachineState) LoadRom(base uint16, size uint16, bytes []uint8) {
+	ms.roms = append(ms.roms, memoryRegion{size, base, newRomBytes(size, bytes)})
+}
+
+func (ms *MachineState) readMem(addr uint16, numBytes uint16) []uint8 {
 	for _, rom := range ms.roms {
 		if inRegion(addr, numBytes, &rom) {
 			return read(addr, numBytes, &rom)
@@ -140,7 +126,7 @@ func (ms *machineState) readMem(addr uint16, numBytes uint16) []uint8 {
 	panic(fmt.Sprintf("Cannot read memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
 }
 
-func (ms *machineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
+func (ms *MachineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
 	for _, rom := range ms.roms {
 		if inRegion(addr, numBytes, &rom) {
 			write(addr, bytes, numBytes, &rom)
@@ -179,15 +165,15 @@ func write(addr uint16, bytes []uint8, numBytes uint16, mr *memoryRegion) {
 	//Debug.Printf("wrote %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
 }
 
-func (ms *machineState) setZ(result uint8) {
+func (ms *MachineState) setZ(result uint8) {
 	ms.flagZ = result == 0
 }
 
-func (ms *machineState) setS(result uint8) {
+func (ms *MachineState) setS(result uint8) {
 	ms.flagS = (result >> 7) == 0x1
 }
 
-func (ms *machineState) setP(result uint8) {
+func (ms *MachineState) setP(result uint8) {
 	numBitsSet := 0
 	for i := uint(0); i < 8; i++ {
 		if ((result >> i) & 0x1) == 0x1 {
@@ -197,23 +183,23 @@ func (ms *machineState) setP(result uint8) {
 	ms.flagP = (numBitsSet & 0x1) == 0
 }
 
-func (ms *machineState) setCY(val bool) {
+func (ms *MachineState) setCY(val bool) {
 	ms.flagCY = val
 }
 
-func (ms *machineState) setAC(result uint8) {
+func (ms *MachineState) setAC(result uint8) {
 	// Not yet implemented.
 }
 
-func (ms *machineState) getM() uint8 {
+func (ms *MachineState) getM() uint8 {
 	return ms.readMem(getPair(ms.regH, ms.regL), 1)[0]
 }
 
-func (ms *machineState) setM(val uint8) {
+func (ms *MachineState) setM(val uint8) {
 	ms.writeMem(getPair(ms.regH, ms.regL), []uint8{val}, 1)
 }
 
-func (ms *machineState) getFlags() uint8 {
+func (ms *MachineState) getFlags() uint8 {
 	var f uint8 = 0
 	if ms.flagS {
 		f |= 1 << 7
@@ -234,7 +220,7 @@ func (ms *machineState) getFlags() uint8 {
 	return f
 }
 
-func (ms *machineState) setFlags(val uint8) {
+func (ms *MachineState) setFlags(val uint8) {
 	ms.flagS = ((val >> 7) & 0x1) == 0x1
 	ms.flagZ = ((val >> 6) & 0x1) == 0x1
 	ms.flagAC = ((val >> 4) & 0x1) == 0x1
@@ -242,12 +228,12 @@ func (ms *machineState) setFlags(val uint8) {
 	ms.flagCY = (val & 0x1) == 0x1
 }
 
-func (ms *machineState) setInterrupt(addr uint16) {
+func (ms *MachineState) setInterrupt(addr uint16) {
 	ms.interrupt = true
 	ms.interruptAddr = addr
 }
 
-func (ms *machineState) handleInterrupt() bool {
+func (ms *MachineState) handleInterrupt() bool {
 	if ms.interruptsEnabled && ms.interrupt {
 		nextPC := ms.pc
 		pcHi := uint8(nextPC >> 8)

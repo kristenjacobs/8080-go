@@ -7,7 +7,7 @@ all: build fmt vet
 
 .PHONY: build
 build:
-	go build
+	go install -v ./cmd/...
 
 .PHONY: clean
 clean:

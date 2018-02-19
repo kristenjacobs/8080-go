@@ -1,4 +1,4 @@
-package main
+package system
 
 import (
 	//"fmt"
@@ -6,11 +6,26 @@ import (
 	//"os/exec"
 	"time"
 
+	"github.com/kristenjacobs/8080-go/pkg/core"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
 
 	"golang.org/x/image/colornames"
+)
+
+const (
+	ROM_SIZE      uint16 = 0x800
+	ROM_E_BASE    uint16 = 0x1800
+	ROM_F_BASE    uint16 = 0x1000
+	ROM_G_BASE    uint16 = 0x0800
+	ROM_H_BASE    uint16 = 0x0000
+	RAM_SIZE      uint16 = 0x2000
+	RAM_BASE      uint16 = 0x2000
+	RAM_MIRROR    uint16 = 0x4000
+	TEST_ROM_BASE uint16 = 0x100
+	TEST_ROM_SIZE uint16 = 0x1000
 )
 
 const (
@@ -201,7 +216,7 @@ func (system *System) drawPixel(imd *imdraw.IMDraw, x int, y int) {
 	imd.Rectangle(0)
 }
 
-func (system *System) drawScreen(imd *imdraw.IMDraw, ms *machineState, fromX int, toX int, byteIndex uint16) uint16 {
+func (system *System) drawScreen(imd *imdraw.IMDraw, ms *core.MachineState, fromX int, toX int, byteIndex uint16) uint16 {
 	var bitIndex uint = 0
 	var byteValue uint8
 	for x := fromX; x < toX; x++ {
@@ -222,7 +237,13 @@ func (system *System) drawScreen(imd *imdraw.IMDraw, ms *machineState, fromX int
 	return byteIndex
 }
 
-func (system *System) run(ms *machineState) {
+func (system *System) run(ms *core.MachineState) {
+	// Loads the space invaders roms.
+	ms.LoadRom(ROM_G_BASE, ROM_SIZE, InvadersG)
+	ms.LoadRom(ROM_H_BASE, ROM_SIZE, InvadersH)
+	ms.LoadRom(ROM_E_BASE, ROM_SIZE, InvadersE)
+	ms.LoadRom(ROM_F_BASE, ROM_SIZE, InvadersF)
+
 	cfg := pixelgl.WindowConfig{
 		Title:  "Go Pixel Example",
 		Bounds: pixel.R(0, 0, windowWidthPixels, windowHeightPixels),

@@ -3,29 +3,17 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
 	"runtime/pprof"
 
+	"github.com/kristenjacobs/8080-go/pkg/core"
+
 	"github.com/faiface/pixel/pixelgl"
 )
 
-var (
-	Trace *log.Logger
-	Debug *log.Logger
-)
-
-func initLogging(
-	traceHandle io.Writer,
-	debugHandle io.Writer) {
-	Trace = log.New(traceHandle, "TRACE: ", 0)
-	Debug = log.New(debugHandle, "DEBUG: ", log.Lshortfile)
-}
-
-func dumpStats(ms *machineState, system *System) {
+func dumpStats(ms *core.MachineState, system *System) {
 	fmt.Printf("========== CORE STATS ==========\n")
 	simulationTimeNS := int64(ms.endTime.Sub(ms.startTime))
 	fmt.Printf("Total simulation time: %.3fms\n", float64(simulationTimeNS/1000000.0))
@@ -53,7 +41,6 @@ func dumpStats(ms *machineState, system *System) {
 
 func main() {
 	trace := flag.Bool("t", false, "enables instruction tracing")
-	debug := flag.Bool("d", false, "enables debug")
 	stats := flag.Bool("s", false, "enables statistcs output")
 	test := flag.Bool("test", false, "executes inbuilt instruction test rom")
 	max := flag.Int64("m", 0, "exit after `n` instructions")
@@ -61,14 +48,8 @@ func main() {
 	memprofile := flag.String("memprofile", "", "write memory profile to `file`")
 	flag.Parse()
 
-	traceStream := ioutil.Discard
-	if *trace {
-		traceStream = os.Stdout
-	}
-	debugStream := ioutil.Discard
-	if *debug {
-		debugStream = os.Stdout
-	}
+	core.InitTracing(*trace)
+
 	if *cpuprofile != "" {
 		f, err := os.Create(*cpuprofile)
 		if err != nil {
@@ -79,17 +60,16 @@ func main() {
 		}
 		defer pprof.StopCPUProfile()
 	}
-	initLogging(traceStream, debugStream)
 
 	pixelgl.Run(func() {
-		var ms *machineState
+		var ms *core.MachineState
 		var system *System
 		if *test {
-			ms = newTestMachineState()
+			ms = core.NewTestMachineState()
 			start(ms, *max)
 		} else {
 			system = newSystem()
-			ms = newMachineState(system)
+			ms = core.NewMachineState(system)
 			go func() {
 				start(ms, *max)
 			}()

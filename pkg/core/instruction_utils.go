@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"fmt"
@@ -6,47 +6,47 @@ import (
 	"strings"
 )
 
-func MVI(instrName string, ms *machineState, reg *uint8) {
+func MVI(instrName string, ms *MachineState, reg *uint8) {
 	*reg = ms.readMem(ms.pc+1, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x\n", ms.pc, instrName, *reg)
 	ms.pc += 2
 }
 
-func MOV_REG_REG(instrName string, ms *machineState, dst *uint8, src *uint8) {
+func MOV_REG_REG(instrName string, ms *MachineState, dst *uint8, src *uint8) {
 	*dst = *src
 	Trace.Printf("0x%04x: %s 0x%02x 0x%02x\n", ms.pc, instrName, *dst, *src)
 	ms.pc += 1
 }
 
-func MOV_REG_MEM(instrName string, ms *machineState, dst *uint8) {
+func MOV_REG_MEM(instrName string, ms *MachineState, dst *uint8) {
 	addr := getPair(ms.regH, ms.regL)
 	*dst = ms.readMem(addr, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x [0x%04x]\n", ms.pc, instrName, *dst, addr)
 	ms.pc += 1
 }
 
-func MOV_MEM_REG(instrName string, ms *machineState, srcReg *uint8) {
+func MOV_MEM_REG(instrName string, ms *MachineState, srcReg *uint8) {
 	addr := getPair(ms.regH, ms.regL)
 	ms.writeMem(addr, []uint8{*srcReg}, 1)
 	Trace.Printf("0x%04x: %s [0x%04x] 0x%02x\n", ms.pc, instrName, addr, *srcReg)
 	ms.pc += 1
 }
 
-func LDAX(instrName string, ms *machineState, adrRegHi *uint8, adrRegLo *uint8) {
+func LDAX(instrName string, ms *MachineState, adrRegHi *uint8, adrRegLo *uint8) {
 	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
 	ms.regA = ms.readMem(adr, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x 0x%04x\n", ms.pc, instrName, ms.regA, adr)
 	ms.pc += 1
 }
 
-func STAX(instrName string, ms *machineState, adrRegHi *uint8, adrRegLo *uint8) {
+func STAX(instrName string, ms *MachineState, adrRegHi *uint8, adrRegLo *uint8) {
 	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
 	ms.writeMem(adr, []uint8{ms.regA}, 1)
 	Trace.Printf("0x%04x: %s (0x%04x) = regA[0x%02x]\n", ms.pc, instrName, adr, ms.regA)
 	ms.pc += 1
 }
 
-func INX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+func INX(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 	result := getPair(*regHi, *regLo) + 1
 	*regHi = uint8(result >> 8)
 	*regLo = uint8(result & 0xFF)
@@ -54,7 +54,7 @@ func INX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.pc += 1
 }
 
-func DCX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+func DCX(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 	result := getPair(*regHi, *regLo) - 1
 	*regHi = uint8(result >> 8)
 	*regLo = uint8(result & 0xFF)
@@ -62,7 +62,7 @@ func DCX(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.pc += 1
 }
 
-func PUSH(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+func PUSH(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 	ms.writeMem(ms.sp-2, []uint8{*regHi}, 1)
 	ms.writeMem(ms.sp-1, []uint8{*regLo}, 1)
 	newSp := ms.sp - 2
@@ -72,7 +72,7 @@ func PUSH(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.sp = newSp
 }
 
-func POP(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+func POP(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 	*regHi = ms.readMem(ms.sp, 1)[0]
 	*regLo = ms.readMem(ms.sp+1, 1)[0]
 	newSp := ms.sp + 2
@@ -82,7 +82,7 @@ func POP(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.sp = newSp
 }
 
-func DAD(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
+func DAD(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 	lhs := getPair(ms.regH, ms.regL)
 	rhs := getPair(*regHi, *regLo)
 	if (uint32(lhs) + uint32(rhs)) > 0xffff {
@@ -96,7 +96,7 @@ func DAD(instrName string, ms *machineState, regHi *uint8, regLo *uint8) {
 	ms.pc += 1
 }
 
-func RST(instrName string, ms *machineState, addr uint16) {
+func RST(instrName string, ms *MachineState, addr uint16) {
 	nextPC := ms.pc + 1
 	pcHi := uint8(nextPC >> 8)
 	pcLo := uint8(nextPC & 0xFF)
@@ -106,7 +106,7 @@ func RST(instrName string, ms *machineState, addr uint16) {
 	ms.pc = addr
 }
 
-func CALL(instrName string, ms *machineState, condFlagName string, condFlagVal bool) {
+func CALL(instrName string, ms *MachineState, condFlagName string, condFlagVal bool) {
 	byte1 := ms.readMem(ms.pc+1, 1)[0]
 	byte2 := ms.readMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
@@ -154,7 +154,7 @@ func CALL(instrName string, ms *machineState, condFlagName string, condFlagVal b
 	}
 }
 
-func RET(instrName string, ms *machineState, condFlagName string, condFlagVal bool) {
+func RET(instrName string, ms *MachineState, condFlagName string, condFlagVal bool) {
 	currentPc := ms.pc
 	bytes := ms.readMem(ms.sp, 2)
 	pcLo := bytes[0]
@@ -174,7 +174,7 @@ func RET(instrName string, ms *machineState, condFlagName string, condFlagVal bo
 	}
 }
 
-func INR(instrName string, ms *machineState, reg *uint8) {
+func INR(instrName string, ms *MachineState, reg *uint8) {
 	r := *reg
 	*reg = *reg + 1
 	ms.setZ(*reg)
@@ -187,7 +187,7 @@ func INR(instrName string, ms *machineState, reg *uint8) {
 	ms.pc += 1
 }
 
-func DCR(instrName string, ms *machineState, reg *uint8) {
+func DCR(instrName string, ms *MachineState, reg *uint8) {
 	r := *reg
 	*reg = *reg - 1
 	ms.setZ(*reg)
@@ -200,7 +200,7 @@ func DCR(instrName string, ms *machineState, reg *uint8) {
 	ms.pc += 1
 }
 
-func ADD(instrName string, ms *machineState, srcReg string, reg uint8) {
+func ADD(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	regA := ms.regA
 	ms.regA = regA + reg
 	ms.setZ(ms.regA)
@@ -213,7 +213,7 @@ func ADD(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func SUB(instrName string, ms *machineState, srcReg string, reg uint8) {
+func SUB(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	regA := ms.regA
 	ms.regA = regA - reg
 	ms.setZ(ms.regA)
@@ -226,7 +226,7 @@ func SUB(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func ADC(instrName string, ms *machineState, srcReg string, reg uint8) {
+func ADC(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	regA := ms.regA
 	ms.regA = regA + reg
 	var carry uint8 = 0
@@ -244,7 +244,7 @@ func ADC(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func SBB(instrName string, ms *machineState, srcReg string, reg uint8) {
+func SBB(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	regA := ms.regA
 	ms.regA = regA - reg
 	var carry uint8 = 0
@@ -262,7 +262,7 @@ func SBB(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func ANA(instrName string, ms *machineState, srcReg string, reg uint8) {
+func ANA(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	regA := ms.regA
 	ms.regA = regA & reg
 	ms.setZ(ms.regA)
@@ -275,7 +275,7 @@ func ANA(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func ORA(instrName string, ms *machineState, srcReg string, reg uint8) {
+func ORA(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	regA := ms.regA
 	ms.regA = regA | reg
 	ms.setZ(ms.regA)
@@ -288,7 +288,7 @@ func ORA(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func XRA(instrName string, ms *machineState, srcReg string, reg uint8) {
+func XRA(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	regA := ms.regA
 	ms.regA = regA ^ reg
 	ms.setZ(ms.regA)
@@ -301,7 +301,7 @@ func XRA(instrName string, ms *machineState, srcReg string, reg uint8) {
 	ms.pc += 1
 }
 
-func CMP(instrName string, ms *machineState, srcReg string, reg uint8) {
+func CMP(instrName string, ms *MachineState, srcReg string, reg uint8) {
 	result := ms.regA - reg
 	ms.setZ(result)
 	ms.setS(result)

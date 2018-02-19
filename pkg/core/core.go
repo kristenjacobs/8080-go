@@ -1,13 +1,28 @@
-package main
+package core
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
 	"time"
 )
 
 var instructionTime = 4 * time.Microsecond
 
-func start(ms *machineState, max int64) {
+var (
+	Trace *log.Logger
+)
+
+func InitTracing(enabled bool) {
+	traceStream := ioutil.Discard
+	if enabled {
+		traceStream = os.Stdout
+	}
+	Trace = log.New(traceStream, "TRACE: ", 0)
+}
+
+func start(ms *MachineState, max int64) {
 	ms.startTime = time.Now()
 	for ms.halt == false {
 		step(ms)
@@ -19,7 +34,7 @@ func start(ms *machineState, max int64) {
 	ms.endTime = time.Now()
 }
 
-func step(ms *machineState) {
+func step(ms *MachineState) {
 	start := time.Now()
 
 	ms.handleInterrupt()
@@ -34,12 +49,11 @@ func step(ms *machineState) {
 	}
 }
 
-func fetch(ms *machineState) uint8 {
+func fetch(ms *MachineState) uint8 {
 	return ms.readMem(ms.pc, 1)[0]
 }
 
-func decodeAndExecute(ms *machineState, opcode uint8) {
-	Debug.Printf("decodeAndExecute, opcode: 0x%02x\n", opcode)
+func decodeAndExecute(ms *MachineState, opcode uint8) {
 	switch opcode {
 	case 0x00:
 		instr_0x00_NOP(ms)
