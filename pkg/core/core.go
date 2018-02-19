@@ -22,13 +22,13 @@ func InitTracing(enabled bool) {
 	Trace = log.New(traceStream, "TRACE: ", 0)
 }
 
-func start(ms *MachineState, max int64) {
+func Run(ms *MachineState, max int64) {
 	ms.startTime = time.Now()
-	for ms.halt == false {
+	for ms.Halt == false {
 		step(ms)
 		ms.numInstructionsExecuted++
 		if max != 0 && ms.numInstructionsExecuted == max {
-			ms.halt = true
+			ms.Halt = true
 		}
 	}
 	ms.endTime = time.Now()
@@ -50,7 +50,7 @@ func step(ms *MachineState) {
 }
 
 func fetch(ms *MachineState) uint8 {
-	return ms.readMem(ms.pc, 1)[0]
+	return ms.ReadMem(ms.pc, 1)[0]
 }
 
 func decodeAndExecute(ms *MachineState, opcode uint8) {

@@ -12,8 +12,8 @@ func instr_0x00_NOP(ms *MachineState) {
 
 func instr_0x01_LXI_B_D16(ms *MachineState) {
 	// 3		B <- byte 3, C <- byte 2
-	byte2 := ms.readMem(ms.pc+1, 1)[0]
-	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte3 := ms.ReadMem(ms.pc+2, 1)[0]
 	ms.regB = byte3
 	ms.regC = byte2
 	Trace.Printf("0x%04x: 0x01_LXI_B_D16 0x%02x 0x%02x\n", ms.pc, ms.regB, ms.regC)
@@ -99,8 +99,8 @@ func instr_0x0f_RRC(ms *MachineState) {
 
 func instr_0x11_LXI_D_D16(ms *MachineState) {
 	// 3		D <- byte 3, E <- byte 2
-	byte2 := ms.readMem(ms.pc+1, 1)[0]
-	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte3 := ms.ReadMem(ms.pc+2, 1)[0]
 	ms.regD = byte3
 	ms.regE = byte2
 	Trace.Printf("0x%04x: 0x11_LXI_D_D16 0x%02x 0x%02x\n", ms.pc, ms.regD, ms.regE)
@@ -200,8 +200,8 @@ func instr_0x20_RIM(ms *MachineState) {
 
 func instr_0x21_LXI_H_D16(ms *MachineState) {
 	// 3		H <- byte 3, L <- byte 2
-	byte2 := ms.readMem(ms.pc+1, 1)[0]
-	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte3 := ms.ReadMem(ms.pc+2, 1)[0]
 	ms.regH = byte3
 	ms.regL = byte2
 	Trace.Printf("0x%04x: 0x21_LXI_H_D16 0x%02x 0x%02x\n", ms.pc, ms.regH, ms.regL)
@@ -210,11 +210,11 @@ func instr_0x21_LXI_H_D16(ms *MachineState) {
 
 func instr_0x22_SHLD_adr(ms *MachineState) {
 	// 3		(adr) <-L; (adr+1)<-H
-	byte2 := ms.readMem(ms.pc+1, 1)[0]
-	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte3 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte3) << 8) | uint16(byte2)
-	ms.writeMem(adr, []uint8{ms.regL}, 1)
-	ms.writeMem(adr+1, []uint8{ms.regH}, 1)
+	ms.WriteMem(adr, []uint8{ms.regL}, 1)
+	ms.WriteMem(adr+1, []uint8{ms.regH}, 1)
 	Trace.Printf("0x%04x: 0x22_SHLD_adr (0x%04x) = regL[0x%02x], (0x%04x) = regH[0x%02x]\n",
 		ms.pc, adr, ms.regL, adr+1, ms.regH)
 	ms.pc += 3
@@ -253,11 +253,11 @@ func instr_0x29_DAD_H(ms *MachineState) {
 
 func instr_0x2a_LHLD_adr(ms *MachineState) {
 	// 3		L <- (adr); H<-(adr+1)
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
-	ms.regL = ms.readMem(adr, 1)[0]
-	ms.regH = ms.readMem(adr+1, 1)[0]
+	ms.regL = ms.ReadMem(adr, 1)[0]
+	ms.regH = ms.ReadMem(adr+1, 1)[0]
 	Trace.Printf("0x%04x: 0x2a_LHLD_adr regL[0x%02x] = (0x%04x), regH[0x%02x] = (0x%04x)\n",
 		ms.pc, ms.regL, adr, ms.regH, adr+1)
 	ms.pc += 3
@@ -298,8 +298,8 @@ func instr_0x30_SIM(ms *MachineState) {
 
 func instr_0x31_LXI_SP_D16(ms *MachineState) {
 	// 3		SP.hi <- byte 3, SP.lo <- byte 2
-	byte2 := ms.readMem(ms.pc+1, 1)[0]
-	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte3 := ms.ReadMem(ms.pc+2, 1)[0]
 	var sp uint16 = (uint16(byte3) << 8) | uint16(byte2)
 	Trace.Printf("0x%04x: 0x31_LXI_SP_D16 0x%04x\n", ms.pc, sp)
 	ms.sp = sp
@@ -308,10 +308,10 @@ func instr_0x31_LXI_SP_D16(ms *MachineState) {
 
 func instr_0x32_STA_adr(ms *MachineState) {
 	// 3		(adr) <- A
-	byte2 := ms.readMem(ms.pc+1, 1)[0]
-	byte3 := ms.readMem(ms.pc+2, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte3 := ms.ReadMem(ms.pc+2, 1)[0]
 	var addr uint16 = (uint16(byte3) << 8) | uint16(byte2)
-	ms.writeMem(addr, []uint8{ms.regA}, 1)
+	ms.WriteMem(addr, []uint8{ms.regA}, 1)
 	Trace.Printf("0x%04x: 0x32_STA_adr (0x%04x) = regA[0x%02x]\n", ms.pc, addr, ms.regA)
 	ms.pc += 3
 }
@@ -355,9 +355,9 @@ func instr_0x35_DCR_M(ms *MachineState) {
 
 func instr_0x36_MVI_M_D8(ms *MachineState) {
 	// 2		(HL) <- byte 2
-	byte2 := ms.readMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+1, 1)[0]
 	addr := getPair(ms.regH, ms.regL)
-	ms.writeMem(addr, []uint8{byte2}, 1)
+	ms.WriteMem(addr, []uint8{byte2}, 1)
 	Trace.Printf("0x%04x: 0x36_MVI_M_D8 [0x%04x] 0x%02x\n", ms.pc, addr, byte2)
 	ms.pc += 2
 }
@@ -387,10 +387,10 @@ func instr_0x39_DAD_SP(ms *MachineState) {
 
 func instr_0x3a_LDA_adr(ms *MachineState) {
 	// 3		A <- (adr)
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
-	ms.regA = ms.readMem(adr, 1)[0]
+	ms.regA = ms.ReadMem(adr, 1)[0]
 	Trace.Printf("0x%04x: 0x3a_LDA_adr regA[0x%02x] (0x%04x)\n", ms.pc, ms.regA, adr)
 	ms.pc += 3
 }
@@ -697,7 +697,7 @@ func instr_0x75_MOV_M_L(ms *MachineState) {
 func instr_0x76_HLT(ms *MachineState) {
 	// 1		special
 	Trace.Printf("0x%04x: 0x76_HLT\n", ms.pc)
-	ms.halt = true
+	ms.Halt = true
 }
 
 func instr_0x77_MOV_M_A(ms *MachineState) {
@@ -1077,8 +1077,8 @@ func instr_0xc1_POP_B(ms *MachineState) {
 
 func instr_0xc2_JNZ_adr(ms *MachineState) {
 	// 3		if NZ, PC <- adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xc2_JNZ_adr 0x%04x, Z=%t\n", ms.pc, adr, ms.flagZ)
 	if !ms.flagZ {
@@ -1090,8 +1090,8 @@ func instr_0xc2_JNZ_adr(ms *MachineState) {
 
 func instr_0xc3_JMP_adr(ms *MachineState) {
 	// 3		PC <= adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xc3_JMP_adr 0x%04x\n", ms.pc, adr)
 	ms.pc = adr
@@ -1109,7 +1109,7 @@ func instr_0xc5_PUSH_B(ms *MachineState) {
 
 func instr_0xc6_ADI_D8(ms *MachineState) {
 	// 2	Z, S, P, CY, AC	A <- A + byte
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	regA := ms.regA
 	ms.regA = regA + data
 	ms.setZ(ms.regA)
@@ -1139,8 +1139,8 @@ func instr_0xc9_RET(ms *MachineState) {
 
 func instr_0xca_JZ_adr(ms *MachineState) {
 	// adr	3		if Z, PC <- adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xca_JZ_adr Z=%t 0x%04x\n", ms.pc, ms.flagZ, adr)
 	if ms.flagZ {
@@ -1162,7 +1162,7 @@ func instr_0xcd_CALL_adr(ms *MachineState) {
 
 func instr_0xce_ACI_D8(ms *MachineState) {
 	// 2	Z, S, P, CY, AC	A <- A + data + CY
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	regA := ms.regA
 	var carry uint8
 	if ms.flagCY {
@@ -1198,8 +1198,8 @@ func instr_0xd1_POP_D(ms *MachineState) {
 
 func instr_0xd2_JNC_adr(ms *MachineState) {
 	// 3		if NCY, PC<-adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xd2_JNC_adr 0x%04x, C=%t\n", ms.pc, adr, ms.flagCY)
 	if !ms.flagCY {
@@ -1211,7 +1211,7 @@ func instr_0xd2_JNC_adr(ms *MachineState) {
 
 func instr_0xd3_OUT_D8(ms *MachineState) {
 	// 2		special
-	port := ms.readMem(ms.pc+1, 1)[0]
+	port := ms.ReadMem(ms.pc+1, 1)[0]
 	ms.io.Write(port, ms.regA)
 	Trace.Printf("0x%04x: 0xd3_OUT_D8 %d regA[0x%02x]\n", ms.pc, port, ms.regA)
 	ms.pc += 2
@@ -1229,7 +1229,7 @@ func instr_0xd5_PUSH_D(ms *MachineState) {
 
 func instr_0xd6_SUI_D8(ms *MachineState) {
 	// D8	2	Z, S, P, CY, AC	A <- A - data
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	regA := ms.regA
 	ms.regA = regA - data
 	ms.setZ(ms.regA)
@@ -1254,8 +1254,8 @@ func instr_0xd8_RC(ms *MachineState) {
 
 func instr_0xda_JC_adr(ms *MachineState) {
 	// 3		if CY, PC<-adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xda_JC_adr 0x%04x, C=%t\n", ms.pc, adr, ms.flagCY)
 	if ms.flagCY {
@@ -1267,7 +1267,7 @@ func instr_0xda_JC_adr(ms *MachineState) {
 
 func instr_0xdb_IN_D8(ms *MachineState) {
 	// 2		special
-	port := ms.readMem(ms.pc+1, 1)[0]
+	port := ms.ReadMem(ms.pc+1, 1)[0]
 	ms.regA = ms.io.Read(port)
 	Trace.Printf("0x%04x: 0xdb_IN_D8 %d regA[0x%02x]\n", ms.pc, port, ms.regA)
 	ms.pc += 2
@@ -1280,7 +1280,7 @@ func instr_0xdc_CC_adr(ms *MachineState) {
 
 func instr_0xde_SBI_D8(ms *MachineState) {
 	// 2	Z, S, P, CY, AC	A <- A - data - CY
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	regA := ms.regA
 	var carry uint8
 	if ms.flagCY {
@@ -1316,8 +1316,8 @@ func instr_0xe1_POP_H(ms *MachineState) {
 
 func instr_0xe2_JPO_adr(ms *MachineState) {
 	// 3		if PO, PC <- adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xe2_JPO_adr 0x%04x, P=%t\n", ms.pc, adr, ms.flagP)
 	if !ms.flagP {
@@ -1329,13 +1329,13 @@ func instr_0xe2_JPO_adr(ms *MachineState) {
 
 func instr_0xe3_XTHL(ms *MachineState) {
 	// 1		L <-> (SP); H <-> (SP+1)
-	sp := ms.readMem(ms.sp, 2)
+	sp := ms.ReadMem(ms.sp, 2)
 	regL := ms.regL
 	regH := ms.regH
 	ms.regL = sp[0]
 	ms.regH = sp[1]
-	ms.writeMem(ms.sp, []uint8{regL}, 1)
-	ms.writeMem(ms.sp+1, []uint8{regH}, 1)
+	ms.WriteMem(ms.sp, []uint8{regL}, 1)
+	ms.WriteMem(ms.sp+1, []uint8{regH}, 1)
 	Trace.Printf("0x%04x: 0xe3_XTHL regL[0x%02x], regH[0x%02x], (0x%04x)=0x%02x, (0x%04x)=0x%02x\n",
 		ms.pc, ms.regL, ms.regH, ms.sp, regL, ms.sp+1, regH)
 	ms.pc += 1
@@ -1354,7 +1354,7 @@ func instr_0xe5_PUSH_H(ms *MachineState) {
 
 func instr_0xe6_ANI_D8(ms *MachineState) {
 	// 2	Z, S, P, CY, AC	A <- A & data
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	regA := ms.regA
 	ms.regA = regA & data
 	ms.setZ(ms.regA)
@@ -1386,8 +1386,8 @@ func instr_0xe9_PCHL(ms *MachineState) {
 
 func instr_0xea_JPE_adr(ms *MachineState) {
 	// 3		if PE, PC <- adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xea_JPE_adr 0x%04x, P=%t\n", ms.pc, adr, ms.flagP)
 	if ms.flagP {
@@ -1419,7 +1419,7 @@ func instr_0xec_CPE_adr(ms *MachineState) {
 
 func instr_0xee_XRI_D8(ms *MachineState) {
 	// 2	Z, S, P, CY, AC	A <- A ^ data
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	regA := ms.regA
 	ms.regA = regA ^ data
 	ms.setZ(ms.regA)
@@ -1444,8 +1444,8 @@ func instr_0xf0_RP(ms *MachineState) {
 
 func instr_0xf1_POP_PSW(ms *MachineState) {
 	// 1		flags <- (sp); A <- (sp+1); sp <- sp+2
-	ms.setFlags(ms.readMem(ms.sp, 1)[0])
-	ms.regA = ms.readMem(ms.sp+1, 1)[0]
+	ms.setFlags(ms.ReadMem(ms.sp, 1)[0])
+	ms.regA = ms.ReadMem(ms.sp+1, 1)[0]
 	newSp := ms.sp + 2
 	Trace.Printf("0x%04x: 0xf1_POP_PSW 0x%02x <- (0x%04x), 0x%02x <- (0x%04x), sp <- 0x%04x\n",
 		ms.pc, ms.getFlags(), ms.sp, ms.regA, ms.sp+1, newSp)
@@ -1455,8 +1455,8 @@ func instr_0xf1_POP_PSW(ms *MachineState) {
 
 func instr_0xf2_JP_adr(ms *MachineState) {
 	// 3		if P=1 PC <- adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xf2_JP_adr 0x%04x, S=%t\n", ms.pc, adr, ms.flagS)
 	if !ms.flagS {
@@ -1480,8 +1480,8 @@ func instr_0xf4_CP_adr(ms *MachineState) {
 
 func instr_0xf5_PUSH_PSW(ms *MachineState) {
 	// 1               (sp-2)<-flags; (sp-1)<-A; sp <- sp - 2
-	ms.writeMem(ms.sp-2, []uint8{ms.getFlags()}, 1)
-	ms.writeMem(ms.sp-1, []uint8{ms.regA}, 1)
+	ms.WriteMem(ms.sp-2, []uint8{ms.getFlags()}, 1)
+	ms.WriteMem(ms.sp-1, []uint8{ms.regA}, 1)
 	newSp := ms.sp - 2
 	Trace.Printf("0x%04x: 0xf5_PUSH_PSW (0x%04x) <- 0x%02x, (0x%04x) <- 0x%02x, sp <- 0x%04x\n",
 		ms.pc, ms.sp-2, ms.getFlags(), ms.sp-1, ms.regA, newSp)
@@ -1491,7 +1491,7 @@ func instr_0xf5_PUSH_PSW(ms *MachineState) {
 
 func instr_0xf6_ORI_D8(ms *MachineState) {
 	// 2	Z, S, P, CY, AC	A <- A | data
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	regA := ms.regA
 	ms.regA = regA | data
 	ms.setZ(ms.regA)
@@ -1524,8 +1524,8 @@ func instr_0xf9_SPHL(ms *MachineState) {
 
 func instr_0xfa_JM_adr(ms *MachineState) {
 	// 3		if M, PC <- adr
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	Trace.Printf("0x%04x: 0xfa_JM_adr 0x%04x, S=%t\n", ms.pc, adr, ms.flagS)
 	if ms.flagS {
@@ -1549,7 +1549,7 @@ func instr_0xfc_CM_adr(ms *MachineState) {
 
 func instr_0xfe_CPI_D8(ms *MachineState) {
 	// 2	Z, S, P, CY, AC	A - data
-	data := ms.readMem(ms.pc+1, 1)[0]
+	data := ms.ReadMem(ms.pc+1, 1)[0]
 	result := ms.regA - data
 	ms.setZ(result)
 	ms.setS(result)

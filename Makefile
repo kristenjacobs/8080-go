@@ -30,15 +30,15 @@ test:
 
 .PHONY: fmt
 fmt:
-	go fmt
+	go fmt ./cmd/... ./pkg/...
 
 .PHONY: vet
 vet:
-	go vet
+	go vet ./cmd/... ./pkg/...
 
 .PHONY: test-rom
 test-rom:
-	./test/bin2go.py > test_rom.go
+	./test/bin2go.py > ./pkg/test/roms.go
 
 .PHONY: cprof
 cprof:

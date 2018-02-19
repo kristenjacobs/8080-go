@@ -12,9 +12,9 @@ type memoryRegion struct {
 }
 
 type MachineState struct {
-	roms      []memoryRegion
-	ram       memoryRegion
-	rammirror memoryRegion
+	roms   []memoryRegion
+	ram    memoryRegion
+	mirror memoryRegion
 
 	regA uint8
 	regB uint8
@@ -33,11 +33,12 @@ type MachineState struct {
 	pc uint16
 	sp uint16
 
-	halt              bool
 	interruptsEnabled bool
 	interrupt         bool
 	interruptAddr     uint16
 	io                IO
+
+	Halt bool
 
 	startTime               time.Time
 	endTime                 time.Time
@@ -45,27 +46,40 @@ type MachineState struct {
 	coreSleepNS             int64
 }
 
-func NewMachineState(io IO) *MachineState {
+func NewMachineState(io IO, initialPC uint16, initialSP uint16) *MachineState {
 	ms := MachineState{}
 	ms.roms = []memoryRegion{}
 	ms.initialiseFlags()
-	ms.pc = ROM_H_BASE
-	ms.sp = RAM_BASE
-	ms.halt = false
+	ms.pc = initialPC
+	ms.sp = initialSP
+	ms.Halt = false
 	ms.io = io
 	return &ms
 }
 
-func newTestMachineState() *MachineState {
-	ms := MachineState{}
-	ms.roms = []memoryRegion{}
-	ms.initialiseFlags()
-	ms.pc = TEST_ROM_BASE
-	ms.sp = RAM_BASE
-	ms.halt = false
-	ms.io = nil
-	return &ms
+func (ms *MachineState) DumpStats() {
+	fmt.Printf("========== CORE STATS ==========\n")
+	simulationTimeNS := int64(ms.endTime.Sub(ms.startTime))
+	fmt.Printf("Simulation time: %.3fms\n", float64(simulationTimeNS/1000000.0))
+	fmt.Printf("Total core sleep time: %.3fms\n", float64(ms.coreSleepNS/1000000.0))
+	fmt.Printf("Instructions executed: %d\n", ms.numInstructionsExecuted)
+	if ms.numInstructionsExecuted > 0 {
+		fmt.Printf("Average time per instruction: %.3fus\n", float64(simulationTimeNS/ms.numInstructionsExecuted)/1000.0)
+		fmt.Printf("Average sleep time per instruction: %.3fus\n", float64(ms.coreSleepNS/ms.numInstructionsExecuted)/1000.0)
+	}
+	fmt.Printf("\n")
 }
+
+//func newTestMachineState() *MachineState {
+//	ms := MachineState{}
+//	ms.roms = []memoryRegion{}
+//	ms.initialiseFlags()
+//	ms.pc = TEST_ROM_BASE
+//	ms.sp = RAM_BASE
+//	ms.Halt = false
+//	ms.io = nil
+//	return &ms
+//}
 
 //func (ms *MachineState) initialiseTestRom() {
 //	ms.roms = []memoryRegion{
@@ -73,9 +87,9 @@ func newTestMachineState() *MachineState {
 //	}
 //
 //	// Skips the DAA test
-//	//	ms.writeMem(0x59c, []uint8{0xc3}, 1) // JMP
-//	//	ms.writeMem(0x59d, []uint8{0xc2}, 1)
-//	//	ms.writeMem(0x59e, []uint8{0x05}, 1)
+//	//	ms.WriteMem(0x59c, []uint8{0xc3}, 1) // JMP
+//	//	ms.WriteMem(0x59d, []uint8{0xc2}, 1)
+//	//	ms.WriteMem(0x59e, []uint8{0x05}, 1)
 //}
 
 func (ms *MachineState) initialiseFlags() {
@@ -92,17 +106,17 @@ func (ms *MachineState) InitialiseRam(base uint16, size uint16) {
 	ms.ram.bytes = make([]uint8, size)
 }
 
-func (ms *MachineState) InitialiseRamMirror(base uint16) {
-	ms.rammirror.base = base
-	ms.rammirror.size = ms.ram.size
-	ms.rammirror.bytes = ms.ram.bytes
+func (ms *MachineState) InitialiseMirror(base uint16) {
+	ms.mirror.base = base
+	ms.mirror.size = ms.ram.size
+	ms.mirror.bytes = ms.ram.bytes
 }
 
 func (ms *MachineState) LoadRom(base uint16, size uint16, bytes []uint8) {
 	ms.roms = append(ms.roms, memoryRegion{base, size, newRomBytes(size, bytes)})
 }
 
-func (ms *MachineState) readMem(addr uint16, numBytes uint16) []uint8 {
+func (ms *MachineState) ReadMem(addr uint16, numBytes uint16) []uint8 {
 	for _, rom := range ms.roms {
 		if inRegion(addr, numBytes, &rom) {
 			return read(addr, numBytes, &rom)
@@ -111,13 +125,13 @@ func (ms *MachineState) readMem(addr uint16, numBytes uint16) []uint8 {
 	if inRegion(addr, numBytes, &ms.ram) {
 		return read(addr, numBytes, &ms.ram)
 	}
-	if inRegion(addr, numBytes, &ms.rammirror) {
-		return read(addr, numBytes, &ms.rammirror)
+	if inRegion(addr, numBytes, &ms.mirror) {
+		return read(addr, numBytes, &ms.mirror)
 	}
 	panic(fmt.Sprintf("Cannot read memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
 }
 
-func (ms *MachineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
+func (ms *MachineState) WriteMem(addr uint16, bytes []uint8, numBytes uint16) {
 	for _, rom := range ms.roms {
 		if inRegion(addr, numBytes, &rom) {
 			write(addr, bytes, numBytes, &rom)
@@ -128,8 +142,8 @@ func (ms *MachineState) writeMem(addr uint16, bytes []uint8, numBytes uint16) {
 		write(addr, bytes, numBytes, &ms.ram)
 		return
 	}
-	if inRegion(addr, numBytes, &ms.rammirror) {
-		write(addr, bytes, numBytes, &ms.rammirror)
+	if inRegion(addr, numBytes, &ms.mirror) {
+		write(addr, bytes, numBytes, &ms.mirror)
 		return
 	}
 	panic(fmt.Sprintf("Cannot write memory, addr: 0x%04x, numBytes: %d", addr, numBytes))
@@ -183,11 +197,11 @@ func (ms *MachineState) setAC(result uint8) {
 }
 
 func (ms *MachineState) getM() uint8 {
-	return ms.readMem(getPair(ms.regH, ms.regL), 1)[0]
+	return ms.ReadMem(getPair(ms.regH, ms.regL), 1)[0]
 }
 
 func (ms *MachineState) setM(val uint8) {
-	ms.writeMem(getPair(ms.regH, ms.regL), []uint8{val}, 1)
+	ms.WriteMem(getPair(ms.regH, ms.regL), []uint8{val}, 1)
 }
 
 func (ms *MachineState) getFlags() uint8 {
@@ -219,7 +233,7 @@ func (ms *MachineState) setFlags(val uint8) {
 	ms.flagCY = (val & 0x1) == 0x1
 }
 
-func (ms *MachineState) setInterrupt(addr uint16) {
+func (ms *MachineState) SetInterrupt(addr uint16) {
 	ms.interrupt = true
 	ms.interruptAddr = addr
 }
@@ -229,7 +243,7 @@ func (ms *MachineState) handleInterrupt() bool {
 		nextPC := ms.pc
 		pcHi := uint8(nextPC >> 8)
 		pcLo := uint8(nextPC & 0xFF)
-		ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
+		ms.WriteMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
 		ms.sp = ms.sp - 2
 		ms.pc = ms.interruptAddr
 		Trace.Printf("********** INTERRUPT: addr: 0x%04x **********\n", ms.interruptAddr)

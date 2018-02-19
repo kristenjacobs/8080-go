@@ -7,7 +7,7 @@ import (
 )
 
 func MVI(instrName string, ms *MachineState, reg *uint8) {
-	*reg = ms.readMem(ms.pc+1, 1)[0]
+	*reg = ms.ReadMem(ms.pc+1, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x\n", ms.pc, instrName, *reg)
 	ms.pc += 2
 }
@@ -20,28 +20,28 @@ func MOV_REG_REG(instrName string, ms *MachineState, dst *uint8, src *uint8) {
 
 func MOV_REG_MEM(instrName string, ms *MachineState, dst *uint8) {
 	addr := getPair(ms.regH, ms.regL)
-	*dst = ms.readMem(addr, 1)[0]
+	*dst = ms.ReadMem(addr, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x [0x%04x]\n", ms.pc, instrName, *dst, addr)
 	ms.pc += 1
 }
 
 func MOV_MEM_REG(instrName string, ms *MachineState, srcReg *uint8) {
 	addr := getPair(ms.regH, ms.regL)
-	ms.writeMem(addr, []uint8{*srcReg}, 1)
+	ms.WriteMem(addr, []uint8{*srcReg}, 1)
 	Trace.Printf("0x%04x: %s [0x%04x] 0x%02x\n", ms.pc, instrName, addr, *srcReg)
 	ms.pc += 1
 }
 
 func LDAX(instrName string, ms *MachineState, adrRegHi *uint8, adrRegLo *uint8) {
 	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
-	ms.regA = ms.readMem(adr, 1)[0]
+	ms.regA = ms.ReadMem(adr, 1)[0]
 	Trace.Printf("0x%04x: %s 0x%02x 0x%04x\n", ms.pc, instrName, ms.regA, adr)
 	ms.pc += 1
 }
 
 func STAX(instrName string, ms *MachineState, adrRegHi *uint8, adrRegLo *uint8) {
 	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
-	ms.writeMem(adr, []uint8{ms.regA}, 1)
+	ms.WriteMem(adr, []uint8{ms.regA}, 1)
 	Trace.Printf("0x%04x: %s (0x%04x) = regA[0x%02x]\n", ms.pc, instrName, adr, ms.regA)
 	ms.pc += 1
 }
@@ -63,8 +63,8 @@ func DCX(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 }
 
 func PUSH(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
-	ms.writeMem(ms.sp-2, []uint8{*regHi}, 1)
-	ms.writeMem(ms.sp-1, []uint8{*regLo}, 1)
+	ms.WriteMem(ms.sp-2, []uint8{*regHi}, 1)
+	ms.WriteMem(ms.sp-1, []uint8{*regLo}, 1)
 	newSp := ms.sp - 2
 	Trace.Printf("0x%04x: %s (0x%04x) <- 0x%02x, (0x%04x) <- 0x%02x, sp <- 0x%04x\n",
 		ms.pc, instrName, ms.sp-2, *regHi, ms.sp-1, *regLo, newSp)
@@ -73,8 +73,8 @@ func PUSH(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 }
 
 func POP(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
-	*regHi = ms.readMem(ms.sp, 1)[0]
-	*regLo = ms.readMem(ms.sp+1, 1)[0]
+	*regHi = ms.ReadMem(ms.sp, 1)[0]
+	*regLo = ms.ReadMem(ms.sp+1, 1)[0]
 	newSp := ms.sp + 2
 	Trace.Printf("0x%04x: %s 0x%02x <- (0x%04x), 0x%02x <- (0x%04x), sp <- 0x%04x\n",
 		ms.pc, instrName, *regHi, ms.sp, *regLo, ms.sp+1, newSp)
@@ -100,15 +100,15 @@ func RST(instrName string, ms *MachineState, addr uint16) {
 	nextPC := ms.pc + 1
 	pcHi := uint8(nextPC >> 8)
 	pcLo := uint8(nextPC & 0xFF)
-	ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
+	ms.WriteMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
 	Trace.Printf("0x%04x: %s 0x%04x\n", ms.pc, instrName, addr)
 	ms.sp = ms.sp - 2
 	ms.pc = addr
 }
 
 func CALL(instrName string, ms *MachineState, condFlagName string, condFlagVal bool) {
-	byte1 := ms.readMem(ms.pc+1, 1)[0]
-	byte2 := ms.readMem(ms.pc+2, 1)[0]
+	byte1 := ms.ReadMem(ms.pc+1, 1)[0]
+	byte2 := ms.ReadMem(ms.pc+2, 1)[0]
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	PC := ms.pc
 	nextPC := ms.pc + 3
@@ -122,7 +122,7 @@ func CALL(instrName string, ms *MachineState, condFlagName string, condFlagVal b
 	} else if isSyscallAddress(adr) {
 		offset := getPair(ms.regD, ms.regE)
 		for i := 0; ; i++ {
-			char := ms.readMem(offset+3+uint16(i), 1)[0]
+			char := ms.ReadMem(offset+3+uint16(i), 1)[0]
 			if char == '$' {
 				message += "\n"
 				break
@@ -135,7 +135,7 @@ func CALL(instrName string, ms *MachineState, condFlagName string, condFlagVal b
 	} else {
 		pcHi := uint8(nextPC >> 8)
 		pcLo := uint8(nextPC & 0xFF)
-		ms.writeMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
+		ms.WriteMem(ms.sp-2, []uint8{pcLo, pcHi}, 2)
 		ms.sp = ms.sp - 2
 		ms.pc = adr
 		syscall = ""
@@ -149,14 +149,14 @@ func CALL(instrName string, ms *MachineState, condFlagName string, condFlagVal b
 	if message != "" {
 		fmt.Printf("%s", message)
 		if strings.Contains(message, "CPU IS OPERATIONAL") {
-			ms.halt = true
+			ms.Halt = true
 		}
 	}
 }
 
 func RET(instrName string, ms *MachineState, condFlagName string, condFlagVal bool) {
 	currentPc := ms.pc
-	bytes := ms.readMem(ms.sp, 2)
+	bytes := ms.ReadMem(ms.sp, 2)
 	pcLo := bytes[0]
 	pcHi := bytes[1]
 	newSp := ms.sp + 2
