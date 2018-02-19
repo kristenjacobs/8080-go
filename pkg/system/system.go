@@ -238,6 +238,10 @@ func (system *System) drawScreen(imd *imdraw.IMDraw, ms *core.MachineState, from
 }
 
 func (system *System) run(ms *core.MachineState) {
+	// Configures the core ram.
+	ms.InitialiseRam(RAM_BASE, RAM_SIZE)
+	ms.InitialiseRamMirror(RAM_MIRROR)
+
 	// Loads the space invaders roms.
 	ms.LoadRom(ROM_G_BASE, ROM_SIZE, InvadersG)
 	ms.LoadRom(ROM_H_BASE, ROM_SIZE, InvadersH)

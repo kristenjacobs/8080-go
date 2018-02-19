@@ -11,11 +11,6 @@ type memoryRegion struct {
 	bytes []uint8
 }
 
-type IO interface {
-	Read(port uint8) uint8
-	Write(port uint8, value uint8)
-}
-
 type MachineState struct {
 	roms      []memoryRegion
 	ram       memoryRegion
@@ -52,8 +47,7 @@ type MachineState struct {
 
 func NewMachineState(io IO) *MachineState {
 	ms := MachineState{}
-	ms.initialiseRam()
-	ms.initialiseRoms()
+	ms.roms = []memoryRegion{}
 	ms.initialiseFlags()
 	ms.pc = ROM_H_BASE
 	ms.sp = RAM_BASE
@@ -64,8 +58,7 @@ func NewMachineState(io IO) *MachineState {
 
 func newTestMachineState() *MachineState {
 	ms := MachineState{}
-	ms.initialiseRam()
-	ms.initialiseTestRom()
+	ms.roms = []memoryRegion{}
 	ms.initialiseFlags()
 	ms.pc = TEST_ROM_BASE
 	ms.sp = RAM_BASE
@@ -74,30 +67,16 @@ func newTestMachineState() *MachineState {
 	return &ms
 }
 
-func (ms *MachineState) initialiseRoms() {
-	ms.roms = []memoryRegion{}
-}
-
-func (ms *MachineState) initialiseTestRom() {
-	ms.roms = []memoryRegion{
-	//	memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, newRomBytes(TEST_ROM_SIZE, TestRom)},
-	}
-
-	// Skips the DAA test
-	//	ms.writeMem(0x59c, []uint8{0xc3}, 1) // JMP
-	//	ms.writeMem(0x59d, []uint8{0xc2}, 1)
-	//	ms.writeMem(0x59e, []uint8{0x05}, 1)
-}
-
-func (ms *MachineState) initialiseRam() {
-	ms.ram.size = RAM_SIZE
-	ms.ram.base = RAM_BASE
-	ms.ram.bytes = make([]uint8, RAM_SIZE)
-
-	ms.rammirror.size = RAM_SIZE
-	ms.rammirror.base = RAM_MIRROR
-	ms.rammirror.bytes = ms.ram.bytes
-}
+//func (ms *MachineState) initialiseTestRom() {
+//	ms.roms = []memoryRegion{
+//	//	memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, newRomBytes(TEST_ROM_SIZE, TestRom)},
+//	}
+//
+//	// Skips the DAA test
+//	//	ms.writeMem(0x59c, []uint8{0xc3}, 1) // JMP
+//	//	ms.writeMem(0x59d, []uint8{0xc2}, 1)
+//	//	ms.writeMem(0x59e, []uint8{0x05}, 1)
+//}
 
 func (ms *MachineState) initialiseFlags() {
 	ms.flagZ = false
@@ -107,8 +86,20 @@ func (ms *MachineState) initialiseFlags() {
 	ms.flagAC = false
 }
 
+func (ms *MachineState) InitialiseRam(base uint16, size uint16) {
+	ms.ram.base = base
+	ms.ram.size = size
+	ms.ram.bytes = make([]uint8, size)
+}
+
+func (ms *MachineState) InitialiseRamMirror(base uint16) {
+	ms.rammirror.base = base
+	ms.rammirror.size = ms.ram.size
+	ms.rammirror.bytes = ms.ram.bytes
+}
+
 func (ms *MachineState) LoadRom(base uint16, size uint16, bytes []uint8) {
-	ms.roms = append(ms.roms, memoryRegion{size, base, newRomBytes(size, bytes)})
+	ms.roms = append(ms.roms, memoryRegion{base, size, newRomBytes(size, bytes)})
 }
 
 func (ms *MachineState) readMem(addr uint16, numBytes uint16) []uint8 {
