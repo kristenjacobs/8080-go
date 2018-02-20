@@ -36,7 +36,7 @@ func main() {
 
 	sys := system.NewSystem()
 	pixelgl.Run(func() {
-		sys.Run()
+		sys.Run(*max)
 	})
 	if *stats {
 		sys.DumpStats()

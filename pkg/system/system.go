@@ -52,8 +52,29 @@ func NewSystem() *System {
 	}
 }
 
+func (s *System) Run(max int64) {
+	s.ms = core.NewMachineState(s, ROM_H_BASE, RAM_BASE)
+
+	// Configures the core ram.
+	s.ms.InitialiseRam(RAM_BASE, RAM_SIZE)
+	s.ms.InitialiseMirror(RAM_MIRROR)
+
+	// Loads the space invaders roms.
+	s.ms.LoadRom(ROM_G_BASE, ROM_SIZE, InvadersG)
+	s.ms.LoadRom(ROM_H_BASE, ROM_SIZE, InvadersH)
+	s.ms.LoadRom(ROM_E_BASE, ROM_SIZE, InvadersE)
+	s.ms.LoadRom(ROM_F_BASE, ROM_SIZE, InvadersF)
+
+	// Starts the 8080 core running.
+	go func() {
+		core.Run(s.ms, max)
+	}()
+
+	s.handleScreen()
+}
+
 func (s *System) DumpStats() {
-	ms.DumpStats()
+	s.ms.DumpStats()
 	fmt.Printf("========== SYSTEM STATS ==========\n")
 	fmt.Printf("Total screen refresh time: %.3fms\n", float64(s.screenRefreshNS/1000000.0))
 	fmt.Printf("Total screen refresh sleep time: %.3fms\n", float64(s.screenRefreshSleepNS/1000000.0))
@@ -221,13 +242,66 @@ func (s *System) Write(port uint8, value uint8) {
 //	}()
 //}
 
-func (s *System) drawPixel(imd *imdraw.IMDraw, x int, y int) {
-	x1 := float64(x * spriteSizePixels)
-	y1 := float64(y * spriteSizePixels)
-	x2 := x1 + spriteSizePixels
-	y2 := y1 + spriteSizePixels
-	imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
-	imd.Rectangle(0)
+func (s *System) handleScreen() {
+	cfg := pixelgl.WindowConfig{
+		Title:  "8080 Space Invaders",
+		Bounds: pixel.R(0, 0, windowWidthPixels, windowHeightPixels),
+	}
+	var err error
+	s.window, err = pixelgl.NewWindow(cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	// Graphics handling loop.
+	imd := imdraw.New(nil)
+	imd.Color = colornames.White
+
+	period := 8 * time.Millisecond
+
+	for !s.window.Closed() && s.ms.Halt == false {
+		start := time.Now()
+
+		s.window.Clear(colornames.Black)
+		imd.Clear()
+
+		var byteIndex uint16 = videoRamAddr
+
+		// Draw the left half of the screen.
+		byteIndex = s.drawScreen(imd, s.ms, 0, numX/2, byteIndex)
+
+		// Middle of frame interrupt (RST_1).
+		s.ms.SetInterrupt(0x08)
+
+		elapsed := time.Now().Sub(start)
+		if elapsed < period {
+			sleep := period - elapsed
+			s.screenRefreshSleepNS += int64(sleep)
+			time.Sleep(sleep)
+		}
+		s.screenRefreshNS += int64(elapsed)
+
+		start = time.Now()
+
+		// Draw the right half of the screen.
+		byteIndex = s.drawScreen(imd, s.ms, numX/2, numX, byteIndex)
+
+		// End of frame interrupt (RST_2).
+		s.ms.SetInterrupt(0x10)
+
+		imd.Draw(s.window)
+		s.window.Update()
+
+		elapsed = time.Now().Sub(start)
+		if elapsed < period {
+			sleep := period - elapsed
+			s.screenRefreshSleepNS += int64(sleep)
+			time.Sleep(sleep)
+		}
+		s.screenRefreshNS += int64(elapsed)
+
+		s.numScreenRefreshes++
+	}
 }
 
 func (s *System) drawScreen(imd *imdraw.IMDraw, ms *core.MachineState, fromX int, toX int, byteIndex uint16) uint16 {
@@ -251,81 +325,11 @@ func (s *System) drawScreen(imd *imdraw.IMDraw, ms *core.MachineState, fromX int
 	return byteIndex
 }
 
-func (s *System) Run() {
-	ms := core.NewMachineState(sys, system.ROM_H_BASE, system.RAM_BASE)
-
-	// Configures the core ram.
-	ms.InitialiseRam(RAM_BASE, RAM_SIZE)
-	ms.InitialiseMirror(RAM_MIRROR)
-
-	// Loads the space invaders roms.
-	ms.LoadRom(ROM_G_BASE, ROM_SIZE, InvadersG)
-	ms.LoadRom(ROM_H_BASE, ROM_SIZE, InvadersH)
-	ms.LoadRom(ROM_E_BASE, ROM_SIZE, InvadersE)
-	ms.LoadRom(ROM_F_BASE, ROM_SIZE, InvadersF)
-
-	go func() {
-		core.Run(ms, *max)
-	}()
-
-	cfg := pixelgl.WindowConfig{
-		Title:  "8080 Space Invaders",
-		Bounds: pixel.R(0, 0, windowWidthPixels, windowHeightPixels),
-	}
-	var err error
-	system.window, err = pixelgl.NewWindow(cfg)
-	if err != nil {
-		panic(err)
-	}
-
-	// Graphics handling loop.
-	imd := imdraw.New(nil)
-	imd.Color = colornames.White
-
-	period := 8 * time.Millisecond
-
-	for !system.window.Closed() && ms.Halt == false {
-		start := time.Now()
-
-		system.window.Clear(colornames.Black)
-		imd.Clear()
-
-		var byteIndex uint16 = videoRamAddr
-
-		// Draw the left half of the screen.
-		byteIndex = system.drawScreen(imd, ms, 0, numX/2, byteIndex)
-
-		// Middle of frame interrupt (RST_1).
-		ms.SetInterrupt(0x08)
-
-		elapsed := time.Now().Sub(start)
-		if elapsed < period {
-			sleep := period - elapsed
-			system.screenRefreshSleepNS += int64(sleep)
-			time.Sleep(sleep)
-		}
-		system.screenRefreshNS += int64(elapsed)
-
-		start = time.Now()
-
-		// Draw the right half of the screen.
-		byteIndex = system.drawScreen(imd, ms, numX/2, numX, byteIndex)
-
-		// End of frame interrupt (RST_2).
-		ms.SetInterrupt(0x10)
-
-		imd.Draw(system.window)
-		system.window.Update()
-
-		elapsed = time.Now().Sub(start)
-		if elapsed < period {
-			sleep := period - elapsed
-			system.screenRefreshSleepNS += int64(sleep)
-			time.Sleep(sleep)
-		}
-		system.screenRefreshNS += int64(elapsed)
-
-		system.numScreenRefreshes++
-	}
-	ms.Halt = true
+func (s *System) drawPixel(imd *imdraw.IMDraw, x int, y int) {
+	x1 := float64(x * spriteSizePixels)
+	y1 := float64(y * spriteSizePixels)
+	x2 := x1 + spriteSizePixels
+	y2 := y1 + spriteSizePixels
+	imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
+	imd.Rectangle(0)
 }
