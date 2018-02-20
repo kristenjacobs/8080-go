@@ -2,8 +2,14 @@ package core
 
 import "testing"
 
+func newTestMachineState() *MachineState {
+	ms := NewMachineState(nil, RAM_BASE, RAM_BASE)
+	ms.InitialiseRam(RAM_BASE, RAM_SIZE)
+	return ms
+}
+
 func TestSetZ(t *testing.T) {
-	ms := newMachineState(nil)
+	ms := newTestMachineState()
 	ms.setZ(0x1)
 	if ms.flagZ {
 		t.Errorf("expected z=false, got z=true")
@@ -15,7 +21,7 @@ func TestSetZ(t *testing.T) {
 }
 
 func TestSetS(t *testing.T) {
-	ms := newMachineState(nil)
+	ms := newTestMachineState()
 	ms.setS(0x1)
 	if ms.flagS {
 		t.Errorf("expected s=false, got s=true")
@@ -27,7 +33,7 @@ func TestSetS(t *testing.T) {
 }
 
 func TestSetP(t *testing.T) {
-	ms := newMachineState(nil)
+	ms := newTestMachineState()
 	ms.setP(0xF)
 	if !ms.flagP {
 		t.Errorf("expected p=true, got p=false")
