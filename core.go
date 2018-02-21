@@ -29,6 +29,7 @@ func step(ms *machineState) {
 	elapsed := time.Now().Sub(start)
 	if elapsed < instructionTime {
 		sleep := instructionTime - elapsed
+		ms.coreSleepNS += int64(sleep)
 		time.Sleep(sleep)
 	}
 }

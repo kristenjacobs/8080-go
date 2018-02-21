@@ -28,10 +28,12 @@ func initLogging(
 func dumpStats(ms *machineState, system *System) {
 	fmt.Printf("========== CORE STATS ==========\n")
 	simulationTimeNS := int64(ms.endTime.Sub(ms.startTime))
-	fmt.Printf("Simulation time: %.3fms\n", float64(simulationTimeNS/1000000.0))
+	fmt.Printf("Total simulation time: %.3fms\n", float64(simulationTimeNS/1000000.0))
+	fmt.Printf("Total core sleep time: %.3fms\n", float64(ms.coreSleepNS/1000000.0))
 	fmt.Printf("Instructions executed: %d\n", ms.numInstructionsExecuted)
 	if ms.numInstructionsExecuted > 0 {
 		fmt.Printf("Average time per instruction: %.3fus\n", float64(simulationTimeNS/ms.numInstructionsExecuted)/1000.0)
+		fmt.Printf("Average sleep time per instruction: %.3fus\n", float64(ms.coreSleepNS/ms.numInstructionsExecuted)/1000.0)
 	}
 	fmt.Printf("\n")
 	if system != nil {

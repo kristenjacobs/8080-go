@@ -60,6 +60,7 @@ type machineState struct {
 	startTime               time.Time
 	endTime                 time.Time
 	numInstructionsExecuted int64
+	coreSleepNS             int64
 }
 
 func newMachineState(io IO) *machineState {
