@@ -43,7 +43,6 @@ type MachineState struct {
 	startTime               time.Time
 	endTime                 time.Time
 	numInstructionsExecuted int64
-	coreSleepNS             int64
 }
 
 func NewMachineState(io IO, initialPC uint16, initialSP uint16) *MachineState {
@@ -61,11 +60,9 @@ func (ms *MachineState) DumpStats() {
 	fmt.Printf("========== CORE STATS ==========\n")
 	simulationTimeNS := int64(ms.endTime.Sub(ms.startTime))
 	fmt.Printf("Simulation time: %.3fms\n", float64(simulationTimeNS/1000000.0))
-	fmt.Printf("Total core sleep time: %.3fms\n", float64(ms.coreSleepNS/1000000.0))
 	fmt.Printf("Instructions executed: %d\n", ms.numInstructionsExecuted)
 	if ms.numInstructionsExecuted > 0 {
 		fmt.Printf("Average time per instruction: %.3fus\n", float64(simulationTimeNS/ms.numInstructionsExecuted)/1000.0)
-		fmt.Printf("Average sleep time per instruction: %.3fus\n", float64(ms.coreSleepNS/ms.numInstructionsExecuted)/1000.0)
 	}
 	fmt.Printf("\n")
 }

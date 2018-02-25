@@ -35,18 +35,9 @@ func Run(ms *MachineState, max int64) {
 }
 
 func step(ms *MachineState) {
-	start := time.Now()
-
 	ms.handleInterrupt()
 	opcode := fetch(ms)
 	decodeAndExecute(ms, opcode)
-
-	elapsed := time.Now().Sub(start)
-	if elapsed < instructionTime {
-		sleep := instructionTime - elapsed
-		ms.coreSleepNS += int64(sleep)
-		time.Sleep(sleep)
-	}
 }
 
 func fetch(ms *MachineState) uint8 {
