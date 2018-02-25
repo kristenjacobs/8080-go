@@ -34,12 +34,12 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	sys := system.NewSystem()
+	s := system.NewSystem()
 	pixelgl.Run(func() {
-		sys.Run(*max)
+		s.Run(*max)
 	})
 	if *stats {
-		sys.DumpStats()
+		s.DumpStats()
 	}
 
 	if *memprofile != "" {

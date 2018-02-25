@@ -14,10 +14,9 @@ func main() {
 
 	core.InitTracing(*trace)
 
-	ms := core.NewMachineState(nil, test.TEST_ROM_BASE, test.RAM_BASE)
-	core.Run(ms, 0)
-
+	s := test.NewSystem()
+	s.Run(0)
 	if *stats {
-		ms.DumpStats()
+		s.DumpStats()
 	}
 }
