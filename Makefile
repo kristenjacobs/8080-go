@@ -18,7 +18,7 @@ clean:
 
 .PHONY: run
 run:
-	$(BINARY) -t 2>&1 | tee $(TRACE)
+	$(BINARY)
 
 .PHONY: run-test
 run-test:
