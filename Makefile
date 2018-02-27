@@ -2,7 +2,6 @@ BINARY=8080-space-invaders
 TEST_BINARY=8080-test
 CPUPROF=8080-go.cprof
 MEMPROF=8080-go.mprof
-TRACE=8080-go.trace
 
 all: build fmt vet
 
@@ -14,7 +13,6 @@ build:
 clean:
 	rm -rf $(CPUPROF)
 	rm -rf $(MEMPROF)
-	rm -rf $(TRACE)
 
 .PHONY: run
 run:
@@ -22,7 +20,7 @@ run:
 
 .PHONY: run-test
 run-test:
-	$(TEST_BINARY) -test -t -s 2>&1 | tee $(TRACE)
+	$(TEST_BINARY) -t -s
 
 .PHONY: test
 test:

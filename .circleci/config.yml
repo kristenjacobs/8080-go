@@ -1,17 +1,23 @@
 version: 2
 
-dependencies:
-  pre:
-    - sudo apt-get update; sudo apt-get install -y libgl1-mesa-dev xorg-dev
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.8
+      - image: circleci/golang:1.9
       
     working_directory: /go/src/github.com/kristenjacobs/8080-go
     steps:
       - checkout
-      - run: make
-      - run: make test
-      - run: make run-test
+      - run:
+          name: Install dependencies
+          command: sudo apt-get update ; sudo apt-get install -y libgl1-mesa-dev xorg-dev
+      - run: 
+          name: Build
+          command: make
+      - run: 
+          name: Unit Test
+          command: make test
+      - run: 
+          name: Core Test
+          command: make run-test
 
