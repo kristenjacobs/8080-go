@@ -2,8 +2,7 @@ package system
 
 import (
 	"fmt"
-	//"image/color"
-	//"os/exec"
+	"os/exec"
 	"time"
 
 	"github.com/kristenjacobs/8080-go/pkg/core"
@@ -27,12 +26,13 @@ const (
 	TEST_ROM_BASE uint16 = 0x100
 	TEST_ROM_SIZE uint16 = 0x1000
 
-	spriteSizePixels          = 3
-	numX                      = 224
-	numY                      = 256
-	windowWidthPixels         = numX * spriteSizePixels
-	windowHeightPixels        = numY * spriteSizePixels
-	videoRamAddr       uint16 = 0x2400
+	spriteSizePixels           = 3
+	numX                       = 224
+	numY                       = 256
+	windowWidthPixels          = numX * spriteSizePixels
+	windowHeightPixels         = numY * spriteSizePixels
+	videoRamAddr        uint16 = 0x2400
+	maxConcurrentSounds        = 100
 )
 
 type System struct {
@@ -43,12 +43,16 @@ type System struct {
 	numScreenRefreshes   int64
 	screenRefreshNS      int64
 	screenRefreshSleepNS int64
+	soundEffects1        uint8
+	soundEffects2        uint8
 }
 
 func NewSystem() *System {
 	return &System{
 		numScreenRefreshes: 0,
 		screenRefreshNS:    0,
+		soundEffects1:      0,
+		soundEffects2:      0,
 	}
 }
 
@@ -113,7 +117,7 @@ func (s *System) Read(port uint8) uint8 {
 			value |= (0x1 << 6)
 		}
 		// bit 7 ? tied to demux port 7 ?
-		//fmt.Printf("Unimplemented read from port: %d\n", port)
+		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 1:
 		// bit 0 = CREDIT (1 if deposit)
@@ -146,7 +150,6 @@ func (s *System) Read(port uint8) uint8 {
 		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 2:
-
 		// bit 0 = DIP3 00 = 3 ships  10 = 5 ships
 		// bit 1 = DIP5 01 = 4 ships  11 = 6 ships
 		value |= 0x0 << 0
@@ -175,8 +178,6 @@ func (s *System) Read(port uint8) uint8 {
 	case 3:
 		// shift register result
 		value = uint8((s.shiftRegister >> (8 - s.shiftRegisterOffset)) & 0xFF)
-		//fmt.Printf("Read port: %d, value: 0x%02x, shiftRegister: 0x%04x, offset: %d\n",
-		//	port, value, s.shiftRegister, s.shiftRegisterOffset)
 
 	case 4:
 		//fmt.Printf("Unimplemented read from port: %d\n", port)
@@ -203,44 +204,36 @@ func (s *System) Write(port uint8, value uint8) {
 
 	case 2:
 		// shift register result offset (bits 0,1,2)
-		//fmt.Printf("Write: port: %d, value: 0x%02x\n", port, value)
 		s.shiftRegisterOffset = uint16(value) & 0x7
 
 	case 3:
 		// sound related
-		//fmt.Printf("Unimplemented write to port: %d\n", port)
+		handleSoundEffect(s.soundEffects1, value, 1, "./res/shoot.wav")
+		handleSoundEffect(s.soundEffects1, value, 2, "./res/explosion.wav")
+		handleSoundEffect(s.soundEffects1, value, 3, "./res/invaderkilled.wav")
+		s.soundEffects1 = value
 
 	case 4:
 		// fill shift register
-		//before := s.shiftRegister
 		s.shiftRegister = (s.shiftRegister) >> 8
 		s.shiftRegister = s.shiftRegister | ((uint16(value) << 8) & 0xFF00)
-		//fmt.Printf("Write: port: %d, value: 0x%02x, befofe: 0x%04x, after: 0x%04x, offset: %d\n",
-		//	port, value, before, s.shiftRegister, s.shiftRegisterOffset)
 
 	case 5:
 		// sound related
-		//fmt.Printf("Unimplemented write to port: %d\n", port)
+		handleSoundEffect(s.soundEffects2, value, 0, "./res/fastinvader1.wav")
+		handleSoundEffect(s.soundEffects2, value, 1, "./res/fastinvader2.wav")
+		handleSoundEffect(s.soundEffects2, value, 2, "./res/fastinvader3.wav")
+		handleSoundEffect(s.soundEffects2, value, 3, "./res/fastinvader4.wav")
+		handleSoundEffect(s.soundEffects2, value, 4, "./res/ufo_lowpitch.wav")
+		s.soundEffects2 = value
 
 	case 6:
-		// 'debug' port? eg. it writes to this port when it
-		// writes text to the screen (0=a,1=b,2=c, etc)
 		//fmt.Printf("Unimplemented write to port: %d\n", port)
 
 	case 7:
 		//fmt.Printf("Unimplemented write to port: %d\n", port)
 	}
 }
-
-//func playSound() {
-//	go func() {
-//		cmd := exec.Command("paplay", "./resources/sample.wav")
-//		_, err := cmd.CombinedOutput()
-//		if err != nil {
-//			panic(err)
-//		}
-//	}()
-//}
 
 func (s *System) handleScreen() {
 	cfg := pixelgl.WindowConfig{
@@ -332,4 +325,18 @@ func (s *System) drawPixel(imd *imdraw.IMDraw, x int, y int) {
 	y2 := y1 + spriteSizePixels
 	imd.Push(pixel.V(x1, y1), pixel.V(x2, y2))
 	imd.Rectangle(0)
+}
+
+func handleSoundEffect(previous uint8, value uint8, bitPos uint, file string) {
+	// If the required bit has transitioned from 0->1,
+	// play the corresponding sound effect.
+	if (((previous >> bitPos) & 0x1) == 0x0) && (((value >> bitPos) & 0x1) == 0x1) {
+		go func() {
+			cmd := exec.Command("paplay", file)
+			_, err := cmd.CombinedOutput()
+			if err != nil {
+				panic(err)
+			}
+		}()
+	}
 }
