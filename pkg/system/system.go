@@ -3,6 +3,7 @@ package system
 import (
 	"fmt"
 	"os/exec"
+	"runtime"
 	"time"
 
 	"github.com/kristenjacobs/8080-go/pkg/core"
@@ -332,7 +333,14 @@ func handleSoundEffect(previous uint8, value uint8, bitPos uint, file string) {
 	// play the corresponding sound effect.
 	if (((previous >> bitPos) & 0x1) == 0x0) && (((value >> bitPos) & 0x1) == 0x1) {
 		go func() {
-			cmd := exec.Command("paplay", file)
+			var cmd *exec.Cmd
+			if runtime.GOOS == "linux" {
+				cmd = exec.Command("paplay", file)
+			} else if runtime.GOOS == "darwin" {
+				cmd = exec.Command("afplay", file)
+			} else {
+				panic(fmt.Sprintf("runtime.GOOS: %s not supported", runtime.GOOS))
+			}
 			_, err := cmd.CombinedOutput()
 			if err != nil {
 				panic(err)
