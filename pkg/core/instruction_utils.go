@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-func MVI(instrName string, ms *MachineState, reg *uint8) {
+func MVI(instrName string, regName string, ms *MachineState, reg *uint8) {
 	*reg = ms.ReadMem(ms.pc+1, 1)[0]
-	Trace.Printf("0x%04x: %s 0x%02x\n", ms.pc, instrName, *reg)
+	Trace.Printf("0x%04x: %s reg%s[0x%02x]=0x%02x\n", ms.pc, instrName, regName, *reg, *reg)
 	ms.pc += 2
 }
 
@@ -42,7 +42,7 @@ func LDAX(instrName string, ms *MachineState, adrRegHi *uint8, adrRegLo *uint8) 
 func STAX(instrName string, ms *MachineState, adrRegHi *uint8, adrRegLo *uint8) {
 	var adr uint16 = (uint16(*adrRegHi) << 8) | uint16(*adrRegLo)
 	ms.WriteMem(adr, []uint8{ms.regA}, 1)
-	Trace.Printf("0x%04x: %s (0x%04x) = regA[0x%02x]\n", ms.pc, instrName, adr, ms.regA)
+	Trace.Printf("0x%04x: %s (0x%04x)=regA[0x%02x]\n", ms.pc, instrName, adr, ms.regA)
 	ms.pc += 1
 }
 
@@ -66,7 +66,7 @@ func PUSH(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 	ms.WriteMem(ms.sp-2, []uint8{*regHi}, 1)
 	ms.WriteMem(ms.sp-1, []uint8{*regLo}, 1)
 	newSp := ms.sp - 2
-	Trace.Printf("0x%04x: %s (0x%04x) <- 0x%02x, (0x%04x) <- 0x%02x, sp <- 0x%04x\n",
+	Trace.Printf("0x%04x: %s (0x%04x)<-0x%02x, (0x%04x)<-0x%02x, sp<-0x%04x\n",
 		ms.pc, instrName, ms.sp-2, *regHi, ms.sp-1, *regLo, newSp)
 	ms.pc += 1
 	ms.sp = newSp
@@ -76,7 +76,7 @@ func POP(instrName string, ms *MachineState, regHi *uint8, regLo *uint8) {
 	*regHi = ms.ReadMem(ms.sp, 1)[0]
 	*regLo = ms.ReadMem(ms.sp+1, 1)[0]
 	newSp := ms.sp + 2
-	Trace.Printf("0x%04x: %s 0x%02x <- (0x%04x), 0x%02x <- (0x%04x), sp <- 0x%04x\n",
+	Trace.Printf("0x%04x: %s 0x%02x<-(0x%04x), 0x%02x<-(0x%04x), sp<-0x%04x\n",
 		ms.pc, instrName, *regHi, ms.sp, *regLo, ms.sp+1, newSp)
 	ms.pc += 1
 	ms.sp = newSp

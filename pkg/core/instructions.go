@@ -42,7 +42,7 @@ func instr_0x05_DCR_B(ms *MachineState) {
 
 func instr_0x06_MVI_B_D8(ms *MachineState) {
 	// 2		B <- byte 2
-	MVI("0x06_MVI_B_D8", ms, &ms.regB)
+	MVI("0x06_MVI_B_D8", "B", ms, &ms.regB)
 }
 
 func instr_0x07_RLC(ms *MachineState) {
@@ -83,7 +83,7 @@ func instr_0x0d_DCR_C(ms *MachineState) {
 
 func instr_0x0e_MVI_C_D8(ms *MachineState) {
 	// 2		C <- byte 2
-	MVI("0x0e_MVI_C_D8", ms, &ms.regC)
+	MVI("0x0e_MVI_C_D8", "C", ms, &ms.regC)
 }
 
 func instr_0x0f_RRC(ms *MachineState) {
@@ -129,7 +129,7 @@ func instr_0x15_DCR_D(ms *MachineState) {
 
 func instr_0x16_MVI_D_D8(ms *MachineState) {
 	// 2		D <- byte 2
-	MVI("0x16_MVI_D_D8", ms, &ms.regD)
+	MVI("0x16_MVI_D_D8", "D", ms, &ms.regD)
 }
 
 func instr_0x17_RAL(ms *MachineState) {
@@ -174,7 +174,7 @@ func instr_0x1d_DCR_E(ms *MachineState) {
 
 func instr_0x1e_MVI_E_D8(ms *MachineState) {
 	// 2		E <- byte 2
-	MVI("0x1e_MVI_E_D8", ms, &ms.regE)
+	MVI("0x1e_MVI_E_D8", "E", ms, &ms.regE)
 }
 
 func instr_0x1f_RAR(ms *MachineState) {
@@ -215,7 +215,7 @@ func instr_0x22_SHLD_adr(ms *MachineState) {
 	var adr uint16 = (uint16(byte3) << 8) | uint16(byte2)
 	ms.WriteMem(adr, []uint8{ms.regL}, 1)
 	ms.WriteMem(adr+1, []uint8{ms.regH}, 1)
-	Trace.Printf("0x%04x: 0x22_SHLD_adr (0x%04x) = regL[0x%02x], (0x%04x) = regH[0x%02x]\n",
+	Trace.Printf("0x%04x: 0x22_SHLD_adr (0x%04x)=regL[0x%02x], (0x%04x)=regH[0x%02x]\n",
 		ms.pc, adr, ms.regL, adr+1, ms.regH)
 	ms.pc += 3
 }
@@ -237,7 +237,7 @@ func instr_0x25_DCR_H(ms *MachineState) {
 
 func instr_0x26_MVI_H_D8(ms *MachineState) {
 	// 2		H <- byte 2
-	MVI("0x26_MVI_H_D8", ms, &ms.regH)
+	MVI("0x26_MVI_H_D8", "H", ms, &ms.regH)
 }
 
 func instr_0x27_DAA(ms *MachineState) {
@@ -258,7 +258,7 @@ func instr_0x2a_LHLD_adr(ms *MachineState) {
 	var adr uint16 = (uint16(byte2) << 8) | uint16(byte1)
 	ms.regL = ms.ReadMem(adr, 1)[0]
 	ms.regH = ms.ReadMem(adr+1, 1)[0]
-	Trace.Printf("0x%04x: 0x2a_LHLD_adr regL[0x%02x] = (0x%04x), regH[0x%02x] = (0x%04x)\n",
+	Trace.Printf("0x%04x: 0x2a_LHLD_adr regL[0x%02x]=(0x%04x), regH[0x%02x]=(0x%04x)\n",
 		ms.pc, ms.regL, adr, ms.regH, adr+1)
 	ms.pc += 3
 }
@@ -280,7 +280,7 @@ func instr_0x2d_DCR_L(ms *MachineState) {
 
 func instr_0x2e_MVI_L_D8(ms *MachineState) {
 	// 2		L <- byte 2
-	MVI("0x2e_MVI_L_D8", ms, &ms.regL)
+	MVI("0x2e_MVI_L_D8", "L", ms, &ms.regL)
 }
 
 func instr_0x2f_CMA(ms *MachineState) {
@@ -414,7 +414,7 @@ func instr_0x3d_DCR_A(ms *MachineState) {
 
 func instr_0x3e_MVI_A_D8(ms *MachineState) {
 	// 2		A <- byte 2
-	MVI("0x3e_MVI_A_D8", ms, &ms.regA)
+	MVI("0x3e_MVI_A_D8", "A", ms, &ms.regA)
 }
 
 func instr_0x3f_CMC(ms *MachineState) {
