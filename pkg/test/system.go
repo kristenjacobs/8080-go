@@ -5,11 +5,11 @@ import (
 )
 
 const (
-	RAM_SIZE      uint16 = 0x2000
-	RAM_BASE      uint16 = 0x2000
-	RAM_MIRROR    uint16 = 0x4000
-	TEST_ROM_BASE uint16 = 0x100
-	TEST_ROM_SIZE uint16 = 0x1000
+	ramBase     uint16 = 0x2000
+	ramSize     uint16 = 0x2000
+	ramMirror   uint16 = 0x4000
+	testRomBase uint16 = 0x100
+	testRomSize uint16 = 0x1000
 )
 
 type System struct {
@@ -21,14 +21,14 @@ func NewSystem() *System {
 }
 
 func (s *System) Run(max int64) {
-	s.ms = core.NewMachineState(nil, TEST_ROM_BASE, RAM_BASE)
+	s.ms = core.NewMachineState(nil, testRomBase, ramBase)
 
 	// Configures the core ram.
-	s.ms.InitialiseRam(RAM_BASE, RAM_SIZE)
-	s.ms.InitialiseMirror(RAM_MIRROR)
+	s.ms.InitialiseRam(ramBase, ramSize)
+	s.ms.InitialiseMirror(ramMirror)
 
 	// Loads the test rom.
-	s.ms.LoadRom(TEST_ROM_BASE, TEST_ROM_SIZE, TestRom)
+	s.ms.LoadRom(testRomBase, testRomSize, testRom)
 
 	// Skips the DAA test
 	s.ms.WriteMem(0x59c, []uint8{0xc3}, 1) // JMP

@@ -16,24 +16,20 @@ import (
 )
 
 const (
-	ROM_SIZE      uint16 = 0x800
-	ROM_E_BASE    uint16 = 0x1800
-	ROM_F_BASE    uint16 = 0x1000
-	ROM_G_BASE    uint16 = 0x0800
-	ROM_H_BASE    uint16 = 0x0000
-	RAM_SIZE      uint16 = 0x2000
-	RAM_BASE      uint16 = 0x2000
-	RAM_MIRROR    uint16 = 0x4000
-	TEST_ROM_BASE uint16 = 0x100
-	TEST_ROM_SIZE uint16 = 0x1000
-
-	spriteSizePixels           = 3
-	numX                       = 224
-	numY                       = 256
-	windowWidthPixels          = numX * spriteSizePixels
-	windowHeightPixels         = numY * spriteSizePixels
-	videoRamAddr        uint16 = 0x2400
-	maxConcurrentSounds        = 100
+	romEBase           uint16 = 0x1800
+	romFBase           uint16 = 0x1000
+	romGBase           uint16 = 0x0800
+	romHBase           uint16 = 0x0000
+	romSize            uint16 = 0x800
+	ramBase            uint16 = 0x2000
+	ramSize            uint16 = 0x2000
+	ramMirror          uint16 = 0x4000
+	videoRamAddr       uint16 = 0x2400
+	spriteSizePixels          = 3
+	numX                      = 224
+	numY                      = 256
+	windowWidthPixels         = numX * spriteSizePixels
+	windowHeightPixels        = numY * spriteSizePixels
 )
 
 type System struct {
@@ -58,23 +54,24 @@ func NewSystem() *System {
 }
 
 func (s *System) Run(max int64) {
-	s.ms = core.NewMachineState(s, ROM_H_BASE, RAM_BASE)
+	s.ms = core.NewMachineState(s, romHBase, ramBase)
 
 	// Configures the core ram.
-	s.ms.InitialiseRam(RAM_BASE, RAM_SIZE)
-	s.ms.InitialiseMirror(RAM_MIRROR)
+	s.ms.InitialiseRam(ramBase, ramSize)
+	s.ms.InitialiseMirror(ramMirror)
 
 	// Loads the space invaders roms.
-	s.ms.LoadRom(ROM_G_BASE, ROM_SIZE, InvadersG)
-	s.ms.LoadRom(ROM_H_BASE, ROM_SIZE, InvadersH)
-	s.ms.LoadRom(ROM_E_BASE, ROM_SIZE, InvadersE)
-	s.ms.LoadRom(ROM_F_BASE, ROM_SIZE, InvadersF)
+	s.ms.LoadRom(romGBase, romSize, invadersG)
+	s.ms.LoadRom(romHBase, romSize, invadersH)
+	s.ms.LoadRom(romEBase, romSize, invadersE)
+	s.ms.LoadRom(romFBase, romSize, invadersF)
 
 	// Starts the 8080 core running.
 	go func() {
 		core.Run(s.ms, max)
 	}()
 
+	// Handles the screen updates on the main thread.
 	s.handleScreen()
 }
 

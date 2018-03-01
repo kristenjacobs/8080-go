@@ -67,28 +67,6 @@ func (ms *MachineState) DumpStats() {
 	fmt.Printf("\n")
 }
 
-//func newTestMachineState() *MachineState {
-//	ms := MachineState{}
-//	ms.roms = []memoryRegion{}
-//	ms.initialiseFlags()
-//	ms.pc = TEST_ROM_BASE
-//	ms.sp = RAM_BASE
-//	ms.Halt = false
-//	ms.io = nil
-//	return &ms
-//}
-
-//func (ms *MachineState) initialiseTestRom() {
-//	ms.roms = []memoryRegion{
-//	//	memoryRegion{TEST_ROM_SIZE, TEST_ROM_BASE, newRomBytes(TEST_ROM_SIZE, TestRom)},
-//	}
-//
-//	// Skips the DAA test
-//	//	ms.WriteMem(0x59c, []uint8{0xc3}, 1) // JMP
-//	//	ms.WriteMem(0x59d, []uint8{0xc2}, 1)
-//	//	ms.WriteMem(0x59e, []uint8{0x05}, 1)
-//}
-
 func (ms *MachineState) initialiseFlags() {
 	ms.flagZ = false
 	ms.flagS = false
@@ -148,14 +126,12 @@ func (ms *MachineState) WriteMem(addr uint16, bytes []uint8, numBytes uint16) {
 
 func inRegion(addr uint16, numBytes uint16, mr *memoryRegion) bool {
 	result := (addr >= mr.base) && (addr+numBytes) <= (mr.base+mr.size)
-	//Debug.Printf("In region: 0x%04x, %d, region: 0x%04x->0x%04x, result: %t\n", addr, numBytes, mr.base, mr.base+mr.size, result)
 	return result
 }
 
 func read(addr uint16, numBytes uint16, mr *memoryRegion) []uint8 {
 	i := addr - mr.base
 	bytes := mr.bytes[i : i+numBytes]
-	//Debug.Printf("read %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
 	return bytes
 }
 
@@ -164,7 +140,6 @@ func write(addr uint16, bytes []uint8, numBytes uint16, mr *memoryRegion) {
 	for i, b := range bytes {
 		mr.bytes[a+uint16(i)] = b
 	}
-	//Debug.Printf("wrote %d bytes at addr: 0x%04x: %v\n", numBytes, addr, bytes)
 }
 
 func (ms *MachineState) setZ(result uint8) {
@@ -249,8 +224,6 @@ func (ms *MachineState) handleInterrupt() bool {
 		ms.interruptsEnabled = false
 		return true
 	}
-	//ms.interrupt = false
-	//ms.interruptAddr = 0
 	return false
 }
 
