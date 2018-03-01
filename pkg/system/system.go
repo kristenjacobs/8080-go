@@ -115,7 +115,6 @@ func (s *System) Read(port uint8) uint8 {
 			value |= (0x1 << 6)
 		}
 		// bit 7 ? tied to demux port 7 ?
-		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 1:
 		// bit 0 = CREDIT (1 if deposit)
@@ -145,7 +144,6 @@ func (s *System) Read(port uint8) uint8 {
 			value |= 0x1 << 6
 		}
 		// bit 7 = Not connected
-		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 2:
 		// bit 0 = DIP3 00 = 3 ships  10 = 5 ships
@@ -171,35 +169,16 @@ func (s *System) Read(port uint8) uint8 {
 		}
 		// bit 7 = DIP7 Coin info displayed in demo screen 0=ON
 		value |= 0x0 << 7
-		//fmt.Printf("Read port: %d, value: 0x%02x\n", port, value)
 
 	case 3:
 		// shift register result
 		value = uint8((s.shiftRegister >> (8 - s.shiftRegisterOffset)) & 0xFF)
-
-	case 4:
-		//fmt.Printf("Unimplemented read from port: %d\n", port)
-
-	case 5:
-		//fmt.Printf("Unimplemented read from port: %d\n", port)
-
-	case 6:
-		//fmt.Printf("Unimplemented read from port: %d\n", port)
-
-	case 7:
-		//fmt.Printf("Unimplemented read from port: %d\n", port)
 	}
 	return value
 }
 
 func (s *System) Write(port uint8, value uint8) {
 	switch port {
-	case 0:
-		//fmt.Printf("Unimplemented write to port: %d\n", port)
-
-	case 1:
-		//fmt.Printf("Unimplemented write to port: %d\n", port)
-
 	case 2:
 		// shift register result offset (bits 0,1,2)
 		s.shiftRegisterOffset = uint16(value) & 0x7
@@ -224,12 +203,6 @@ func (s *System) Write(port uint8, value uint8) {
 		handleSoundEffect(s.soundEffects2, value, 3, "./res/fastinvader4.wav")
 		handleSoundEffect(s.soundEffects2, value, 4, "./res/ufo_lowpitch.wav")
 		s.soundEffects2 = value
-
-	case 6:
-		//fmt.Printf("Unimplemented write to port: %d\n", port)
-
-	case 7:
-		//fmt.Printf("Unimplemented write to port: %d\n", port)
 	}
 }
 
