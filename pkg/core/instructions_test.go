@@ -4,11 +4,6 @@ import (
 	"testing"
 )
 
-const (
-	RAM_BASE = 0x0
-	RAM_SIZE = 0x100
-)
-
 func init() {
 	InitTracing(false)
 }

@@ -2,6 +2,11 @@ package core
 
 import "testing"
 
+const (
+	RAM_BASE = 0x0
+	RAM_SIZE = 0x100
+)
+
 func newTestMachineState() *MachineState {
 	ms := NewMachineState(nil, RAM_BASE, RAM_BASE)
 	ms.InitialiseRam(RAM_BASE, RAM_SIZE)
